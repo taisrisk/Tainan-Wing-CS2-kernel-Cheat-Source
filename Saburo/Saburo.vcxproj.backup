@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{4e7a0a69-f873-4c8a-9452-d30720e54fcc}</ProjectGuid>
+    <RootNamespace>Saburo</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)build\</OutDir>
+    <IntDir>$(SolutionDir)build\Saburo_Intermediates\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)build\</OutDir>
+    <IntDir>$(SolutionDir)build\Saburo_Intermediates\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Core\driver.cpp" />
+    <ClCompile Include="src\Core\process.cpp" />
+    <ClCompile Include="src\Features\overlay.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_allegro5.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_android.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_dx10.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_dx12.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_dx9.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_glut.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_null.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_sdl3.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_sdlgpu3.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_sdlrenderer2.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_sdlrenderer3.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_wgpu.cpp" />
+    <ClCompile Include="src\Helpers\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_allegro5.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_android.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_dx10.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_dx12.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_dx9.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_glut.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_null.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_sdl3.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_sdlgpu3.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_sdlrenderer2.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_sdlrenderer3.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_wgpu.cpp" />
+    <ClCompile Include="src\Helpers\imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\Helpers\imgui\imgui.cpp" />
+    <ClCompile Include="src\Helpers\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\Helpers\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\Helpers\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\Helpers\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Helpers\imgui\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="src\Helpers\imgui\misc\fonts\binary_to_compressed_c.cpp" />
+    <ClCompile Include="src\Helpers\imgui\misc\freetype\imgui_freetype.cpp" />
+    <ClCompile Include="src\Helpers\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="src\Helpers\misc\fonts\binary_to_compressed_c.cpp" />
+    <ClCompile Include="src\Helpers\misc\freetype\imgui_freetype.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Core\driver.hpp" />
+    <ClInclude Include="src\Core\process.hpp" />
+    <ClInclude Include="src\Features\entity.hpp" />
+    <ClInclude Include="src\Features\entity_enumerator.hpp" />
+    <ClInclude Include="src\Features\esp.hpp" />
+    <ClInclude Include="src\Features\overlay.hpp" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_allegro5.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_android.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_dx10.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_dx12.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_dx9.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_glut.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_metal.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_null.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_opengl2.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_osx.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_sdl2.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_sdl3.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_sdlgpu3.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_sdlgpu3_shaders.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_sdlrenderer2.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_sdlrenderer3.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_vulkan.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_wgpu.h" />
+    <ClInclude Include="src\Helpers\backends\imgui_impl_win32.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_allegro5.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_android.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_dx10.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_dx12.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_dx9.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_glut.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_metal.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_null.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_opengl2.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_osx.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_sdl2.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_sdl3.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_sdlgpu3.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_sdlgpu3_shaders.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_sdlrenderer2.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_sdlrenderer3.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_vulkan.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_wgpu.h" />
+    <ClInclude Include="src\Helpers\imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="src\Helpers\imgui\imconfig.h" />
+    <ClInclude Include="src\Helpers\imgui\imgui.h" />
+    <ClInclude Include="src\Helpers\imgui\imgui_internal.h" />
+    <ClInclude Include="src\Helpers\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\Helpers\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\Helpers\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\Helpers\imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="src\Helpers\imgui\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="src\Helpers\imgui\misc\single_file\imgui_single_file.h" />
+    <ClInclude Include="src\Helpers\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="src\Helpers\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="src\Helpers\misc\single_file\imgui_single_file.h" />
+    <ClInclude Include="src\Offsets\buttons.hpp" />
+    <ClInclude Include="src\Offsets\client_dll.hpp" />
+    <ClInclude Include="src\Offsets\offsets.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

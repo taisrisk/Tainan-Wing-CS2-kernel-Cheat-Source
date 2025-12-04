@@ -1,0 +1,448 @@
+
+================================================================================
+  SESSION START: 2025-12-03 17:16:40
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[17:16:40] [*] Checking for updates from server...
+[17:16:41] [*] Remote version: 1.2.5
+[17:16:41] [*] Device name: cs2raperX
+[17:16:41] [!] No local Version.txt found - first time setup
+[17:16:41] [!] Version mismatch detected!
+[17:16:41] [!] Local: None | Remote: 1.2.5
+[17:16:41] [!] Driver files are missing or incomplete
+[17:16:41] [*] Update required - download will be initiated
+[17:16:41] [*] Starting driver package download...
+[17:16:41] [*] URL: https://firebasestorage.googleapis.com/v0/b/lucent-xijvr.firebasestorage.app/o/Hiroyoshi.zip?alt=media&token=0799965b-9b78-4a35-8726-95305f2d6b66
+[17:16:41] [*] Destination: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.zip
+[17:16:41] [+] File downloaded successfully
+[17:16:42] [*] Verifying installation...
+[17:16:42] [+] Driver files verified
+[17:16:42] [+] Version.txt updated: 1.2.5
+[17:16:42] [+] Installation verified successfully
+[17:16:42] [+] Current version: 1.2.5
+[17:16:42] [*] Attempting to connect to driver...
+[17:16:42] [*] Device symbolic link: cs2raperX
+[17:16:42] [+] Driver already loaded and connected
+[17:16:42] [+] Driver connection established
+[17:16:42] [*] Waiting for CS2 process...
+[17:16:47] [+] CS2 process found - PID: 1712
+[17:16:47] [+] Attached to CS2 process
+[17:16:47] [*] Waiting for client.dll...
+[17:16:59] [+] client.dll found at address: 0x140729911148544
+[17:16:59] [*] Entering lobby mode - waiting for game start
+[17:16:59] [*] Waiting for in-game state...
+[17:18:00] [+] In-game state detected!
+[17:18:01] [+] In-game mode activated
+
+================================================================================
+  SESSION START: 2025-12-03 17:25:06
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[17:25:06] [*] Checking for updates from server...
+[17:25:07] [*] Remote version: 1.2.5
+[17:25:07] [*] Device name: cs2raperX
+[17:25:07] [*] Local version: 1.2.5
+[17:25:07] [+] Version is up-to-date and files are present
+[17:25:07] [*] Attempting to connect to driver...
+[17:25:07] [*] Device symbolic link: cs2raperX
+[17:25:07] [+] Driver already loaded and connected
+[17:25:07] [+] Driver connection established
+[17:25:07] [*] Waiting for CS2 process...
+[17:25:07] [+] CS2 process found - PID: 1712
+[17:25:07] [+] Attached to CS2 process
+[17:25:07] [*] Waiting for client.dll...
+[17:25:07] [+] client.dll found at address: 0x140729911148544
+[17:25:07] [*] Entering lobby mode - waiting for game start
+[17:25:07] [*] Waiting for in-game state...
+[17:25:08] [+] In-game state detected!
+[17:25:08] [+] In-game mode activated
+[17:25:20] [*] Re-attach triggered - no players for 3 seconds
+[17:25:21] [*] Returning to game state detection...
+[17:25:21] [*] Entering lobby mode - waiting for game start
+[17:25:21] [*] Waiting for in-game state...
+[17:25:22] [+] In-game state detected!
+[17:25:22] [+] In-game mode activated
+[17:25:34] [*] Re-attach triggered - no players for 3 seconds
+[17:25:35] [*] Returning to game state detection...
+[17:25:35] [*] Entering lobby mode - waiting for game start
+[17:25:35] [*] Waiting for in-game state...
+[17:25:35] [+] In-game state detected!
+[17:25:36] [+] In-game mode activated
+[17:25:48] [*] Re-attach triggered - no players for 3 seconds
+[17:25:49] [*] Returning to game state detection...
+[17:25:49] [*] Entering lobby mode - waiting for game start
+[17:25:49] [*] Waiting for in-game state...
+[17:25:49] [+] In-game state detected!
+[17:25:50] [+] In-game mode activated
+[17:26:01] [*] Re-attach triggered - no players for 3 seconds
+[17:26:02] [*] Returning to game state detection...
+[17:26:02] [*] Entering lobby mode - waiting for game start
+[17:26:02] [*] Waiting for in-game state...
+[17:26:02] [+] In-game state detected!
+[17:26:03] [+] In-game mode activated
+[17:26:15] [*] Re-attach triggered - no players for 3 seconds
+[17:26:16] [*] Returning to game state detection...
+[17:26:16] [*] Entering lobby mode - waiting for game start
+[17:26:16] [*] Waiting for in-game state...
+[17:26:16] [+] In-game state detected!
+[17:26:16] [+] In-game mode activated
+[17:26:28] [*] Re-attach triggered - no players for 3 seconds
+[17:26:29] [*] Returning to game state detection...
+[17:26:29] [*] Entering lobby mode - waiting for game start
+[17:26:30] [*] Waiting for in-game state...
+[17:26:30] [+] In-game state detected!
+[17:26:30] [+] In-game mode activated
+
+================================================================================
+  SESSION START: 2025-12-03 17:26:44
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[17:26:44] [*] Checking for updates from server...
+[17:26:44] [*] Remote version: 1.2.5
+[17:26:44] [*] Device name: cs2raperX
+[17:26:44] [*] Local version: 1.2.5
+[17:26:44] [+] Version is up-to-date and files are present
+[17:26:44] [*] Attempting to connect to driver...
+[17:26:44] [*] Device symbolic link: cs2raperX
+[17:26:44] [+] Driver already loaded and connected
+[17:26:44] [+] Driver connection established
+[17:26:44] [*] Waiting for CS2 process...
+[17:26:44] [+] CS2 process found - PID: 1712
+[17:26:44] [+] Attached to CS2 process
+[17:26:44] [*] Waiting for client.dll...
+[17:26:44] [+] client.dll found at address: 0x140729911148544
+[17:26:44] [*] Entering lobby mode - waiting for game start
+[17:26:45] [*] Waiting for in-game state...
+[17:26:45] [+] In-game state detected!
+[17:26:45] [+] In-game mode activated
+
+================================================================================
+  SESSION START: 2025-12-03 17:27:28
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[17:27:28] [*] Checking for updates from server...
+[17:27:28] [*] Remote version: 1.2.5
+[17:27:28] [*] Device name: cs2raperX
+[17:27:28] [*] Local version: 1.2.5
+[17:27:28] [+] Version is up-to-date and files are present
+[17:27:28] [*] Attempting to connect to driver...
+[17:27:28] [*] Device symbolic link: cs2raperX
+[17:27:28] [+] Driver already loaded and connected
+[17:27:28] [+] Driver connection established
+[17:27:28] [*] Waiting for CS2 process...
+[17:27:28] [+] CS2 process found - PID: 1712
+[17:27:28] [+] Attached to CS2 process
+[17:27:28] [*] Waiting for client.dll...
+[17:27:28] [+] client.dll found at address: 0x140729911148544
+[17:27:29] [*] Entering lobby mode - waiting for game start
+[17:27:29] [*] Waiting for in-game state...
+[17:27:29] [+] In-game state detected!
+[17:27:29] [+] In-game mode activated
+
+================================================================================
+  SESSION START: 2025-12-03 17:30:49
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[17:30:49] [*] Checking for updates from server...
+[17:30:49] [*] Remote version: 1.2.5
+[17:30:49] [*] Device name: cs2raperX
+[17:30:49] [*] Local version: 1.2.5
+[17:30:49] [+] Version is up-to-date and files are present
+[17:30:49] [*] Attempting to connect to driver...
+[17:30:49] [*] Device symbolic link: cs2raperX
+[17:30:49] [+] Driver already loaded and connected
+[17:30:49] [+] Driver connection established
+[17:30:49] [*] Waiting for CS2 process...
+[17:30:49] [+] CS2 process found - PID: 1712
+[17:30:49] [+] Attached to CS2 process
+[17:30:49] [*] Waiting for client.dll...
+[17:30:49] [+] client.dll found at address: 0x140729911148544
+[17:30:49] [*] Entering lobby mode - waiting for game start
+[17:30:49] [+] Already in-game - skipping lobby detection
+[17:30:50] [+] In-game mode activated
+[17:30:50] [!] Entity list empty on attempt 1 - retrying
+[17:30:52] [!] Entity list empty on attempt 2 - retrying
+[17:30:53] [!] Entity list empty on attempt 3 - retrying
+[17:30:54] [!] Entity list empty on attempt 4 - retrying
+[17:30:55] [!] Entity list empty on attempt 5 - retrying
+[17:30:56] [+] Game ready - 0 players detected
+
+================================================================================
+  SESSION START: 2025-12-03 17:34:53
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[17:34:53] [*] Checking for updates from server...
+[17:34:54] [*] Remote version: 1.2.5
+[17:34:54] [*] Device name: cs2raperX
+[17:34:54] [*] Local version: 1.2.5
+[17:34:54] [+] Version is up-to-date and files are present
+[17:34:54] [*] Attempting to connect to driver...
+[17:34:54] [*] Device symbolic link: cs2raperX
+[17:34:54] [+] Driver already loaded and connected
+[17:34:54] [+] Driver connection established
+[17:34:54] [*] Waiting for CS2 process...
+[17:34:54] [+] CS2 process found - PID: 1712
+[17:34:54] [+] Attached to CS2 process
+[17:34:54] [*] Waiting for client.dll...
+[17:34:54] [+] client.dll found at address: 0x140729911148544
+[17:34:54] [*] Entering lobby mode - waiting for game start
+[17:34:54] [*] Waiting for in-game state...
+[17:35:28] [+] In-game state detected!
+[17:35:28] [+] In-game mode activated
+[17:35:29] [+] Game ready - 13 players detected
+
+================================================================================
+  SESSION START: 2025-12-03 17:53:38
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[17:53:38] [*] Checking for updates from server...
+[17:53:39] [*] Remote version: 1.2.5
+[17:53:39] [*] Device name: cs2raperX
+[17:53:39] [*] Local version: 1.2.5
+[17:53:39] [+] Version is up-to-date and files are present
+[17:53:39] [*] Attempting to connect to driver...
+[17:53:39] [*] Device symbolic link: cs2raperX
+[17:53:39] [+] Driver already loaded and connected
+[17:53:39] [+] Driver connection established
+[17:53:39] [*] Waiting for CS2 process...
+[17:53:39] [+] CS2 process found - PID: 1712
+[17:53:39] [+] Attached to CS2 process
+[17:53:39] [*] Waiting for client.dll...
+[17:53:39] [+] client.dll found at address: 0x140729911148544
+[17:53:40] [*] Entering lobby mode - waiting for game start
+[17:53:40] [+] Already in-game - skipping lobby detection
+[17:53:40] [+] In-game mode activated
+[17:53:41] [+] Game ready - 13 players detected
+[18:02:32] [!] Entity list empty - forcing rescan
+[18:02:37] [*] Re-attach triggered - no players for 3 seconds
+[18:02:38] [*] Returning to game state detection...
+[18:02:38] [*] Entering lobby mode - waiting for game start
+[18:02:38] [*] Waiting for in-game state...
+[18:02:49] [+] In-game state detected!
+[18:02:50] [+] In-game mode activated
+[18:02:50] [+] Game ready - 9 players detected
+[18:13:23] [!] Entity list empty - forcing rescan
+[18:13:28] [*] Re-attach triggered - no players for 3 seconds
+[18:13:29] [*] Returning to game state detection...
+[18:13:29] [*] Entering lobby mode - waiting for game start
+[18:13:29] [*] Waiting for in-game state...
+
+================================================================================
+  SESSION START: 2025-12-03 22:58:37
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[22:58:37] [*] Checking for updates from server...
+[22:58:38] [*] Remote version: 1.2.5
+[22:58:38] [*] Device name: cs2raperX
+[22:58:38] [*] Local version: 1.2.5
+[22:58:38] [+] Version is up-to-date and files are present
+[22:58:38] [*] Attempting to connect to driver...
+[22:58:38] [*] Device symbolic link: cs2raperX
+[22:58:38] [+] Driver already loaded and connected
+[22:58:38] [+] Driver connection established
+[22:58:38] [*] Waiting for CS2 process...
+
+================================================================================
+  SESSION START: 2025-12-03 23:23:48
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[23:23:48] [*] Checking for updates from server...
+[23:23:49] [*] Remote version: 1.2.8
+[23:23:49] [*] Device name: irapedvalve
+[23:23:49] [*] Local version: 1.2.5
+[23:23:49] [!] Version mismatch detected!
+[23:23:49] [!] Local: 1.2.5 | Remote: 1.2.8
+[23:23:49] [*] Update required - download will be initiated
+[23:23:49] [*] Starting driver package download...
+[23:23:49] [*] URL: https://firebasestorage.googleapis.com/v0/b/lucent-xijvr.firebasestorage.app/o/Hiroyoshi.zip?alt=media&token=0799965b-9b78-4a35-8726-95305f2d6b66
+[23:23:49] [*] Destination: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.zip
+[23:23:50] [+] File downloaded successfully
+[23:23:51] [*] Verifying installation...
+[23:23:51] [+] Driver files verified
+[23:23:51] [+] Version.txt updated: 1.2.8
+[23:23:51] [+] Installation verified successfully
+[23:23:51] [+] Current version: 1.2.8
+[23:23:51] [*] Attempting to connect to driver...
+[23:23:51] [*] Device symbolic link: irapedvalve
+[23:23:51] [+] Driver already loaded and connected
+[23:23:51] [+] Driver connection established
+[23:23:51] [*] Waiting for CS2 process...
+[23:23:51] [+] CS2 process found - PID: 20124
+[23:23:51] [+] Attached to CS2 process
+[23:23:51] [*] Waiting for client.dll...
+[23:23:51] [+] client.dll found at address: 0x140730663829504
+[23:23:52] [*] Entering lobby mode - waiting for game start
+[23:23:52] [*] Waiting for in-game state...
+[23:23:53] [+] In-game state detected!
+[23:23:54] [+] In-game mode activated
+[23:23:54] [+] Entity scan successful - 12 players detected
+[23:31:45] [!] No entities detected - quick rescan
+[23:31:48] [!] Entity list empty - forcing full rescan
+[23:42:24] [!] No entities detected - quick rescan
+[23:42:27] [!] Entity list empty - forcing full rescan
+[23:42:34] [*] Re-attach triggered - no players for 5 seconds
+[23:42:35] [*] Returning to game state detection...
+[23:42:35] [*] Entering lobby mode - waiting for game start
+[23:42:35] [*] Waiting for in-game state...
+
+================================================================================
+  SESSION START: 2025-12-04 00:00:23
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:00:23] [*] Checking for updates from server...
+[00:00:23] [*] Remote version: 1.2.8
+[00:00:23] [*] Device name: irapedvalve
+[00:00:23] [*] Local version: 1.2.8
+[00:00:23] [+] Version is up-to-date and files are present
+[00:00:23] [*] Attempting to connect to driver...
+[00:00:23] [*] Device symbolic link: irapedvalve
+[00:00:23] [+] Driver already loaded and connected
+[00:00:23] [+] Driver connection established
+[00:00:23] [*] Waiting for CS2 process...
+[00:00:29] [+] CS2 process found - PID: 8676
+[00:00:29] [*] CS2 process monitor started
+[00:00:29] [+] Attached to CS2 process
+[00:00:29] [*] Waiting for client.dll...
+[00:00:40] [+] client.dll found at address: 0x140730638336000
+[00:00:41] [*] Using default settings
+[00:00:41] [*] Entering lobby mode - waiting for game start
+[00:00:41] [*] Waiting for in-game state...
+[00:02:11] [!] CS2 process terminated - PID 8676 no longer exists
+[00:02:11] [!] CS2 process closed during lobby wait
+[00:02:11] [!] CS2 process closed during lobby wait
+[00:02:21] [*] User chose to exit after CS2 closure
+[00:02:21] [*] Shutting down Subaro...
+
+================================================================================
+  SESSION END: 2025-12-04 00:02:21
+  Duration: Session started at 2025-12-04 00:00:23
+================================================================================
+
+
+================================================================================
+  SESSION START: 2025-12-04 02:41:58
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[02:41:58] [*] Checking for updates from server...
+[02:41:58] [*] Remote version: 1.2.8
+[02:41:58] [*] Device name: irapedvalve
+[02:41:58] [*] Local version: 1.2.8
+[02:41:58] [+] Version is up-to-date and files are present
+[02:41:58] [*] Attempting to connect to driver...
+[02:41:58] [*] Device symbolic link: irapedvalve
+[02:41:58] [+] Driver already loaded and connected
+[02:41:58] [+] Driver connection established
+[02:41:58] [*] Waiting for CS2 process...
+[02:42:00] [+] CS2 process found - PID: 33276
+[02:42:00] [*] CS2 process monitor started
+[02:42:00] [+] Attached to CS2 process
+[02:42:00] [*] Waiting for client.dll...
+[02:42:12] [+] client.dll found at address: 0x140728822530048
+[02:42:13] [*] Using default settings
+[02:42:13] [*] Entering lobby mode - waiting for game start
+[02:42:13] [*] Waiting for in-game state...
+[02:43:12] [+] In-game state detected!
+[02:43:13] [+] In-game mode activated
+[02:43:14] [+] Entity scan successful - 13 players detected
+[02:46:32] [!] No entities detected - quick rescan
+[02:46:35] [!] Entity list empty - forcing full rescan
+[02:57:26] [!] No entities detected - quick rescan
+[02:57:29] [!] Entity list empty - forcing full rescan
+[02:57:34] [!] CS2 process terminated - PID 33276 no longer exists
+[02:57:34] [!] CS2 process closed - prompting user
+[02:58:14] [*] User chose to exit after CS2 closure
+[02:58:14] [*] Shutting down Subaro...
+
+================================================================================
+  SESSION END: 2025-12-04 02:58:14
+  Duration: Session started at 2025-12-04 02:41:58
+================================================================================
+
