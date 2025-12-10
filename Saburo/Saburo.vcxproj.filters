@@ -19,6 +19,7 @@
     <ClCompile Include="src\Helpers\console_logger.cpp" />
     <ClCompile Include="src\Offsets\offset_manager.cpp" />
     <ClCompile Include="src\Features\BoneESP.cpp" />
+    <ClCompile Include="src\App\app_state.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\driver.hpp" />
@@ -68,5 +69,16 @@
     <ClInclude Include="src\Features\SmoothAim.hpp" />
     <ClInclude Include="src\Features\HeadAngleLine.hpp" />
     <ClInclude Include="src\Helpers\settings_manager.hpp" />
+    <ClInclude Include="src\Offsets\header_parser.hpp" />
+    <ClInclude Include="src\Features\SilentAim.hpp" />
+    <ClInclude Include="src\Features\ThirdPerson.hpp" />
+    <ClInclude Include="src\App\app_state.hpp" />
+    <ClInclude Include="src\App\driver_manager.hpp" />
+    <ClInclude Include="src\App\entity_utils.hpp" />
+    <ClInclude Include="src\App\game_state_waiter.hpp" />
+    <ClInclude Include="src\App\process_utils.hpp" />
+    <ClInclude Include="src\Helpers\settings_helper.hpp" />
+    <ClInclude Include="src\Helpers\toggle_manager.hpp" />
+    <ClInclude Include="src\Helpers\ui_helper.hpp" />
   </ItemGroup>
 </Project>

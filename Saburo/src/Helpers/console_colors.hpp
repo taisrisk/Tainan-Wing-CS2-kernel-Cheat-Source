@@ -269,31 +269,22 @@ namespace ConsoleColor {
         SetConsoleCursorInfo(GetConsoleHandle(), &cursorInfo);
     }
     
-    // Print unified control panel with status (single clean display)
+    // Print unified control panel with status (single clean display) - EXPANDED VERSION
+    // Only update the status region, do not clear the whole console or reset cursor every frame
     inline void PrintUnifiedPanel(int frame, int players, int enemies, int teammates,
-                                   bool aimbot, bool triggerbot, bool bhop, bool boneESP,
-                                   bool snaplines, bool distance, bool wallCheck, bool teamCheck, bool chams, bool inGame = false) {
-        SetCursorPosition(0, 0);
-        
-        // Subaro ASCII Logo - Blue in lobby, Red in-game
-        SetColor(inGame ? RED : CYAN);
-        std::cout << "   _____       __                     \n";
-        std::cout << "  / ___/__  __/ /_  ____ __________  \n";
-        std::cout << "  \\__ \\/ / / / __ \\/ __ `/ ___/ __ \\ \n";
-        std::cout << " ___/ / /_/ / /_/ / /_/ / /  / /_/ / \n";
-        std::cout << "/____/\\__,_/_.___/\\__,_/_/   \\____/  \n";
-        Reset();
-        SetColor(DARK_GRAY);
-        std::cout << "                          By: zrorisc\n";
-        Reset();
-        
-        // Header - Blue in lobby, Red in-game
+                                   bool aimbot, bool triggerbot, bool bhop, bool headLine,
+                                   bool snaplines, bool distance, bool wallCheck, bool teamCheck, bool chams,
+                                   bool boneESP, bool silentAim, bool thirdPerson, bool recoilComp,
+                                   bool smoothAim, bool entityPredictor, bool visibilityCheck,
+                                   bool inGame = false) {
+        // Move cursor to a fixed region (e.g., row 10)
+        SetCursorPosition(0, 10);
+        // Print only the status panel, not the logo/header
         SetColor(inGame ? RED : CYAN);
         std::cout << "========================================\n";
         std::cout << "           SUBARO - CS2 TOOL            \n";
         std::cout << "========================================\n";
         Reset();
-        
         // Game Info
         std::cout << "Frame: ";
         SetColor(DARK_GRAY);
@@ -313,11 +304,13 @@ namespace ConsoleColor {
         Reset();
         std::cout << ")\n";
         
-        SetColor(DARK_GRAY);
-        std::cout << "----------------------------------------\n";
+        SetColor(CYAN);
+        std::cout << "========================================\n";
+        std::cout << "          CORE FEATURES (0-9)           \n";
+        std::cout << "========================================\n";
         Reset();
         
-        // Features with keybinds
+        // Core Features with keybinds
         std::cout << "[0] Debug Console    ";
         SetColor(DARK_GRAY);
         std::cout << "OFF\n";
@@ -339,8 +332,8 @@ namespace ConsoleColor {
         Reset();
         
         std::cout << "[4] Head Line        ";
-        SetColor(boneESP ? GREEN : DARK_GRAY);
-        std::cout << (boneESP ? "ON " : "OFF") << "\n";
+        SetColor(headLine ? GREEN : DARK_GRAY);
+        std::cout << (headLine ? "ON " : "OFF") << "\n";
         Reset();
         
         std::cout << "[5] Snaplines        ";
@@ -366,6 +359,47 @@ namespace ConsoleColor {
         std::cout << "[9] Chams            ";
         SetColor(chams ? GREEN : DARK_GRAY);
         std::cout << (chams ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        SetColor(MAGENTA);
+        std::cout << "========================================\n";
+        std::cout << "        ADVANCED FEATURES (F1-F7)       \n";
+        std::cout << "========================================\n";
+        Reset();
+        
+        std::cout << "[F1] Bone ESP        ";
+        SetColor(boneESP ? GREEN : DARK_GRAY);
+        std::cout << (boneESP ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[F2] Silent Aim      ";
+        SetColor(silentAim ? GREEN : DARK_GRAY);
+        std::cout << (silentAim ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[F3] Third Person    ";
+        SetColor(thirdPerson ? GREEN : DARK_GRAY);
+        std::cout << (thirdPerson ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[F4] Recoil Comp     ";
+        SetColor(recoilComp ? GREEN : DARK_GRAY);
+        std::cout << (recoilComp ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[F5] Smooth Aim      ";
+        SetColor(smoothAim ? GREEN : DARK_GRAY);
+        std::cout << (smoothAim ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[F6] Prediction      ";
+        SetColor(entityPredictor ? GREEN : DARK_GRAY);
+        std::cout << (entityPredictor ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[F7] Visibility      ";
+        SetColor(visibilityCheck ? GREEN : DARK_GRAY);
+        std::cout << (visibilityCheck ? "ON " : "OFF") << "\n";
         Reset();
         
         SetColor(CYAN);

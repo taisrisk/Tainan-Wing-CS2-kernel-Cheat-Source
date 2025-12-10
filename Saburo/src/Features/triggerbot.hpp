@@ -18,18 +18,24 @@ private:
     bool isEnabled;
     bool teamCheckEnabled;
     std::chrono::steady_clock::time_point lastShotTime;
+    std::chrono::steady_clock::time_point lastValidationTime;
     
     // Cache of valid enemy addresses for instant validation
     std::unordered_set<std::uintptr_t> validEnemyCache;
     
+    // Cached local team for faster checks
+    uint8_t cachedLocalTeam;
+    
     static constexpr int SHOT_COOLDOWN_MS = 175; // Fixed 175ms between shots
+    static constexpr int CACHE_REFRESH_MS = 100; // Refresh validation cache every 100ms
 
 public:
     Triggerbot(driver::DriverHandle& driver, std::uintptr_t client)
         : drv(driver), clientBase(client), localPlayerPawn(0),
-        isEnabled(true), teamCheckEnabled(true) {
+        isEnabled(true), teamCheckEnabled(true), cachedLocalTeam(0) {
         // Initialize with time in the past so first shot can fire immediately
         lastShotTime = std::chrono::steady_clock::now() - std::chrono::milliseconds(SHOT_COOLDOWN_MS);
+        lastValidationTime = std::chrono::steady_clock::now();
     }
 
     void setEnabled(bool enabled) {
@@ -56,6 +62,13 @@ public:
 
     void setLocalPlayerPawn(std::uintptr_t pawn) {
         localPlayerPawn = pawn;
+        
+        // Cache local team
+        if (pawn != 0) {
+            const auto& offsets = OffsetsManager::Get();
+            cachedLocalTeam = drv.read<uint8_t>(pawn + offsets.m_iTeamNum);
+        }
+        
         if (ConsoleLogger::isEnabled()) {
             ConsoleLogger::logInfo("TB", ("Local pawn set: 0x" + std::to_string(pawn)).c_str());
         }
@@ -63,6 +76,15 @@ public:
 
     // Update the enemy cache from ESP entities - call this before update()
     void updateEnemyCache(const EntityManager& entityManager) {
+        auto now = std::chrono::steady_clock::now();
+        auto timeSinceLastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(
+            now - lastValidationTime).count();
+        
+        // Only refresh cache every 100ms
+        if (timeSinceLastUpdate < CACHE_REFRESH_MS && !validEnemyCache.empty()) {
+            return;
+        }
+        
         validEnemyCache.clear();
         
         // Build cache of all valid alive enemies
@@ -80,13 +102,19 @@ public:
                 }
             }
         }
+        
+        lastValidationTime = now;
     }
 
-    // INSTANT RESPONSIVE UPDATE - No delays, no validation waits
+    // OPTIMIZED UPDATE - Minimal memory reads
     void update() {
         if (!isEnabled || localPlayerPawn == 0) {
             return;
         }
+
+        // Always refresh cached local team (fixes team check bug)
+        const auto& offsets = OffsetsManager::Get();
+        cachedLocalTeam = drv.read<uint8_t>(localPlayerPawn + offsets.m_iTeamNum);
 
         // Check shot cooldown FIRST - exit immediately if on cooldown
         auto now = std::chrono::steady_clock::now();
@@ -96,9 +124,6 @@ public:
         if (timeSinceLastShot < SHOT_COOLDOWN_MS) {
             return; // Still on cooldown, don't even check crosshair
         }
-
-        // Get dynamic offsets
-        const auto& offsets = OffsetsManager::Get();
 
         // Read crosshair entity handle - INSTANT
         uint32_t crosshairHandle = drv.read<uint32_t>(localPlayerPawn + offsets.m_iIDEntIndex);
@@ -131,11 +156,6 @@ public:
         }
 
         // INSTANT VALIDATION - Check if target is in our ESP enemy cache
-        // This means it's already validated as:
-        // - Valid entity
-        // - Alive (life_state == 0)
-        // - Health > 0
-        // - Enemy team (or teammate if team check disabled)
         if (validEnemyCache.find(targetAddress) == validEnemyCache.end()) {
             // Not a valid target from ESP, do quick inline validation
             if (!quickValidateTarget(targetAddress, offsets)) {
@@ -162,12 +182,12 @@ private:
             return false;
         }
 
-        // Team check if enabled
+        // Team check if enabled (use cached local team)
         if (teamCheckEnabled) {
             uint8_t targetTeam = drv.read<uint8_t>(targetAddress + offsets.m_iTeamNum);
-            uint8_t localTeam = drv.read<uint8_t>(localPlayerPawn + offsets.m_iTeamNum);
             
-            if (targetTeam == localTeam) {
+            if (targetTeam == cachedLocalTeam) {
+                ConsoleLogger::logTriggerTargetTeammate(targetTeam);
                 return false; // Same team
             }
         }
@@ -180,7 +200,7 @@ private:
         const auto& offsets = OffsetsManager::Get();
         std::uintptr_t attackAddress = clientBase + offsets.buttons.attack;
 
-        // TRY METHOD 1: Write to CS2 attack button (primary method)
+        // METHOD 1: Write to CS2 attack button (primary method)
         uint32_t pressValue = 65537; // 0x10001
         bool writeSuccess = drv.write_memory(reinterpret_cast<uint32_t*>(attackAddress), &pressValue, sizeof(pressValue));
         

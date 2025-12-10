@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\App\app_state.cpp" />
     <ClCompile Include="src\Core\driver.cpp" />
     <ClCompile Include="src\Core\process.cpp" />
     <ClCompile Include="src\Features\BoneESP.cpp" />
@@ -161,6 +162,11 @@
     <ClCompile Include="src\Offsets\offset_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\App\app_state.hpp" />
+    <ClInclude Include="src\App\driver_manager.hpp" />
+    <ClInclude Include="src\App\entity_utils.hpp" />
+    <ClInclude Include="src\App\game_state_waiter.hpp" />
+    <ClInclude Include="src\App\process_utils.hpp" />
     <ClInclude Include="src\Core\driver.hpp" />
     <ClInclude Include="src\Core\process.hpp" />
     <ClInclude Include="src\Features\bhop.hpp" />
@@ -173,7 +179,9 @@
     <ClInclude Include="src\Features\HeadAngleLine.hpp" />
     <ClInclude Include="src\Features\ImGuiESP.hpp" />
     <ClInclude Include="src\Features\RecoilCompensation.hpp" />
+    <ClInclude Include="src\Features\SilentAim.hpp" />
     <ClInclude Include="src\Features\SmoothAim.hpp" />
+    <ClInclude Include="src\Features\ThirdPerson.hpp" />
     <ClInclude Include="src\Features\triggerbot.hpp" />
     <ClInclude Include="src\Features\VisibilityChecker.hpp" />
     <ClInclude Include="src\Helpers\console_colors.hpp" />
@@ -197,12 +205,16 @@
     <ClInclude Include="src\Helpers\OS-ImGui\OS-ImGui_External.h" />
     <ClInclude Include="src\Helpers\OS-ImGui\OS-ImGui_Struct.h" />
     <ClInclude Include="src\Helpers\OS-ImGui\stb\stb_image.h" />
+    <ClInclude Include="src\Helpers\settings_helper.hpp" />
     <ClInclude Include="src\Helpers\settings_manager.hpp" />
+    <ClInclude Include="src\Helpers\toggle_manager.hpp" />
+    <ClInclude Include="src\Helpers\ui_helper.hpp" />
     <ClInclude Include="src\Helpers\version_manager.hpp" />
     <ClInclude Include="src\Helpers\windows_security_helper.hpp" />
     <ClInclude Include="src\Offsets\buttons.hpp" />
     <ClInclude Include="src\Offsets\client.dll.hpp" />
     <ClInclude Include="src\Offsets\client_dll.hpp" />
+    <ClInclude Include="src\Offsets\header_parser.hpp" />
     <ClInclude Include="src\Offsets\offsets.hpp" />
     <ClInclude Include="src\Offsets\offsets_pt2.hpp" />
     <ClInclude Include="src\Offsets\offset_manager.hpp" />

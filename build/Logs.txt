@@ -446,3 +446,460 @@
   Duration: Session started at 2025-12-04 02:41:58
 ================================================================================
 
+
+================================================================================
+  SESSION START: 2025-12-10 13:57:13
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[13:57:13] [*] Checking for updates from server...
+[13:57:14] [*] Remote version: 1.3.0
+[13:57:14] [*] Device name: irapedvac
+[13:57:14] [*] Local version: 1.2.8
+[13:57:20] [!] Version mismatch detected!
+[13:57:20] [!] Local: 1.2.8 | Remote: 1.3.0
+[13:57:20] [*] Update required - download will be initiated
+[13:57:20] [*] Starting driver package download...
+[13:57:20] [*] URL: https://firebasestorage.googleapis.com/v0/b/lucent-xijvr.firebasestorage.app/o/Hiroyoshi.zip?alt=media&token=12188cae-3608-468c-a758-ff5ae40dd5ce
+[13:57:20] [*] Destination: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.zip
+[13:57:21] [+] File downloaded successfully
+[13:57:33] [*] Verifying installation...
+[13:57:33] [+] Driver files verified
+[13:57:33] [+] Version.txt updated: 1.3.0
+[13:57:33] [+] Installation verified successfully
+[13:57:33] [+] Current version: 1.3.0
+[13:57:33] [*] Attempting to connect to driver...
+[13:57:33] [*] Device symbolic link: irapedvac
+[13:57:33] [!] Driver not detected - loading...
+[13:57:38] [*] Loading driver with KDU...
+[13:57:38] [*] Device name: irapedvac
+[13:57:38] [*] KDU path: C:\Users\tai2l\source\repos\Tainan Wing\build\kdu.exe
+[13:57:38] [*] Driver path: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.sys
+[13:57:38] [+] Original driver restored from backup
+[13:57:38] [*] Patching driver with custom device name...
+[13:57:38] [*] Target device name: irapedvac
+[13:57:38] [+] Driver file loaded (10488 bytes)
+[13:57:38] [*] Searching for: \Device\airway_radio
+[13:57:38] [+] Found 1 occurrence(s)
+[13:57:38] [+] Replaced at offset 0xd80
+[13:57:38] [+] Replaced with: \Device\irapedvac
+[13:57:38] [*] Searching for: \DosDevices\airway_radio
+[13:57:38] [+] Found 1 occurrence(s)
+[13:57:38] [+] Replaced at offset 0xdb0
+[13:57:38] [+] Replaced with: \DosDevices\irapedvac
+[13:57:38] [*] Searching for: \Driver\airway_radio
+[13:57:38] [+] Found 1 occurrence(s)
+[13:57:38] [+] Replaced at offset 0xe10
+[13:57:38] [+] Replaced with: \Driver\irapedvac
+[13:57:38] [+] Successfully patched 3 occurrence(s)
+[13:57:38] [+] Driver file patched and saved successfully!
+[13:57:38] [+] Driver patched: irapedvac
+[13:57:38] [*] Selected KDU provider: 50
+[13:57:38] [*] Executing KDU command...
+[13:57:38] [*] Command: "C:\Users\tai2l\source\repos\Tainan Wing\build\kdu.exe" -prv 50 -map "C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.sys"
+[13:57:38] [*] Starting KDU process...
+[13:58:08] [!] KDU timed out after 30 seconds
+[13:58:10] [!] KDU attempt 2 of 3
+[13:58:10] [*] Selected KDU provider: 52
+[13:58:10] [*] Executing KDU command...
+[13:58:10] [*] Command: "C:\Users\tai2l\source\repos\Tainan Wing\build\kdu.exe" -prv 52 -map "C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.sys"
+[13:58:10] [*] Starting KDU process...
+[13:58:13] [*] KDU process completed with exit code: 1
+[13:58:13] [+] Driver loaded successfully with KDU (exit code: 1)
+[13:58:13] [*] Connecting to driver (attempt 1/5)...
+[13:58:13] [+] Successfully connected to driver on attempt 1
+[13:58:13] [+] Driver connection established
+[13:58:13] [*] Waiting for CS2 process...
+[13:58:18] [+] CS2 process found - PID: 26208
+[13:58:18] [*] CS2 process monitor started
+[13:58:18] [+] Attached to CS2 process
+[13:58:18] [*] Waiting for client.dll...
+[13:58:27] [+] client.dll found at address: 0x140721986338816
+[13:58:28] [+] Settings loaded from saburo_settings.cfg
+[13:58:28] [*] Entering lobby mode - waiting for game start
+[13:58:28] [*] Waiting for in-game state...
+
+================================================================================
+  SESSION START: 2025-12-10 13:59:28
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[13:59:28] [*] Checking for updates from server...
+[13:59:29] [*] Remote version: 1.3.1
+[13:59:29] [*] Device name: irapedva2
+[13:59:29] [*] Local version: 1.3.0
+[13:59:29] [!] Version mismatch detected!
+[13:59:29] [!] Local: 1.3.0 | Remote: 1.3.1
+[13:59:29] [*] Update required - download will be initiated
+[13:59:29] [*] Starting driver package download...
+[13:59:29] [*] URL: https://firebasestorage.googleapis.com/v0/b/lucent-xijvr.firebasestorage.app/o/Hiroyoshi.zip?alt=media&token=12188cae-3608-468c-a758-ff5ae40dd5ce
+[13:59:29] [*] Destination: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.zip
+[13:59:29] [+] File downloaded successfully
+[13:59:30] [*] Verifying installation...
+[13:59:30] [+] Driver files verified
+[13:59:30] [+] Version.txt updated: 1.3.1
+[13:59:30] [+] Installation verified successfully
+[13:59:30] [+] Current version: 1.3.1
+[13:59:30] [*] Attempting to connect to driver...
+[13:59:30] [*] Device symbolic link: irapedva2
+[13:59:30] [!] Driver not detected - loading...
+[13:59:30] [*] Loading driver with KDU...
+[13:59:30] [*] Device name: irapedva2
+[13:59:30] [*] KDU path: C:\Users\tai2l\source\repos\Tainan Wing\build\kdu.exe
+[13:59:30] [*] Driver path: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.sys
+[13:59:30] [+] Original driver restored from backup
+[13:59:30] [*] Patching driver with custom device name...
+[13:59:30] [*] Target device name: irapedva2
+[13:59:30] [+] Driver file loaded (10488 bytes)
+[13:59:30] [*] Searching for: \Device\airway_radio
+[13:59:30] [+] Found 1 occurrence(s)
+[13:59:30] [+] Replaced at offset 0xd80
+[13:59:30] [+] Replaced with: \Device\irapedva2
+[13:59:30] [*] Searching for: \DosDevices\airway_radio
+[13:59:30] [+] Found 1 occurrence(s)
+[13:59:30] [+] Replaced at offset 0xdb0
+[13:59:30] [+] Replaced with: \DosDevices\irapedva2
+[13:59:30] [*] Searching for: \Driver\airway_radio
+[13:59:30] [+] Found 1 occurrence(s)
+[13:59:30] [+] Replaced at offset 0xe10
+[13:59:30] [+] Replaced with: \Driver\irapedva2
+[13:59:30] [+] Successfully patched 3 occurrence(s)
+[13:59:30] [+] Driver file patched and saved successfully!
+[13:59:30] [+] Driver patched: irapedva2
+[13:59:30] [*] Selected KDU provider: 44
+[13:59:30] [*] Executing KDU command...
+[13:59:30] [*] Command: "C:\Users\tai2l\source\repos\Tainan Wing\build\kdu.exe" -prv 44 -map "C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.sys"
+[13:59:30] [*] Starting KDU process...
+[13:59:31] [*] KDU process completed with exit code: 1
+[13:59:31] [+] Driver loaded successfully with KDU (exit code: 1)
+[13:59:31] [*] Connecting to driver (attempt 1/5)...
+[13:59:31] [+] Successfully connected to driver on attempt 1
+[13:59:31] [+] Driver connection established
+[13:59:31] [*] Waiting for CS2 process...
+[13:59:31] [+] CS2 process found - PID: 26208
+[13:59:31] [*] CS2 process monitor started
+[13:59:31] [+] Attached to CS2 process
+[13:59:31] [*] Waiting for client.dll...
+[13:59:31] [+] client.dll found at address: 0x140721986338816
+[13:59:32] [+] Settings loaded from saburo_settings.cfg
+[13:59:32] [*] Entering lobby mode - waiting for game start
+[13:59:32] [*] Waiting for in-game state...
+
+================================================================================
+  SESSION START: 2025-12-10 14:14:09
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[14:14:09] [*] Checking for updates from server...
+[14:14:10] [*] Remote version: 1.3.1
+[14:14:10] [*] Device name: irapedva2
+[14:14:10] [*] Local version: 1.3.1
+[14:14:10] [+] Version is up-to-date and files are present
+[14:14:10] [*] Attempting to connect to driver...
+[14:14:10] [*] Device symbolic link: irapedva2
+[14:14:10] [+] Driver already loaded and connected
+[14:14:10] [+] Driver connection established
+[14:14:11] [*] Waiting for CS2 process...
+[14:14:11] [+] CS2 process found - PID: 26208
+[14:14:11] [*] CS2 process monitor started
+[14:14:11] [+] Attached to CS2 process
+[14:14:11] [*] Waiting for client.dll...
+[14:14:11] [+] client.dll found at address: 0x140721986338816
+[14:14:11] [+] Settings loaded from saburo_settings.cfg
+[14:14:11] [*] Entering lobby mode - waiting for game start
+[14:14:11] [+] Already in-game - ready to scan entities
+[14:14:12] [+] In-game mode activated
+[14:14:12] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 14:46:48
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[14:46:48] [*] Checking for updates from server...
+[14:46:49] [*] Remote version: 1.3.1
+[14:46:49] [*] Device name: irapedva2
+[14:46:49] [*] Local version: 1.3.1
+[14:46:49] [+] Version is up-to-date and files are present
+[14:46:49] [*] Attempting to connect to driver...
+[14:46:49] [*] Device symbolic link: irapedva2
+[14:46:49] [+] Driver already loaded and connected
+[14:46:49] [+] Driver connection established
+[14:46:51] [*] Waiting for CS2 process...
+[14:46:51] [+] CS2 process found - PID: 26208
+[14:46:51] [*] CS2 process monitor started
+[14:46:51] [+] Attached to CS2 process
+[14:46:51] [*] Waiting for client.dll...
+[14:46:51] [+] client.dll found at address: 0x140721986338816
+[14:46:51] [+] Settings loaded from saburo_settings.cfg
+[14:46:51] [*] Entering lobby mode - waiting for game start
+[14:46:51] [*] Waiting for in-game state...
+
+================================================================================
+  SESSION START: 2025-12-10 14:47:01
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[14:47:01] [*] Checking for updates from server...
+[14:47:01] [*] Remote version: 1.3.1
+[14:47:01] [*] Device name: irapedva2
+[14:47:01] [*] Local version: 1.3.1
+[14:47:01] [+] Version is up-to-date and files are present
+[14:47:01] [*] Attempting to connect to driver...
+[14:47:01] [*] Device symbolic link: irapedva2
+[14:47:01] [+] Driver already loaded and connected
+[14:47:01] [+] Driver connection established
+[14:47:03] [*] Waiting for CS2 process...
+[14:47:03] [+] CS2 process found - PID: 26208
+[14:47:03] [*] CS2 process monitor started
+[14:47:03] [+] Attached to CS2 process
+[14:47:03] [*] Waiting for client.dll...
+[14:47:03] [+] client.dll found at address: 0x140721986338816
+[14:47:04] [+] Settings loaded from saburo_settings.cfg
+[14:47:04] [*] Entering lobby mode - waiting for game start
+[14:47:04] [*] Waiting for in-game state...
+
+================================================================================
+  SESSION START: 2025-12-10 14:51:27
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[14:51:27] [*] Checking for updates from server...
+[14:51:27] [*] Remote version: 1.3.1
+[14:51:27] [*] Device name: irapedva2
+[14:51:27] [*] Local version: 1.3.1
+[14:51:27] [+] Version is up-to-date and files are present
+[14:51:27] [*] Attempting to connect to driver...
+[14:51:27] [*] Device symbolic link: irapedva2
+[14:51:27] [+] Driver already loaded and connected
+[14:51:27] [+] Driver connection established
+[14:51:29] [*] Waiting for CS2 process...
+[14:51:29] [+] CS2 process found - PID: 26208
+[14:51:29] [*] CS2 process monitor started
+[14:51:29] [+] Attached to CS2 process
+[14:51:29] [*] Waiting for client.dll...
+[14:51:29] [+] client.dll found at address: 0x140721986338816
+[14:51:29] [+] Settings loaded from saburo_settings.cfg
+[14:51:29] [*] Entering lobby mode - waiting for game start
+[14:51:29] [*] Waiting for in-game state...
+
+================================================================================
+  SESSION START: 2025-12-10 15:14:01
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[15:14:01] [*] Checking for updates from server...
+[15:14:01] [*] Remote version: 1.3.1
+[15:14:01] [*] Device name: irapedva2
+[15:14:01] [*] Local version: 1.3.1
+[15:14:01] [+] Version is up-to-date and files are present
+[15:14:01] [*] Attempting to connect to driver...
+[15:14:01] [*] Device symbolic link: irapedva2
+[15:14:01] [+] Driver already loaded and connected
+[15:14:01] [+] Driver connection established
+
+================================================================================
+  SESSION START: 2025-12-10 15:14:23
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[15:14:23] [*] Checking for updates from server...
+[15:14:23] [*] Remote version: 1.3.1
+[15:14:23] [*] Device name: irapedva2
+[15:14:23] [*] Local version: 1.3.1
+[15:14:23] [+] Version is up-to-date and files are present
+[15:14:23] [*] Attempting to connect to driver...
+[15:14:23] [*] Device symbolic link: irapedva2
+[15:14:23] [+] Driver already loaded and connected
+[15:14:23] [+] Driver connection established
+[15:14:25] [*] Waiting for CS2 process...
+[15:14:25] [+] CS2 process found - PID: 26208
+[15:14:25] [*] CS2 process monitor started
+[15:14:25] [+] Attached to CS2 process
+[15:14:25] [*] Waiting for client.dll...
+[15:14:25] [+] client.dll found at address: 0x140721986338816
+[15:14:26] [+] Settings loaded from saburo_settings.cfg
+[15:14:26] [*] Entering lobby mode - waiting for game start
+[15:14:26] [+] Already in-game - ready to scan entities
+[15:14:26] [+] In-game mode activated
+[15:14:30] [-] Entity scan failed after 10 attempts
+[15:14:34] [!] No other players detected - continuing
+[15:14:36] [!] No entities detected - quick rescan
+[15:14:42] [!] Entity list empty - forcing full rescan
+
+================================================================================
+  SESSION START: 2025-12-10 15:18:09
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[15:18:09] [*] Checking for updates from server...
+[15:18:09] [*] Remote version: 1.3.1
+[15:18:09] [*] Device name: irapedva2
+[15:18:09] [*] Local version: 1.3.1
+[15:18:09] [+] Version is up-to-date and files are present
+[15:18:09] [*] Attempting to connect to driver...
+[15:18:09] [*] Device symbolic link: irapedva2
+[15:18:09] [!] Driver not detected - loading...
+[15:18:36] [-] Cannot proceed without disabling Real-Time Protection
+[15:18:36] [-] Failed to connect or load driver
+
+================================================================================
+  SESSION START: 2025-12-10 15:18:40
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[15:18:40] [*] Checking for updates from server...
+[15:18:41] [*] Remote version: 1.3.1
+[15:18:41] [*] Device name: irapedva2
+[15:18:41] [*] Local version: 1.3.1
+[15:18:41] [+] Version is up-to-date and files are present
+[15:18:41] [*] Attempting to connect to driver...
+[15:18:41] [*] Device symbolic link: irapedva2
+[15:18:41] [!] Driver not detected - loading...
+[15:18:41] [*] Loading driver with KDU...
+[15:18:41] [*] Device name: irapedva2
+[15:18:41] [*] KDU path: C:\Users\tai2l\source\repos\Tainan Wing\build\kdu.exe
+[15:18:41] [*] Driver path: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.sys
+[15:18:41] [+] Original driver restored from backup
+[15:18:41] [*] Patching driver with custom device name...
+[15:18:41] [*] Target device name: irapedva2
+[15:18:41] [+] Driver file loaded (10488 bytes)
+[15:18:41] [*] Searching for: \Device\airway_radio
+[15:18:41] [+] Found 1 occurrence(s)
+[15:18:41] [+] Replaced at offset 0xd80
+[15:18:41] [+] Replaced with: \Device\irapedva2
+[15:18:41] [*] Searching for: \DosDevices\airway_radio
+[15:18:41] [+] Found 1 occurrence(s)
+[15:18:41] [+] Replaced at offset 0xdb0
+[15:18:41] [+] Replaced with: \DosDevices\irapedva2
+[15:18:41] [*] Searching for: \Driver\airway_radio
+[15:18:41] [+] Found 1 occurrence(s)
+[15:18:41] [+] Replaced at offset 0xe10
+[15:18:41] [+] Replaced with: \Driver\irapedva2
+[15:18:41] [+] Successfully patched 3 occurrence(s)
+[15:18:41] [+] Driver file patched and saved successfully!
+[15:18:41] [+] Driver patched: irapedva2
+[15:18:41] [*] Selected KDU provider: 52
+[15:18:41] [*] Executing KDU command...
+[15:18:41] [*] Command: "C:\Users\tai2l\source\repos\Tainan Wing\build\kdu.exe" -prv 52 -map "C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.sys"
+[15:18:41] [*] Starting KDU process...
+[15:18:42] [*] KDU process completed with exit code: 1
+[15:18:42] [+] Driver loaded successfully with KDU (exit code: 1)
+[15:18:42] [*] Connecting to driver (attempt 1/5)...
+[15:18:42] [+] Successfully connected to driver on attempt 1
+[15:18:42] [+] Driver connection established
+[15:18:44] [*] Waiting for CS2 process...
+[15:18:51] [+] CS2 process found - PID: 20588
+[15:18:51] [*] CS2 process monitor started
+[15:18:51] [+] Attached to CS2 process
+[15:18:51] [*] Waiting for client.dll...
+[15:19:01] [+] client.dll found at address: 0x140707223175168
+[15:19:02] [+] Settings loaded from saburo_settings.cfg
+[15:19:02] [*] Entering lobby mode - waiting for game start
+[15:19:02] [*] Waiting for in-game state...
+[15:19:36] [+] In-game state detected!
+[15:19:37] [+] In-game mode activated
+[15:19:37] [+] Entity scan successful - 11 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 15:20:30
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[15:20:30] [*] Checking for updates from server...
+[15:20:30] [*] Remote version: 1.3.1
+[15:20:30] [*] Device name: irapedva2
+[15:20:30] [*] Local version: 1.3.1
+[15:20:30] [+] Version is up-to-date and files are present
+[15:20:30] [*] Attempting to connect to driver...
+[15:20:30] [*] Device symbolic link: irapedva2
+[15:20:30] [+] Driver already loaded and connected
+[15:20:30] [+] Driver connection established
+[15:20:32] [*] Waiting for CS2 process...
+[15:20:32] [+] CS2 process found - PID: 20588
+[15:20:32] [*] CS2 process monitor started
+[15:20:32] [+] Attached to CS2 process
+[15:20:32] [*] Waiting for client.dll...
+[15:20:32] [+] client.dll found at address: 0x140707223175168
+[15:20:32] [+] Settings loaded from saburo_settings.cfg
+[15:20:32] [*] Entering lobby mode - waiting for game start
+[15:20:32] [+] Already in-game - ready to scan entities
+[15:20:33] [+] In-game mode activated
+[15:20:33] [+] Entity scan successful - 14 players detected
