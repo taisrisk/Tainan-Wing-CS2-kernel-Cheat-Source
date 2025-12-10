@@ -18,6 +18,14 @@
 #include "src/Features/bhop.hpp"
 #include "src/Features/Aimbot.hpp"
 #include "src/Features/Chams.hpp"
+#include "src/Features/HeadAngleLine.hpp"
+#include "src/Features/BoneESP.hpp"
+#include "src/Features/SilentAim.hpp"
+#include "src/Features/ThirdPerson.hpp"
+#include "src/Features/RecoilCompensation.hpp"
+#include "src/Features/SmoothAim.hpp"
+#include "src/Features/EntityPredictor.hpp"
+#include "src/Features/VisibilityChecker.hpp"
 #include "src/Helpers/console_logger.hpp"
 #include "src/Helpers/kernel_mouse.hpp"
 #include "src/Helpers/download_helper.hpp"
@@ -27,11 +35,18 @@
 #include "src/Helpers/version_manager.hpp"
 #include "src/Helpers/logger.hpp"
 #include "src/Helpers/settings_manager.hpp"
+// New helpers to declutter main.cpp
+#include "src/Helpers/ui_helper.hpp"
+#include "src/Helpers/toggle_manager.hpp"
+#include "src/Helpers/settings_helper.hpp"
+// App orchestration helpers
+#include "src/App/app_state.hpp"
+#include "src/App/process_utils.hpp"
+#include "src/App/driver_manager.hpp"
+#include "src/App/entity_utils.hpp"
+#include "src/App/game_state_waiter.hpp"
 
-// Global flag to signal CS2 process closure
-std::atomic<bool> g_cs2ProcessRunning(true);
-std::atomic<bool> g_shutdownRequested(false);
-DWORD g_cs2ProcessId = 0;
+// App state moved to src/App/app_state.cpp
 
 // Clear console without deleting all text (just scroll to new line)
 void clear_line() {
@@ -46,293 +61,11 @@ void set_cursor(int row) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-static DWORD wait_for_process(const std::wstring& name) {
-    std::cout << "[*] Waiting for " << std::string(name.begin(), name.end()) << "...";
-    std::cout.flush();
-    
-    while (true) {
-        DWORD pid = process::get_process_id_by_name(name);
-        if (pid != 0) {
-            std::cout << "\r[+] Found " << std::string(name.begin(), name.end()) << " (PID: " << pid << ")          \n";
-            return pid;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    }
-}
-
-// CS2 Process Monitor Thread
-void CS2ProcessMonitor() {
-    while (!g_shutdownRequested.load()) {
-        if (g_cs2ProcessId != 0) {
-            DWORD pid = process::get_process_id_by_name(L"cs2.exe");
-            if (pid == 0) {
-                // CS2 process no longer exists
-                g_cs2ProcessRunning.store(false);
-                ConsoleColor::PrintWarning("CS2 process terminated!");
-                Logger::LogWarning("CS2 process terminated - PID " + std::to_string(g_cs2ProcessId) + " no longer exists");
-                break;
-            }
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000)); // Check every 1 second
-    }
-}
-
-static std::uintptr_t get_entity_from_handle(driver::DriverHandle& drv, std::uintptr_t client, uint32_t handle) {
-    if (handle == 0) {
-        return 0;
-    }
-
-    const uint32_t index = handle & 0x7FFF;
-    std::uintptr_t entity_list = drv.read<std::uintptr_t>(client + cs2_dumper::offsets::client_dll::dwEntityList);
-
-    if (entity_list == 0) {
-        return 0;
-    }
-
-    const uint32_t chunk_index = index >> 9;
-    std::uintptr_t chunk_pointer_address = entity_list + (0x8 * chunk_index) + 0x10;
-    std::uintptr_t list_entry = drv.read<std::uintptr_t>(chunk_pointer_address);
-
-    if (list_entry == 0) {
-        return 0;
-    }
-
-    const uint32_t entity_index = index & 0x1FF;
-    std::uintptr_t entity_address = list_entry + (0x70 * entity_index);
-    std::uintptr_t entity = drv.read<std::uintptr_t>(entity_address);
-
-    return entity;
-}
-
 void printMessage(const std::string& message) {
     ConsoleColor::Print(message, ConsoleColor::CYAN);
 }
 
-// Auto-loader: Check driver files and download if needed (version-aware)
-bool EnsureDriverFilesPresent(const VersionManager::VersionConfig& config) {
-    if (VersionManager::AreDriverFilesPresent()) {
-        ConsoleColor::PrintSuccess("Driver files already present");
-        return true;
-    }
-
-    ConsoleColor::PrintInfo("Driver files not found - starting download...");
-    
-    if (!DownloadHelper::DownloadAndExtractDriverPackage(config.downloadUrl)) {
-        ConsoleColor::PrintError("Failed to download or extract driver package");
-        return false;
-    }
-
-    // Verify installation after download
-    if (!VersionManager::VerifyInstallation(config)) {
-        ConsoleColor::PrintError("Installation verification failed");
-        return false;
-    }
-
-    return true;
-}
-
-// Auto-loader: Attempt to connect to driver or load it if needed (version-aware)
-bool ConnectOrLoadDriver(driver::DriverHandle& driver_handle, const VersionManager::VersionConfig& config) {
-    // Try connecting to existing driver first
-    if (driver_handle.is_valid()) {
-        ConsoleColor::PrintSuccess("Driver already loaded and connected");
-        Logger::LogSuccess("Driver already loaded and connected");
-        return true;
-    }
-
-    ConsoleColor::PrintWarning("Driver not detected - loading...");
-    Logger::LogWarning("Driver not detected - loading...");
-
-    // Check Windows Security real-time protection
-    if (!WindowsSecurityHelper::GuideUserToDisableRealtimeProtection()) {
-        ConsoleColor::PrintError("Cannot proceed without disabling Real-Time Protection");
-        Logger::LogError("Cannot proceed without disabling Real-Time Protection");
-        return false;
-    }
-
-    // Ensure driver files are present
-    if (!EnsureDriverFilesPresent(config)) {
-        return false;
-    }
-
-    // Load driver with KDU
-    if (!DriverLoaderHelper::LoadDriverWithKDU(config.deviceSymbolicLink)) {
-        ConsoleColor::PrintError("Failed to load driver with KDU");
-        Logger::LogError("Failed to load driver with KDU");
-        return false;
-    }
-
-    // Try connecting multiple times after loading (driver needs time to initialize)
-    const int maxConnectionAttempts = 5;
-    for (int attempt = 1; attempt <= maxConnectionAttempts; attempt++) {
-        ConsoleColor::PrintInfo("Connecting to driver (attempt " + std::to_string(attempt) + "/" + std::to_string(maxConnectionAttempts) + ")...");
-        Logger::LogInfo("Connecting to driver (attempt " + std::to_string(attempt) + "/" + std::to_string(maxConnectionAttempts) + ")...");
-        
-        // Reconstruct driver handle to attempt new connection
-        driver_handle.~DriverHandle();
-        new (&driver_handle) driver::DriverHandle(config.deviceSymbolicLink);
-
-        if (driver_handle.is_valid()) {
-            ConsoleColor::PrintSuccess("Successfully connected to driver");
-            Logger::LogSuccess("Successfully connected to driver on attempt " + std::to_string(attempt));
-            return true;
-        }
-
-        // Wait before retrying (increasing delay each attempt)
-        if (attempt < maxConnectionAttempts) {
-            int delayMs = attempt * 500; // 500ms, 1000ms, 1500ms, 2000ms, 2500ms
-            ConsoleColor::PrintInfo("Waiting " + std::to_string(delayMs) + "ms before retry...");
-            std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
-        }
-    }
-
-    ConsoleColor::PrintError("Failed to connect to driver after " + std::to_string(maxConnectionAttempts) + " attempts");
-    Logger::LogError("Failed to connect to driver after " + std::to_string(maxConnectionAttempts) + " attempts");
-    return false;
-}
-
-// Wait for player to be actually in-game (not menu/loading)
-bool WaitForInGameState(driver::DriverHandle& drv, std::uintptr_t client, ImGuiESP& espRenderer) {
-    using namespace ConsoleColor;
-    
-    const auto& offsets = OffsetsManager::Get();
-    
-    // FIRST: Check if we're already in-game (launched while match is running)
-    std::uintptr_t quickCheckController = drv.read<std::uintptr_t>(client + cs2_dumper::offsets::client_dll::dwLocalPlayerController);
-    if (quickCheckController != 0) {
-        uint32_t quickCheckHandle = drv.read<uint32_t>(quickCheckController + offsets.m_hPlayerPawn);
-        if (quickCheckHandle != 0) {
-            std::uintptr_t quickCheckPawn = get_entity_from_handle(drv, client, quickCheckHandle);
-            if (quickCheckPawn != 0) {
-                int32_t quickCheckHealth = drv.read<int32_t>(quickCheckPawn + offsets.m_iHealth);
-                uint8_t quickCheckTeam = drv.read<uint8_t>(quickCheckPawn + offsets.m_iTeamNum);
-                
-                // If we have valid health and team, we're already in-game
-                if (quickCheckHealth > 0 && quickCheckHealth <= 150 && (quickCheckTeam == 2 || quickCheckTeam == 3)) {
-                    ConsoleColor::PrintSuccess("Already in-game - ready to scan entities");
-                    Logger::LogSuccess("Already in-game - ready to scan entities");
-                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    return true;
-                }
-            }
-        }
-    }
-    
-    // NOT in-game yet - show lobby waiting screen
-    ConsoleColor::ClearScreen();
-    ConsoleColor::PrintLogo(false);  // false = lobby mode (blue)
-    
-    std::cout << "\n";
-    ConsoleColor::PrintInfo("Waiting for in-game state...");
-    Logger::LogInfo("Waiting for in-game state...");
-    std::cout << "\n";
-    SetColor(ConsoleColor::YELLOW);
-    std::cout << "  Please JOIN A GAME:\n";
-    Reset();
-    std::cout << "    - Casual/Competitive Match\n";
-    std::cout << "    - Deathmatch\n";
-    std::cout << "    - Practice/Workshop Map\n";
-    std::cout << "\n";
-    SetColor(ConsoleColor::DARK_GRAY);
-    std::cout << "  (Press ESC to cancel if CS2 closed)\n";
-    Reset();
-    std::cout << "\n";
-    
-    int consecutiveValidChecks = 0;
-    const int requiredValidChecks = 3;
-    
-    while (true) {
-        // ===== CHECK IF CS2 PROCESS CLOSED =====
-        if (!g_cs2ProcessRunning.load()) {
-            ConsoleColor::PrintWarning("CS2 process closed while waiting for game!");
-            Logger::LogWarning("CS2 process closed during lobby wait");
-            return false;
-        }
-        
-        // Update lobby ESP each iteration
-        std::uintptr_t lobbyLocalController = drv.read<std::uintptr_t>(client + cs2_dumper::offsets::client_dll::dwLocalPlayerController);
-        if (lobbyLocalController != 0) {
-            uint32_t lobbyHandle = drv.read<uint32_t>(lobbyLocalController + offsets.m_hPlayerPawn);
-            if (lobbyHandle != 0) {
-                std::uintptr_t lobbyLocalPawn = get_entity_from_handle(drv, client, lobbyHandle);
-                if (lobbyLocalPawn != 0) {
-                    // Set lobby local player for ESP
-                    EntityManager lobbyEntities;  // Empty entity list
-                    espRenderer.updateEntities(lobbyEntities, lobbyLocalPawn);
-                }
-            }
-        }
-        
-        bool allChecksPass = true;
-        
-        // Check 1: Entity List exists
-        std::uintptr_t entityList = drv.read<std::uintptr_t>(client + cs2_dumper::offsets::client_dll::dwEntityList);
-        if (entityList == 0) {
-            allChecksPass = false;
-        }
-        
-        // Check 2: ViewMatrix is valid
-        if (allChecksPass) {
-            std::uintptr_t viewMatrixAddr = client + cs2_dumper::offsets::client_dll::dwViewMatrix;
-            float viewMatrix[16] = {0};
-            drv.read_memory(reinterpret_cast<PVOID>(viewMatrixAddr), viewMatrix, sizeof(viewMatrix));
-            
-            bool hasNonZero = false;
-            for (int i = 0; i < 16; i++) {
-                if (viewMatrix[i] != 0.0f && viewMatrix[i] != 1.0f) {
-                    hasNonZero = true;
-                    break;
-                }
-            }
-            
-            if (!hasNonZero) {
-                allChecksPass = false;
-            }
-        }
-        
-        // Check 3: Local Player exists and is valid
-        if (allChecksPass) {
-            std::uintptr_t localController = drv.read<std::uintptr_t>(client + cs2_dumper::offsets::client_dll::dwLocalPlayerController);
-            if (localController != 0) {
-                uint32_t pawnHandle = drv.read<uint32_t>(localController + offsets.m_hPlayerPawn);
-                if (pawnHandle != 0) {
-                    std::uintptr_t localPlayerPawn = get_entity_from_handle(drv, client, pawnHandle);
-                    
-                    if (localPlayerPawn != 0) {
-                        int32_t health = drv.read<int32_t>(localPlayerPawn + offsets.m_iHealth);
-                        uint8_t team = drv.read<uint8_t>(localPlayerPawn + offsets.m_iTeamNum);
-                        
-                        // Valid if health is reasonable and team is set
-                        if (health <= 0 || health > 150 || (team != 2 && team != 3)) {
-                            allChecksPass = false;
-                        }
-                    } else {
-                        allChecksPass = false;
-                    }
-                } else {
-                    allChecksPass = false;
-                }
-            } else {
-                allChecksPass = false;
-            }
-        }
-        
-        if (allChecksPass) {
-            consecutiveValidChecks++;
-            
-            if (consecutiveValidChecks >= requiredValidChecks) {
-                ConsoleColor::PrintSuccess("In-game state detected!");
-                Logger::LogSuccess("In-game state detected!");
-                std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                return true;
-            }
-        } else {
-            consecutiveValidChecks = 0;
-        }
-        
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-}
+// (Game state waiting moved to src/App/game_state_waiter.hpp)
 
 int main() {
     // ===== INITIALIZE LOGGER FIRST =====
@@ -342,15 +75,14 @@ int main() {
         ConsoleColor::PrintSuccess("Logger initialized - session logged to Logs.txt");
     }
     
+    ConsoleColor::ClearScreen();
     ConsoleColor::PrintHeader("SUBARO INITIALIZING");
     Logger::LogHeader("SUBARO INITIALIZING");
 
 RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     
     // Reset global flags
-    g_cs2ProcessRunning.store(true);
-    g_shutdownRequested.store(false);
-    g_cs2ProcessId = 0;
+    ResetAppState();
 
     // ===== VERSION CONTROL SYSTEM =====
     VersionManager::VersionConfig versionConfig = VersionManager::CheckAndUpdate();
@@ -395,7 +127,7 @@ RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     Logger::LogInfo("Attempting to connect to driver...");
     Logger::Log("[*] Device symbolic link: " + versionConfig.deviceSymbolicLink);
     
-    if (!ConnectOrLoadDriver(driver_handle, versionConfig)) {
+    if (!DriverManager::ConnectOrLoadDriver(driver_handle, versionConfig)) {
         ConsoleColor::PrintError("Failed to connect or load driver");
         Logger::LogError("Failed to connect or load driver");
         std::cout << "\nPress Enter to exit...";
@@ -418,6 +150,7 @@ RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     // Clear console and show logo
     ConsoleColor::ClearScreen();
     ConsoleColor::PrintLogo();
+    ConsoleColor::HideCursor();
     
     std::cout << "\n";
     ConsoleColor::PrintInfo("Waiting for CS2...");
@@ -425,12 +158,12 @@ RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     // ===== WAIT FOR CS2.EXE =====
     const std::wstring proc_name = L"cs2.exe";
     Logger::LogInfo("Waiting for CS2 process...");
-    DWORD pid = wait_for_process(proc_name);
+    DWORD pid = ProcessUtils::WaitForProcess(proc_name);
     g_cs2ProcessId = pid;
     Logger::LogSuccess("CS2 process found - PID: " + std::to_string(pid));
 
     // Start CS2 process monitor thread
-    std::thread processMonitorThread(CS2ProcessMonitor);
+    std::thread processMonitorThread(ProcessUtils::CS2ProcessMonitor);
     processMonitorThread.detach();
     Logger::LogInfo("CS2 process monitor started");
 
@@ -514,6 +247,15 @@ RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     Aimbot aimbot(driver_handle, client);
     Chams chams(driver_handle, client);
     
+    // NEW FEATURES INITIALIZATION
+    BoneESP boneESP(driver_handle, client);
+    ThirdPerson thirdPerson(driver_handle, client);
+    RecoilCompensation recoilComp(driver_handle, client);
+    SmoothAim smoothAim(5.0f); // 5.0f = default smoothness factor
+    EntityPredictor entityPredictor(driver_handle);
+    VisibilityChecker visibilityChecker(driver_handle, client);
+    SilentAim silentAim(driver_handle, client);
+    
     // ===== LOAD SETTINGS FROM FILE =====
     SettingsManager::Settings savedSettings = SettingsManager::LoadSettings();
     
@@ -527,6 +269,15 @@ RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     bool distanceESPEnabled = savedSettings.distanceESPEnabled;
     bool snaplinesWallCheckEnabled = savedSettings.snaplinesWallCheckEnabled;
     bool chamsEnabled = savedSettings.chamsEnabled;
+    
+    // NEW EXTENDED FEATURES
+    bool boneESPEnabled = savedSettings.boneESPEnabled;
+    bool silentAimEnabled = savedSettings.silentAimEnabled;
+    bool thirdPersonEnabled = savedSettings.thirdPersonEnabled;
+    bool recoilCompEnabled = savedSettings.recoilCompEnabled;
+    bool smoothAimEnabled = savedSettings.smoothAimEnabled;
+    bool entityPredictorEnabled = savedSettings.entityPredictorEnabled;
+    bool visibilityCheckEnabled = savedSettings.visibilityCheckEnabled;
     
     if (SettingsManager::SettingsFileExists()) {
         ConsoleColor::PrintSuccess("Settings loaded from file");
@@ -543,10 +294,11 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
     
     Logger::LogInfo("Entering lobby mode - waiting for game start");
     
-    if (!WaitForInGameState(driver_handle, client, espRenderer)) {
+    if (!GameStateWaiter::WaitForInGameState(driver_handle, client, espRenderer)) {
         // CS2 process closed while waiting
         ConsoleColor::ClearScreen();
         ConsoleColor::PrintLogo();
+        ConsoleColor::HideCursor();
         
         std::cout << "\n";
         ConsoleColor::PrintWarning("CS2 process has been closed!");
@@ -595,23 +347,45 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
     bool isInGame = true;
 
     // ===== RE-ENABLE FEATURES AFTER RE-ATTACK =====
+    // Use ToggleManager to apply all toggles consistently
+    ToggleManager toggleManager(
+        triggerbot,
+        bhop,
+        aimbot,
+        chams,
+        boneESP,
+        thirdPerson,
+        visibilityChecker,
+        smoothAim,
+        recoilComp,
+        espRenderer,
+        triggerbotEnabled,
+        bhopEnabled,
+        aimbotEnabled,
+        consoleDebugEnabled,
+        teamCheckEnabled,
+        headAngleLineEnabled,
+        snaplinesEnabled,
+        distanceESPEnabled,
+        snaplinesWallCheckEnabled,
+        chamsEnabled,
+        boneESPEnabled,
+        silentAimEnabled,
+        thirdPersonEnabled,
+        recoilCompEnabled,
+        smoothAimEnabled,
+        entityPredictorEnabled,
+        visibilityCheckEnabled
+    );
     
-    triggerbot.setEnabled(triggerbotEnabled);
-    bhop.setEnabled(bhopEnabled);
-    aimbot.setEnabled(aimbotEnabled);
-    chams.setEnabled(chamsEnabled);
-    ConsoleLogger::setEnabled(consoleDebugEnabled);
-    triggerbot.setTeamCheckEnabled(teamCheckEnabled);
-    aimbot.setTeamCheckEnabled(teamCheckEnabled);
-    espRenderer.setHeadAngleLineEnabled(headAngleLineEnabled);
-    espRenderer.setHeadAngleLineTeamCheckEnabled(teamCheckEnabled);
-    espRenderer.setSnaplinesEnabled(snaplinesEnabled);
-    espRenderer.setSnaplinesWallCheckEnabled(snaplinesWallCheckEnabled);
-    espRenderer.setDistanceESPEnabled(distanceESPEnabled);
-    espRenderer.setChamsEnabled(chamsEnabled);
+    toggleManager.applyAll();
+    // Reset states on respawn
+    recoilComp.resetRecoil();
+    if (!smoothAimEnabled) {
+        smoothAim.reset();
+    }
     
     // Hide cursor for cleaner display
-    ConsoleColor::HideCursor();
 
     // ===== GET LOCAL PLAYER =====
     int attempts = 0;
@@ -635,7 +409,7 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
             continue;
         }
 
-        local_player_pawn = get_entity_from_handle(driver_handle, client, local_player_handle);
+        local_player_pawn = EntityUtils::get_entity_from_handle(driver_handle, client, local_player_handle);
 
         if (local_player_pawn == 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -666,7 +440,7 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
             if (checkController != 0) {
                 uint32_t checkHandle = driver_handle.read<uint32_t>(checkController + OffsetsManager::Get().m_hPlayerPawn);
                 if (checkHandle != 0) {
-                    std::uintptr_t checkPawn = get_entity_from_handle(driver_handle, client, checkHandle);
+                    std::uintptr_t checkPawn = EntityUtils::get_entity_from_handle(driver_handle, client, checkHandle);
                     if (checkPawn != 0) {
                         int32_t checkHealth = driver_handle.read<int32_t>(checkPawn + OffsetsManager::Get().m_iHealth);
                         
@@ -708,8 +482,13 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
         }
 
         // Clear screen and show unified panel
-        ConsoleColor::ClearScreen();
-        ConsoleColor::HideCursor();
+        // Only clear and hide cursor once per game session, not every frame
+        static bool clearedForGame = false;
+        if (!clearedForGame) {
+            ConsoleColor::ClearScreen();
+            ConsoleColor::HideCursor();
+            clearedForGame = true;
+        }
 
         // ===== MAIN LOOP =====
         
@@ -734,7 +513,7 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
                     uint32_t current_handle = driver_handle.read<uint32_t>(current_controller + OffsetsManager::Get().m_hPlayerPawn);
                     
                     if (current_handle != 0) {
-                        std::uintptr_t new_pawn = get_entity_from_handle(driver_handle, client, current_handle);
+                        std::uintptr_t new_pawn = EntityUtils::get_entity_from_handle(driver_handle, client, current_handle);
                         
                         if (new_pawn != 0 && new_pawn != local_player_pawn) {
                             local_player_pawn = new_pawn;
@@ -754,190 +533,7 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
             // Check for key presses
             if (_kbhit()) {
                 int key = _getch();
-                
-                if (key == '0') {
-                    consoleDebugEnabled = !consoleDebugEnabled;
-                    ConsoleLogger::setEnabled(consoleDebugEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
-                else if (key == '1') {
-                    aimbotEnabled = !aimbotEnabled;
-                    aimbot.setEnabled(aimbotEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
-                else if (key == '2') {
-                    triggerbotEnabled = !triggerbotEnabled;
-                    triggerbot.setEnabled(triggerbotEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
-                else if (key == '3') {
-                    bhopEnabled = !bhopEnabled;
-                    bhop.setEnabled(bhopEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
-                else if (key == '4') {
-                    headAngleLineEnabled = !headAngleLineEnabled;
-                    espRenderer.setHeadAngleLineEnabled(headAngleLineEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
-                else if (key == '5') {
-                    snaplinesEnabled = !snaplinesEnabled;
-                    espRenderer.setSnaplinesEnabled(snaplinesEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
-                else if (key == '6') {
-                    distanceESPEnabled = !distanceESPEnabled;
-                    espRenderer.setDistanceESPEnabled(distanceESPEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
-                else if (key == '7') {
-                    snaplinesWallCheckEnabled = !snaplinesWallCheckEnabled;
-                    espRenderer.setSnaplinesWallCheckEnabled(snaplinesWallCheckEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
-                else if (key == '8') {
-                    teamCheckEnabled = !teamCheckEnabled;
-                    triggerbot.setTeamCheckEnabled(teamCheckEnabled);
-                    aimbot.setTeamCheckEnabled(teamCheckEnabled);
-                    espRenderer.setHeadAngleLineTeamCheckEnabled(teamCheckEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
-                else if (key == '9') {
-                    chamsEnabled = !chamsEnabled;
-                    chams.setEnabled(chamsEnabled);
-                    espRenderer.setChamsEnabled(chamsEnabled);
-                    
-                    // Save settings
-                    SettingsManager::Settings settings;
-                    settings.triggerbotEnabled = triggerbotEnabled;
-                    settings.bhopEnabled = bhopEnabled;
-                    settings.aimbotEnabled = aimbotEnabled;
-                    settings.consoleDebugEnabled = consoleDebugEnabled;
-                    settings.teamCheckEnabled = teamCheckEnabled;
-                    settings.headAngleLineEnabled = headAngleLineEnabled;
-                    settings.snaplinesEnabled = snaplinesEnabled;
-                    settings.distanceESPEnabled = distanceESPEnabled;
-                    settings.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
-                    settings.chamsEnabled = chamsEnabled;
-                    SettingsManager::SaveSettings(settings);
-                }
+                toggleManager.handleKey(key);
             }
 
             // ===== CHECK CS2 PROCESS STATUS =====
@@ -1029,7 +625,7 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
                     if (checkController != 0) {
                         uint32_t checkHandle = driver_handle.read<uint32_t>(checkController + OffsetsManager::Get().m_hPlayerPawn);
                         if (checkHandle != 0) {
-                            std::uintptr_t checkPawn = get_entity_from_handle(driver_handle, client, checkHandle);
+                            std::uintptr_t checkPawn = EntityUtils::get_entity_from_handle(driver_handle, client, checkHandle);
                             if (checkPawn != 0) {
                                 // Force full rescan with current local player
                                 enumerator.force_rescan(entities, checkPawn);
@@ -1050,14 +646,7 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
                     
                     Logger::LogInfo("Re-attach triggered - no players for 5 seconds");
                     
-                    std::vector<std::string> boxLines = {
-                        "",
-                        "No players detected for 5 seconds.",
-                        "Returning to lobby detection...",
-                        ""
-                    };
-                    
-                    ConsoleColor::PrintBox("RE-ATTACH TRIGGERED", boxLines);
+                    UIHelper::PrintReattachNotice();
                     
                     aimbot.setEnabled(false);
                     triggerbot.setEnabled(false);
@@ -1094,7 +683,7 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
 
             // Status line - now vertical display every 60 frames
             if (frame % 60 == 0) {
-                ConsoleColor::PrintUnifiedPanel(
+                UIHelper::PrintUnifiedPanel(
                     frame,
                     static_cast<int>(entities.all_entities.size()),
                     static_cast<int>(entities.enemy_entities.size()),
@@ -1108,6 +697,13 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
                     snaplinesWallCheckEnabled,
                     teamCheckEnabled,
                     chamsEnabled,
+                    boneESPEnabled,
+                    silentAimEnabled,
+                    thirdPersonEnabled,
+                    recoilCompEnabled,
+                    smoothAimEnabled,
+                    entityPredictorEnabled,
+                    visibilityCheckEnabled,
                     isInGame
                 );
             }
