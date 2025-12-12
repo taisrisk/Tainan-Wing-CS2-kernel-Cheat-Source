@@ -2,6 +2,7 @@
 #include "../Helpers/OS-ImGui/OS-ImGui.h"
 #include "entity.hpp"
 #include "HeadAngleLine.hpp"
+#include "BoneESP.hpp"
 #include "VisibilityChecker.hpp"
 #include "../Core/driver.hpp"
 #include "../Offsets/offsets.hpp"
@@ -36,6 +37,12 @@ private:
     bool distanceESPEnabled = false;
     bool chamsEnabled = false;
     bool lobbyMode = false;
+<<<<<<< Updated upstream
+=======
+    bool boneESPEnabled = false;
+    bool teamCheckEnabled = true;
+    BoneESP boneEsp;
+>>>>>>> Stashed changes
     
     // Visibility cache for snaplines
     std::vector<bool> enemyVisibility;
@@ -43,7 +50,7 @@ private:
     
 public:
     ImGuiESP(driver::DriverHandle& driver, std::uintptr_t client)
-        : drv(driver), clientBase(client), headAngleLine(driver, client), visibilityChecker(driver, client) {
+        : drv(driver), clientBase(client), headAngleLine(driver, client), visibilityChecker(driver, client), boneEsp(driver, client) {
         lastFrameTime = std::chrono::steady_clock::now();
         headAngleLine.setScreenDimensions(screenWidth, screenHeight);
     }
@@ -56,8 +63,8 @@ public:
         // Update head angle line local player
         headAngleLine.setLocalPlayerPawn(localAddr);
         
-        // Update visibility cache if wall-check is enabled
-        if (snaplinesWallCheckEnabled && localAddr != 0) {
+        // Update visibility cache if checker is enabled (or snapline wall-check on)
+        if ((visibilityChecker.isEnabled() || snaplinesWallCheckEnabled) && localAddr != 0) {
             visibilityChecker.updateVisibility(entities, localAddr, enemyVisibility, teammateVisibility);
         }
         
@@ -79,6 +86,12 @@ public:
     bool isChamsEnabled() const { return chamsEnabled; }
     void setLobbyMode(bool enable) { lobbyMode = enable; }
     bool isLobbyMode() const { return lobbyMode; }
+<<<<<<< Updated upstream
+=======
+    void setBoneESPEnabled(bool enable) { boneESPEnabled = enable; boneEsp.setEnabled(enable); }
+    bool isBoneESPEnabled() const { return boneESPEnabled; }
+    void setTeamCheckEnabled(bool enable) { teamCheckEnabled = enable; }
+>>>>>>> Stashed changes
     
     void updateViewMatrix() {
         std::uintptr_t matrixAddress = clientBase + cs2_dumper::offsets::client_dll::dwViewMatrix;
@@ -90,6 +103,9 @@ public:
         float deltaTime = std::chrono::duration<float>(currentTime - lastFrameTime).count();
         lastFrameTime = currentTime;
         
+        // Always refresh view matrix for correct W2S across all features
+        updateViewMatrix();
+
         frameCount++;
         if (frameCount >= 60) {
             currentFPS = 1.0f / deltaTime;
@@ -172,22 +188,24 @@ public:
         snprintf(countText, sizeof(countText), "Entities: %zu", currentEntities.enemy_entities.size() + currentEntities.teammate_entities.size());
         drawList->AddText(ImVec2(10, 30), ImColor(255, 255, 255, 255), countText);
         
-        // Render enemies with visibility index
+        // Render enemies with visibility index (always render enemies)
         for (size_t i = 0; i < currentEntities.enemy_entities.size(); i++) {
             const auto& ent = currentEntities.enemy_entities[i];
             if (!ent.is_valid || ent.address == localPlayerAddress) continue;
             
-            bool visible = (snaplinesWallCheckEnabled && i < enemyVisibility.size()) ? enemyVisibility[i] : true;
+            bool visible = ((visibilityChecker.isEnabled() || snaplinesWallCheckEnabled) && i < enemyVisibility.size()) ? enemyVisibility[i] : true;
             drawEntity(ent, ImColor(255, 0, 0, 255), true, visible);
         }
         
-        // Render teammates with visibility index
-        for (size_t i = 0; i < currentEntities.teammate_entities.size(); i++) {
-            const auto& ent = currentEntities.teammate_entities[i];
-            if (!ent.is_valid || ent.address == localPlayerAddress) continue;
-            
-            bool visible = (snaplinesWallCheckEnabled && i < teammateVisibility.size()) ? teammateVisibility[i] : true;
-            drawEntity(ent, ImColor(0, 0, 255, 255), false, visible);
+        // Render teammates only when team check is OFF (i.e., show both teams)
+        if (!teamCheckEnabled) {
+            for (size_t i = 0; i < currentEntities.teammate_entities.size(); i++) {
+                const auto& ent = currentEntities.teammate_entities[i];
+                if (!ent.is_valid || ent.address == localPlayerAddress) continue;
+                
+                bool visible = ((visibilityChecker.isEnabled() || snaplinesWallCheckEnabled) && i < teammateVisibility.size()) ? teammateVisibility[i] : true;
+                drawEntity(ent, ImColor(0, 0, 255, 255), false, visible);
+            }
         }
     }
     
@@ -260,6 +278,11 @@ private:
         
         // Only draw box and other elements if on screen
         if (!onScreen) return;
+
+        // If visibility filtering is enabled and target not visible, skip drawing ESP elements
+        if ((visibilityChecker.isEnabled() || snaplinesWallCheckEnabled) && !isVisible) {
+            return;
+        }
         
         float height = feetScreen.y - headScreen.y;
         float width = height * 0.5f;
@@ -291,6 +314,107 @@ private:
         
         // Draw entity box AFTER chams so box is visible
         drawList->AddRect(boxPos.ToImVec2(), ImVec2(boxPos.x + boxSize.x, boxPos.y + boxSize.y), color, 4.0f, 0, 2.0f);
+
+        // Bone ESP rendering (direct bone buffer, exact indices and connections)
+        if (boneESPEnabled) {
+            const auto& offsets = OffsetsManager::Get();
+            std::uintptr_t gameScene = drv.read<std::uintptr_t>(ent.address + offsets.m_pGameSceneNode);
+            if (gameScene != 0) {
+                std::uintptr_t boneIndex = drv.read<std::uintptr_t>(gameScene + offsets.m_modelState + 0x80);
+                if (boneIndex != 0) {
+                    enum BoneIndex {
+                        HEAD = 6, NECK = 5, SPINE = 4, PELVIS = 0,
+                        L_SHOULDER = 8, L_ARM = 9, L_HAND = 11,
+                        R_SHOULDER = 13, R_ARM = 14, R_HAND = 16,
+                        SPINE1 = 2,
+                        L_HIP = 22, L_KNEE = 23, L_FOOT = 24,
+                        R_HIP = 25, R_KNEE = 26, R_FOOT = 27
+                    };
+
+                    static const std::pair<int, int> connections[] = {
+                        { HEAD, NECK }, { NECK, SPINE }, { SPINE, PELVIS },
+                        { SPINE, L_SHOULDER }, { L_SHOULDER, L_ARM }, { L_ARM, L_HAND },
+                        { SPINE, R_SHOULDER }, { R_SHOULDER, R_ARM }, { R_ARM, R_HAND },
+                        { SPINE, SPINE1 }, { PELVIS, L_HIP }, { PELVIS, R_HIP },
+                        { L_HIP, L_KNEE }, { L_KNEE, L_FOOT },
+                        { R_HIP, R_KNEE }, { R_KNEE, R_FOOT }
+                    };
+
+                    // Draw skeleton connections
+                    for (const auto& conn : connections) {
+                        int b1 = conn.first;
+                        int b2 = conn.second;
+                        Vector3 v1 = drv.read<Vector3>(boneIndex + static_cast<std::uintptr_t>(b1) * 32);
+                        Vector3 v2 = drv.read<Vector3>(boneIndex + static_cast<std::uintptr_t>(b2) * 32);
+                        Vec2 s1{}, s2{};
+                        if (worldToScreen(v1, s1) && worldToScreen(v2, s2)) {
+                            drawList->AddLine(ImVec2(s1.x, s1.y), ImVec2(s2.x, s2.y), color, 1.0f);
+                        }
+                    }
+
+                    // China hat on top of head (screen-proportional, distance-stable)
+                    {
+                        Vector3 vHead = drv.read<Vector3>(boneIndex + static_cast<std::uintptr_t>(HEAD) * 32);
+                        Vec2 sHead{};
+                        if (worldToScreen(vHead, sHead)) {
+                            // Scale relative to on-screen box height with lower mins for far targets
+                            float h = std::clamp(height, 0.0f, 1000.0f);
+                            if (h >= 8.0f) {
+                                float brimRadius = std::clamp(h * 0.16f, 4.0f, 18.0f);
+                                float apexOffset = std::clamp(h * 0.18f, 6.0f, 24.0f);
+                                // Keep brim near the top of the head (slightly above)
+                                float brimYOffsetTop = std::clamp(h * 0.01f, 1.0f, 6.0f);
+
+                                // Flatter brim at distance (smaller h), less flatten near
+                                float hNorm = std::clamp(h / 200.0f, 0.0f, 1.0f);
+                                float brimFlatten = 0.22f + 0.28f * hNorm; // 0.22 (far) .. 0.50 (near)
+
+                                const int segments = 26;
+                                const int spokeCount = 12;
+
+                                float baseLift = std::clamp(h * 0.05f, 3.0f, 14.0f);
+                                ImVec2 apex(sHead.x, sHead.y - (apexOffset + baseLift));
+                                ImVec2 brimCenter(sHead.x, sHead.y - brimYOffsetTop);
+
+                                float alphaFactor = std::clamp(h / 200.0f, 0.35f, 1.0f);
+                                ImColor spokeCol(color.Value.x, color.Value.y, color.Value.z, 0.70f * alphaFactor);
+                                ImColor rimCol  (color.Value.x, color.Value.y, color.Value.z, 0.90f * alphaFactor);
+                                ImColor shadeCol(0.0f, 0.0f, 0.0f, 0.25f);
+
+                                // Brim ellipse
+                                ImVec2 firstPt{}, prevPt{};
+                                for (int i = 0; i < segments; ++i) {
+                                    float t = (2.0f * 3.14159265f) * (static_cast<float>(i) / segments);
+                                    ImVec2 pt(
+                                        brimCenter.x + brimRadius * cosf(t),
+                                        brimCenter.y + (brimRadius * brimFlatten) * sinf(t)
+                                    );
+                                    if (i == 0) firstPt = pt; else {
+                                        drawList->AddLine(ImVec2(prevPt.x, prevPt.y + 1.0f), ImVec2(pt.x, pt.y + 1.0f), shadeCol, 1.0f);
+                                        drawList->AddLine(prevPt, pt, rimCol, 1.8f);
+                                    }
+                                    prevPt = pt;
+                                }
+                                // Close ring
+                                drawList->AddLine(ImVec2(prevPt.x, prevPt.y + 1.0f), ImVec2(firstPt.x, firstPt.y + 1.0f), shadeCol, 1.0f);
+                                drawList->AddLine(prevPt, firstPt, rimCol, 1.8f);
+
+                                // Spokes
+                                for (int i = 0; i < spokeCount; ++i) {
+                                    float t = (2.0f * 3.14159265f) * (static_cast<float>(i) / spokeCount);
+                                    ImVec2 brimPt(
+                                        brimCenter.x + brimRadius * cosf(t),
+                                        brimCenter.y + (brimRadius * brimFlatten) * sinf(t)
+                                    );
+                                    drawList->AddLine(ImVec2(apex.x, apex.y + 1.0f), ImVec2(brimPt.x, brimPt.y + 1.0f), shadeCol, 1.0f);
+                                    drawList->AddLine(apex, brimPt, spokeCol, 1.2f);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
         // Draw distance ESP if enabled
         if (distanceESPEnabled && localPlayerAddress != 0) {

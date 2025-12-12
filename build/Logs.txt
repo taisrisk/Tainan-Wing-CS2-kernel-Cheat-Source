@@ -1,6 +1,6 @@
 
 ================================================================================
-  SESSION START: 2025-12-03 17:16:40
+  SESSION START: 2025-12-10 20:12:04
 ================================================================================
 
 
@@ -11,106 +11,55 @@
 ========================================
   VERSION CONTROL SYSTEM
 ========================================
-[17:16:40] [*] Checking for updates from server...
-[17:16:41] [*] Remote version: 1.2.5
-[17:16:41] [*] Device name: cs2raperX
-[17:16:41] [!] No local Version.txt found - first time setup
-[17:16:41] [!] Version mismatch detected!
-[17:16:41] [!] Local: None | Remote: 1.2.5
-[17:16:41] [!] Driver files are missing or incomplete
-[17:16:41] [*] Update required - download will be initiated
-[17:16:41] [*] Starting driver package download...
-[17:16:41] [*] URL: https://firebasestorage.googleapis.com/v0/b/lucent-xijvr.firebasestorage.app/o/Hiroyoshi.zip?alt=media&token=0799965b-9b78-4a35-8726-95305f2d6b66
-[17:16:41] [*] Destination: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.zip
-[17:16:41] [+] File downloaded successfully
-[17:16:42] [*] Verifying installation...
-[17:16:42] [+] Driver files verified
-[17:16:42] [+] Version.txt updated: 1.2.5
-[17:16:42] [+] Installation verified successfully
-[17:16:42] [+] Current version: 1.2.5
-[17:16:42] [*] Attempting to connect to driver...
-[17:16:42] [*] Device symbolic link: cs2raperX
-[17:16:42] [+] Driver already loaded and connected
-[17:16:42] [+] Driver connection established
-[17:16:42] [*] Waiting for CS2 process...
-[17:16:47] [+] CS2 process found - PID: 1712
-[17:16:47] [+] Attached to CS2 process
-[17:16:47] [*] Waiting for client.dll...
-[17:16:59] [+] client.dll found at address: 0x140729911148544
-[17:16:59] [*] Entering lobby mode - waiting for game start
-[17:16:59] [*] Waiting for in-game state...
-[17:18:00] [+] In-game state detected!
-[17:18:01] [+] In-game mode activated
+[20:12:04] [*] Checking for updates from server...
+[20:12:04] [*] Remote version: 1.3.3
+[20:12:04] [*] Device name: irapedva1
+[20:12:04] [!] No local Version.txt found - first time setup
+[20:12:04] [!] Version mismatch detected!
+[20:12:04] [!] Local: None | Remote: 1.3.3
+[20:12:04] [*] Update required - download will be initiated
+[20:12:10] [*] Starting driver package download...
+[20:12:10] [*] URL: https://firebasestorage.googleapis.com/v0/b/lucent-xijvr.firebasestorage.app/o/Hiroyoshi.zip?alt=media&token=aa65a9d2-350b-4a11-958b-a4d5cc101801
+[20:12:10] [*] Destination: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.zip
+[20:12:11] [+] File downloaded successfully
+[20:12:12] [*] Verifying installation...
+[20:12:12] [+] Driver files verified
+[20:12:12] [+] Version.txt updated: 1.3.3
+[20:12:12] [+] Installation verified successfully
+[20:12:12] [+] Current version: 1.3.3
+[20:12:12] [*] Attempting to connect to driver...
+[20:12:12] [*] Device symbolic link: airwave_radio (internal)
+[20:12:12] [!] Driver not detected - loading...
+[20:12:12] [*] Loading driver with KDU (no on-disk patching)...
+[20:12:12] [*] Device name: airway_radio
+[20:12:12] [*] KDU path: C:\Users\tai2l\source\repos\Tainan Wing\build\kdu.exe
+[20:12:12] [*] Driver path: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.sys
+[20:12:12] [*] Skipping driver patching step (using original .sys)
+[20:12:12] [*] Selected KDU provider: 52
+[20:12:12] [*] Executing KDU command...
+[20:12:12] [*] Command: "C:\Users\tai2l\source\repos\Tainan Wing\build\kdu.exe" -prv 52 -map "C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.sys"
+[20:12:12] [*] Starting KDU process...
+[20:12:14] [*] KDU process completed with exit code: 1
+[20:12:14] [+] Device ready: \\.\airway_radio
+[20:12:14] [+] Driver loaded successfully with KDU (exit code: 1)
+[20:12:14] [*] Connecting to driver (attempt 1/5)...
+[20:12:14] [+] Successfully connected to driver on attempt 1
+[20:12:14] [+] Driver connection established
+[20:12:16] [*] Waiting for CS2 process...
+[20:12:16] [+] CS2 process found - PID: 21892
+[20:12:16] [*] CS2 process monitor started
+[20:12:16] [+] Attached to CS2 process
+[20:12:16] [*] Waiting for client.dll...
+[20:12:16] [+] client.dll found at address: 0x140721254039552
+[20:12:16] [*] Using default settings
+[20:12:16] [*] Entering lobby mode - waiting for game start
+[20:12:16] [*] Waiting for in-game state...
+[20:13:16] [+] In-game state detected!
+[20:13:16] [+] In-game mode activated
+[20:13:17] [+] Entity scan successful - 10 players detected
 
 ================================================================================
-  SESSION START: 2025-12-03 17:25:06
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[17:25:06] [*] Checking for updates from server...
-[17:25:07] [*] Remote version: 1.2.5
-[17:25:07] [*] Device name: cs2raperX
-[17:25:07] [*] Local version: 1.2.5
-[17:25:07] [+] Version is up-to-date and files are present
-[17:25:07] [*] Attempting to connect to driver...
-[17:25:07] [*] Device symbolic link: cs2raperX
-[17:25:07] [+] Driver already loaded and connected
-[17:25:07] [+] Driver connection established
-[17:25:07] [*] Waiting for CS2 process...
-[17:25:07] [+] CS2 process found - PID: 1712
-[17:25:07] [+] Attached to CS2 process
-[17:25:07] [*] Waiting for client.dll...
-[17:25:07] [+] client.dll found at address: 0x140729911148544
-[17:25:07] [*] Entering lobby mode - waiting for game start
-[17:25:07] [*] Waiting for in-game state...
-[17:25:08] [+] In-game state detected!
-[17:25:08] [+] In-game mode activated
-[17:25:20] [*] Re-attach triggered - no players for 3 seconds
-[17:25:21] [*] Returning to game state detection...
-[17:25:21] [*] Entering lobby mode - waiting for game start
-[17:25:21] [*] Waiting for in-game state...
-[17:25:22] [+] In-game state detected!
-[17:25:22] [+] In-game mode activated
-[17:25:34] [*] Re-attach triggered - no players for 3 seconds
-[17:25:35] [*] Returning to game state detection...
-[17:25:35] [*] Entering lobby mode - waiting for game start
-[17:25:35] [*] Waiting for in-game state...
-[17:25:35] [+] In-game state detected!
-[17:25:36] [+] In-game mode activated
-[17:25:48] [*] Re-attach triggered - no players for 3 seconds
-[17:25:49] [*] Returning to game state detection...
-[17:25:49] [*] Entering lobby mode - waiting for game start
-[17:25:49] [*] Waiting for in-game state...
-[17:25:49] [+] In-game state detected!
-[17:25:50] [+] In-game mode activated
-[17:26:01] [*] Re-attach triggered - no players for 3 seconds
-[17:26:02] [*] Returning to game state detection...
-[17:26:02] [*] Entering lobby mode - waiting for game start
-[17:26:02] [*] Waiting for in-game state...
-[17:26:02] [+] In-game state detected!
-[17:26:03] [+] In-game mode activated
-[17:26:15] [*] Re-attach triggered - no players for 3 seconds
-[17:26:16] [*] Returning to game state detection...
-[17:26:16] [*] Entering lobby mode - waiting for game start
-[17:26:16] [*] Waiting for in-game state...
-[17:26:16] [+] In-game state detected!
-[17:26:16] [+] In-game mode activated
-[17:26:28] [*] Re-attach triggered - no players for 3 seconds
-[17:26:29] [*] Returning to game state detection...
-[17:26:29] [*] Entering lobby mode - waiting for game start
-[17:26:30] [*] Waiting for in-game state...
-[17:26:30] [+] In-game state detected!
-[17:26:30] [+] In-game mode activated
-
-================================================================================
-  SESSION START: 2025-12-03 17:26:44
+  SESSION START: 2025-12-10 20:19:50
 ================================================================================
 
 
@@ -121,58 +70,38 @@
 ========================================
   VERSION CONTROL SYSTEM
 ========================================
-[17:26:44] [*] Checking for updates from server...
-[17:26:44] [*] Remote version: 1.2.5
-[17:26:44] [*] Device name: cs2raperX
-[17:26:44] [*] Local version: 1.2.5
-[17:26:44] [+] Version is up-to-date and files are present
-[17:26:44] [*] Attempting to connect to driver...
-[17:26:44] [*] Device symbolic link: cs2raperX
-[17:26:44] [+] Driver already loaded and connected
-[17:26:44] [+] Driver connection established
-[17:26:44] [*] Waiting for CS2 process...
-[17:26:44] [+] CS2 process found - PID: 1712
-[17:26:44] [+] Attached to CS2 process
-[17:26:44] [*] Waiting for client.dll...
-[17:26:44] [+] client.dll found at address: 0x140729911148544
-[17:26:44] [*] Entering lobby mode - waiting for game start
-[17:26:45] [*] Waiting for in-game state...
-[17:26:45] [+] In-game state detected!
-[17:26:45] [+] In-game mode activated
+[20:19:50] [*] Checking for updates from server...
+[20:19:50] [*] Remote version: 1.3.3
+[20:19:50] [*] Device name: irapedva1
+[20:19:50] [*] Local version: 1.3.3
+[20:19:50] [+] Version is up-to-date and files are present
+[20:19:50] [*] Attempting to connect to driver...
+[20:19:50] [*] Device symbolic link: airwave_radio (internal)
+[20:19:50] [+] Driver already loaded and connected
+[20:19:50] [+] Driver connection established
+[20:19:52] [*] Waiting for CS2 process...
+[20:19:52] [+] CS2 process found - PID: 21892
+[20:19:52] [*] CS2 process monitor started
+[20:19:52] [+] Attached to CS2 process
+[20:19:52] [*] Waiting for client.dll...
+[20:19:52] [+] client.dll found at address: 0x140721254039552
+[20:19:53] [+] Settings loaded from saburo_settings.cfg
+[20:19:53] [*] Entering lobby mode - waiting for game start
+[20:19:53] [+] Already in-game - ready to scan entities
+[20:19:53] [+] In-game mode activated
+[20:19:54] [+] Entity scan successful - 10 players detected
+[20:23:42] [!] No entities detected - quick rescan
+[20:23:44] [!] Entity list empty - forcing full rescan
+[20:23:50] [*] Re-attach triggered - no players for 5 seconds
+[20:23:51] [*] Returning to game state detection...
+[20:23:51] [*] Entering lobby mode - waiting for game start
+[20:23:51] [*] Waiting for in-game state...
+[20:24:04] [+] In-game state detected!
+[20:24:05] [+] In-game mode activated
+[20:24:05] [+] Entity scan successful - 10 players detected
 
 ================================================================================
-  SESSION START: 2025-12-03 17:27:28
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[17:27:28] [*] Checking for updates from server...
-[17:27:28] [*] Remote version: 1.2.5
-[17:27:28] [*] Device name: cs2raperX
-[17:27:28] [*] Local version: 1.2.5
-[17:27:28] [+] Version is up-to-date and files are present
-[17:27:28] [*] Attempting to connect to driver...
-[17:27:28] [*] Device symbolic link: cs2raperX
-[17:27:28] [+] Driver already loaded and connected
-[17:27:28] [+] Driver connection established
-[17:27:28] [*] Waiting for CS2 process...
-[17:27:28] [+] CS2 process found - PID: 1712
-[17:27:28] [+] Attached to CS2 process
-[17:27:28] [*] Waiting for client.dll...
-[17:27:28] [+] client.dll found at address: 0x140729911148544
-[17:27:29] [*] Entering lobby mode - waiting for game start
-[17:27:29] [*] Waiting for in-game state...
-[17:27:29] [+] In-game state detected!
-[17:27:29] [+] In-game mode activated
-
-================================================================================
-  SESSION START: 2025-12-03 17:30:49
+  SESSION START: 2025-12-10 20:39:09
 ================================================================================
 
 
@@ -183,32 +112,29 @@
 ========================================
   VERSION CONTROL SYSTEM
 ========================================
-[17:30:49] [*] Checking for updates from server...
-[17:30:49] [*] Remote version: 1.2.5
-[17:30:49] [*] Device name: cs2raperX
-[17:30:49] [*] Local version: 1.2.5
-[17:30:49] [+] Version is up-to-date and files are present
-[17:30:49] [*] Attempting to connect to driver...
-[17:30:49] [*] Device symbolic link: cs2raperX
-[17:30:49] [+] Driver already loaded and connected
-[17:30:49] [+] Driver connection established
-[17:30:49] [*] Waiting for CS2 process...
-[17:30:49] [+] CS2 process found - PID: 1712
-[17:30:49] [+] Attached to CS2 process
-[17:30:49] [*] Waiting for client.dll...
-[17:30:49] [+] client.dll found at address: 0x140729911148544
-[17:30:49] [*] Entering lobby mode - waiting for game start
-[17:30:49] [+] Already in-game - skipping lobby detection
-[17:30:50] [+] In-game mode activated
-[17:30:50] [!] Entity list empty on attempt 1 - retrying
-[17:30:52] [!] Entity list empty on attempt 2 - retrying
-[17:30:53] [!] Entity list empty on attempt 3 - retrying
-[17:30:54] [!] Entity list empty on attempt 4 - retrying
-[17:30:55] [!] Entity list empty on attempt 5 - retrying
-[17:30:56] [+] Game ready - 0 players detected
+[20:39:10] [*] Checking for updates from server...
+[20:39:10] [*] Remote version: 1.3.3
+[20:39:10] [*] Device name: irapedva1
+[20:39:10] [*] Local version: 1.3.3
+[20:39:10] [+] Version is up-to-date and files are present
+[20:39:10] [*] Attempting to connect to driver...
+[20:39:10] [*] Device symbolic link: airwave_radio (internal)
+[20:39:10] [+] Driver already loaded and connected
+[20:39:10] [+] Driver connection established
+[20:39:12] [*] Waiting for CS2 process...
+[20:39:12] [+] CS2 process found - PID: 21892
+[20:39:12] [*] CS2 process monitor started
+[20:39:12] [+] Attached to CS2 process
+[20:39:12] [*] Waiting for client.dll...
+[20:39:12] [+] client.dll found at address: 0x140721254039552
+[20:39:13] [+] Settings loaded from saburo_settings.cfg
+[20:39:13] [*] Entering lobby mode - waiting for game start
+[20:39:13] [+] Already in-game - ready to scan entities
+[20:39:13] [+] In-game mode activated
+[20:39:14] [+] Entity scan successful - 8 players detected
 
 ================================================================================
-  SESSION START: 2025-12-03 17:34:53
+  SESSION START: 2025-12-10 20:49:11
 ================================================================================
 
 
@@ -219,72 +145,38 @@
 ========================================
   VERSION CONTROL SYSTEM
 ========================================
-[17:34:53] [*] Checking for updates from server...
-[17:34:54] [*] Remote version: 1.2.5
-[17:34:54] [*] Device name: cs2raperX
-[17:34:54] [*] Local version: 1.2.5
-[17:34:54] [+] Version is up-to-date and files are present
-[17:34:54] [*] Attempting to connect to driver...
-[17:34:54] [*] Device symbolic link: cs2raperX
-[17:34:54] [+] Driver already loaded and connected
-[17:34:54] [+] Driver connection established
-[17:34:54] [*] Waiting for CS2 process...
-[17:34:54] [+] CS2 process found - PID: 1712
-[17:34:54] [+] Attached to CS2 process
-[17:34:54] [*] Waiting for client.dll...
-[17:34:54] [+] client.dll found at address: 0x140729911148544
-[17:34:54] [*] Entering lobby mode - waiting for game start
-[17:34:54] [*] Waiting for in-game state...
-[17:35:28] [+] In-game state detected!
-[17:35:28] [+] In-game mode activated
-[17:35:29] [+] Game ready - 13 players detected
+[20:49:11] [*] Checking for updates from server...
+[20:49:12] [*] Remote version: 1.3.3
+[20:49:12] [*] Device name: irapedva1
+[20:49:12] [*] Local version: 1.3.3
+[20:49:12] [+] Version is up-to-date and files are present
+[20:49:12] [*] Attempting to connect to driver...
+[20:49:12] [*] Device symbolic link: airwave_radio (internal)
+[20:49:12] [+] Driver already loaded and connected
+[20:49:12] [+] Driver connection established
+[20:49:13] [*] Waiting for CS2 process...
+[20:49:13] [+] CS2 process found - PID: 21892
+[20:49:13] [*] CS2 process monitor started
+[20:49:13] [+] Attached to CS2 process
+[20:49:13] [*] Waiting for client.dll...
+[20:49:13] [+] client.dll found at address: 0x140721254039552
+[20:49:14] [+] Settings loaded from saburo_settings.cfg
+[20:49:14] [*] Entering lobby mode - waiting for game start
+[20:49:14] [+] Already in-game - ready to scan entities
+[20:49:14] [+] In-game mode activated
+[20:49:15] [+] Entity scan successful - 9 players detected
+[20:49:27] [!] No entities detected - quick rescan
+[20:49:29] [!] Entity list empty - forcing full rescan
+[20:49:35] [*] Re-attach triggered - no players for 5 seconds
+[20:49:36] [*] Returning to game state detection...
+[20:49:36] [*] Entering lobby mode - waiting for game start
+[20:49:36] [*] Waiting for in-game state...
+[20:49:44] [+] In-game state detected!
+[20:49:45] [+] In-game mode activated
+[20:49:45] [+] Entity scan successful - 10 players detected
 
 ================================================================================
-  SESSION START: 2025-12-03 17:53:38
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[17:53:38] [*] Checking for updates from server...
-[17:53:39] [*] Remote version: 1.2.5
-[17:53:39] [*] Device name: cs2raperX
-[17:53:39] [*] Local version: 1.2.5
-[17:53:39] [+] Version is up-to-date and files are present
-[17:53:39] [*] Attempting to connect to driver...
-[17:53:39] [*] Device symbolic link: cs2raperX
-[17:53:39] [+] Driver already loaded and connected
-[17:53:39] [+] Driver connection established
-[17:53:39] [*] Waiting for CS2 process...
-[17:53:39] [+] CS2 process found - PID: 1712
-[17:53:39] [+] Attached to CS2 process
-[17:53:39] [*] Waiting for client.dll...
-[17:53:39] [+] client.dll found at address: 0x140729911148544
-[17:53:40] [*] Entering lobby mode - waiting for game start
-[17:53:40] [+] Already in-game - skipping lobby detection
-[17:53:40] [+] In-game mode activated
-[17:53:41] [+] Game ready - 13 players detected
-[18:02:32] [!] Entity list empty - forcing rescan
-[18:02:37] [*] Re-attach triggered - no players for 3 seconds
-[18:02:38] [*] Returning to game state detection...
-[18:02:38] [*] Entering lobby mode - waiting for game start
-[18:02:38] [*] Waiting for in-game state...
-[18:02:49] [+] In-game state detected!
-[18:02:50] [+] In-game mode activated
-[18:02:50] [+] Game ready - 9 players detected
-[18:13:23] [!] Entity list empty - forcing rescan
-[18:13:28] [*] Re-attach triggered - no players for 3 seconds
-[18:13:29] [*] Returning to game state detection...
-[18:13:29] [*] Entering lobby mode - waiting for game start
-[18:13:29] [*] Waiting for in-game state...
-
-================================================================================
-  SESSION START: 2025-12-03 22:58:37
+  SESSION START: 2025-12-10 20:54:14
 ================================================================================
 
 
@@ -295,70 +187,29 @@
 ========================================
   VERSION CONTROL SYSTEM
 ========================================
-[22:58:37] [*] Checking for updates from server...
-[22:58:38] [*] Remote version: 1.2.5
-[22:58:38] [*] Device name: cs2raperX
-[22:58:38] [*] Local version: 1.2.5
-[22:58:38] [+] Version is up-to-date and files are present
-[22:58:38] [*] Attempting to connect to driver...
-[22:58:38] [*] Device symbolic link: cs2raperX
-[22:58:38] [+] Driver already loaded and connected
-[22:58:38] [+] Driver connection established
-[22:58:38] [*] Waiting for CS2 process...
+[20:54:15] [*] Checking for updates from server...
+[20:54:15] [*] Remote version: 1.3.3
+[20:54:15] [*] Device name: irapedva1
+[20:54:15] [*] Local version: 1.3.3
+[20:54:15] [+] Version is up-to-date and files are present
+[20:54:15] [*] Attempting to connect to driver...
+[20:54:15] [*] Device symbolic link: airwave_radio (internal)
+[20:54:15] [+] Driver already loaded and connected
+[20:54:15] [+] Driver connection established
+[20:54:17] [*] Waiting for CS2 process...
+[20:54:17] [+] CS2 process found - PID: 21892
+[20:54:17] [*] CS2 process monitor started
+[20:54:17] [+] Attached to CS2 process
+[20:54:17] [*] Waiting for client.dll...
+[20:54:17] [+] client.dll found at address: 0x140721254039552
+[20:54:17] [+] Settings loaded from saburo_settings.cfg
+[20:54:17] [*] Entering lobby mode - waiting for game start
+[20:54:17] [+] Already in-game - ready to scan entities
+[20:54:18] [+] In-game mode activated
+[20:54:18] [+] Entity scan successful - 8 players detected
 
 ================================================================================
-  SESSION START: 2025-12-03 23:23:48
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[23:23:48] [*] Checking for updates from server...
-[23:23:49] [*] Remote version: 1.2.8
-[23:23:49] [*] Device name: irapedvalve
-[23:23:49] [*] Local version: 1.2.5
-[23:23:49] [!] Version mismatch detected!
-[23:23:49] [!] Local: 1.2.5 | Remote: 1.2.8
-[23:23:49] [*] Update required - download will be initiated
-[23:23:49] [*] Starting driver package download...
-[23:23:49] [*] URL: https://firebasestorage.googleapis.com/v0/b/lucent-xijvr.firebasestorage.app/o/Hiroyoshi.zip?alt=media&token=0799965b-9b78-4a35-8726-95305f2d6b66
-[23:23:49] [*] Destination: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.zip
-[23:23:50] [+] File downloaded successfully
-[23:23:51] [*] Verifying installation...
-[23:23:51] [+] Driver files verified
-[23:23:51] [+] Version.txt updated: 1.2.8
-[23:23:51] [+] Installation verified successfully
-[23:23:51] [+] Current version: 1.2.8
-[23:23:51] [*] Attempting to connect to driver...
-[23:23:51] [*] Device symbolic link: irapedvalve
-[23:23:51] [+] Driver already loaded and connected
-[23:23:51] [+] Driver connection established
-[23:23:51] [*] Waiting for CS2 process...
-[23:23:51] [+] CS2 process found - PID: 20124
-[23:23:51] [+] Attached to CS2 process
-[23:23:51] [*] Waiting for client.dll...
-[23:23:51] [+] client.dll found at address: 0x140730663829504
-[23:23:52] [*] Entering lobby mode - waiting for game start
-[23:23:52] [*] Waiting for in-game state...
-[23:23:53] [+] In-game state detected!
-[23:23:54] [+] In-game mode activated
-[23:23:54] [+] Entity scan successful - 12 players detected
-[23:31:45] [!] No entities detected - quick rescan
-[23:31:48] [!] Entity list empty - forcing full rescan
-[23:42:24] [!] No entities detected - quick rescan
-[23:42:27] [!] Entity list empty - forcing full rescan
-[23:42:34] [*] Re-attach triggered - no players for 5 seconds
-[23:42:35] [*] Returning to game state detection...
-[23:42:35] [*] Entering lobby mode - waiting for game start
-[23:42:35] [*] Waiting for in-game state...
-
-================================================================================
-  SESSION START: 2025-12-04 00:00:23
+  SESSION START: 2025-12-10 20:57:47
 ================================================================================
 
 
@@ -369,38 +220,29 @@
 ========================================
   VERSION CONTROL SYSTEM
 ========================================
-[00:00:23] [*] Checking for updates from server...
-[00:00:23] [*] Remote version: 1.2.8
-[00:00:23] [*] Device name: irapedvalve
-[00:00:23] [*] Local version: 1.2.8
-[00:00:23] [+] Version is up-to-date and files are present
-[00:00:23] [*] Attempting to connect to driver...
-[00:00:23] [*] Device symbolic link: irapedvalve
-[00:00:23] [+] Driver already loaded and connected
-[00:00:23] [+] Driver connection established
-[00:00:23] [*] Waiting for CS2 process...
-[00:00:29] [+] CS2 process found - PID: 8676
-[00:00:29] [*] CS2 process monitor started
-[00:00:29] [+] Attached to CS2 process
-[00:00:29] [*] Waiting for client.dll...
-[00:00:40] [+] client.dll found at address: 0x140730638336000
-[00:00:41] [*] Using default settings
-[00:00:41] [*] Entering lobby mode - waiting for game start
-[00:00:41] [*] Waiting for in-game state...
-[00:02:11] [!] CS2 process terminated - PID 8676 no longer exists
-[00:02:11] [!] CS2 process closed during lobby wait
-[00:02:11] [!] CS2 process closed during lobby wait
-[00:02:21] [*] User chose to exit after CS2 closure
-[00:02:21] [*] Shutting down Subaro...
+[20:57:47] [*] Checking for updates from server...
+[20:57:48] [*] Remote version: 1.3.3
+[20:57:48] [*] Device name: irapedva1
+[20:57:48] [*] Local version: 1.3.3
+[20:57:48] [+] Version is up-to-date and files are present
+[20:57:48] [*] Attempting to connect to driver...
+[20:57:48] [*] Device symbolic link: airwave_radio (internal)
+[20:57:48] [+] Driver already loaded and connected
+[20:57:48] [+] Driver connection established
+[20:57:49] [*] Waiting for CS2 process...
+[20:57:49] [+] CS2 process found - PID: 21892
+[20:57:49] [*] CS2 process monitor started
+[20:57:49] [+] Attached to CS2 process
+[20:57:49] [*] Waiting for client.dll...
+[20:57:49] [+] client.dll found at address: 0x140721254039552
+[20:57:50] [+] Settings loaded from saburo_settings.cfg
+[20:57:50] [*] Entering lobby mode - waiting for game start
+[20:57:50] [+] Already in-game - ready to scan entities
+[20:57:50] [+] In-game mode activated
+[20:57:51] [+] Entity scan successful - 10 players detected
 
 ================================================================================
-  SESSION END: 2025-12-04 00:02:21
-  Duration: Session started at 2025-12-04 00:00:23
-================================================================================
-
-
-================================================================================
-  SESSION START: 2025-12-04 02:41:58
+  SESSION START: 2025-12-10 20:59:27
 ================================================================================
 
 
@@ -411,38 +253,1092 @@
 ========================================
   VERSION CONTROL SYSTEM
 ========================================
-[02:41:58] [*] Checking for updates from server...
-[02:41:58] [*] Remote version: 1.2.8
-[02:41:58] [*] Device name: irapedvalve
-[02:41:58] [*] Local version: 1.2.8
-[02:41:58] [+] Version is up-to-date and files are present
-[02:41:58] [*] Attempting to connect to driver...
-[02:41:58] [*] Device symbolic link: irapedvalve
-[02:41:58] [+] Driver already loaded and connected
-[02:41:58] [+] Driver connection established
-[02:41:58] [*] Waiting for CS2 process...
-[02:42:00] [+] CS2 process found - PID: 33276
-[02:42:00] [*] CS2 process monitor started
-[02:42:00] [+] Attached to CS2 process
-[02:42:00] [*] Waiting for client.dll...
-[02:42:12] [+] client.dll found at address: 0x140728822530048
-[02:42:13] [*] Using default settings
-[02:42:13] [*] Entering lobby mode - waiting for game start
-[02:42:13] [*] Waiting for in-game state...
-[02:43:12] [+] In-game state detected!
-[02:43:13] [+] In-game mode activated
-[02:43:14] [+] Entity scan successful - 13 players detected
-[02:46:32] [!] No entities detected - quick rescan
-[02:46:35] [!] Entity list empty - forcing full rescan
-[02:57:26] [!] No entities detected - quick rescan
-[02:57:29] [!] Entity list empty - forcing full rescan
-[02:57:34] [!] CS2 process terminated - PID 33276 no longer exists
-[02:57:34] [!] CS2 process closed - prompting user
-[02:58:14] [*] User chose to exit after CS2 closure
-[02:58:14] [*] Shutting down Subaro...
+[20:59:27] [*] Checking for updates from server...
+[20:59:28] [*] Remote version: 1.3.3
+[20:59:28] [*] Device name: irapedva1
+[20:59:28] [*] Local version: 1.3.3
+[20:59:28] [+] Version is up-to-date and files are present
+[20:59:28] [*] Attempting to connect to driver...
+[20:59:28] [*] Device symbolic link: airwave_radio (internal)
+[20:59:28] [+] Driver already loaded and connected
+[20:59:28] [+] Driver connection established
+[20:59:30] [*] Waiting for CS2 process...
+[20:59:30] [+] CS2 process found - PID: 21892
+[20:59:30] [*] CS2 process monitor started
+[20:59:30] [+] Attached to CS2 process
+[20:59:30] [*] Waiting for client.dll...
+[20:59:30] [+] client.dll found at address: 0x140721254039552
+[20:59:30] [+] Settings loaded from saburo_settings.cfg
+[20:59:30] [*] Entering lobby mode - waiting for game start
+[20:59:30] [+] Already in-game - ready to scan entities
+[20:59:31] [+] In-game mode activated
+[20:59:31] [+] Entity scan successful - 9 players detected
 
 ================================================================================
+  SESSION START: 2025-12-10 21:00:54
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[21:00:54] [*] Checking for updates from server...
+[21:00:54] [*] Remote version: 1.3.3
+[21:00:54] [*] Device name: irapedva1
+[21:00:54] [*] Local version: 1.3.3
+[21:00:54] [+] Version is up-to-date and files are present
+[21:00:54] [*] Attempting to connect to driver...
+[21:00:54] [*] Device symbolic link: airwave_radio (internal)
+[21:00:54] [+] Driver already loaded and connected
+[21:00:54] [+] Driver connection established
+[21:00:56] [*] Waiting for CS2 process...
+[21:00:56] [+] CS2 process found - PID: 21892
+[21:00:56] [*] CS2 process monitor started
+[21:00:56] [+] Attached to CS2 process
+[21:00:56] [*] Waiting for client.dll...
+[21:00:56] [+] client.dll found at address: 0x140721254039552
+[21:00:57] [+] Settings loaded from saburo_settings.cfg
+[21:00:57] [*] Entering lobby mode - waiting for game start
+[21:00:57] [*] Waiting for in-game state...
+[21:00:57] [+] In-game state detected!
+[21:00:58] [+] In-game mode activated
+[21:00:58] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 21:02:55
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[21:02:55] [*] Checking for updates from server...
+[21:02:55] [*] Remote version: 1.3.3
+[21:02:55] [*] Device name: irapedva1
+[21:02:55] [*] Local version: 1.3.3
+[21:02:55] [+] Version is up-to-date and files are present
+[21:02:55] [*] Attempting to connect to driver...
+[21:02:55] [*] Device symbolic link: airwave_radio (internal)
+[21:02:55] [+] Driver already loaded and connected
+[21:02:55] [+] Driver connection established
+[21:02:57] [*] Waiting for CS2 process...
+[21:02:57] [+] CS2 process found - PID: 21892
+[21:02:57] [*] CS2 process monitor started
+[21:02:57] [+] Attached to CS2 process
+[21:02:57] [*] Waiting for client.dll...
+[21:02:57] [+] client.dll found at address: 0x140721254039552
+[21:02:58] [+] Settings loaded from saburo_settings.cfg
+[21:02:58] [*] Entering lobby mode - waiting for game start
+[21:02:58] [+] Already in-game - ready to scan entities
+[21:02:58] [+] In-game mode activated
+[21:02:59] [+] Entity scan successful - 9 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 21:06:17
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[21:06:17] [*] Checking for updates from server...
+[21:06:17] [*] Remote version: 1.3.3
+[21:06:17] [*] Device name: irapedva1
+[21:06:17] [*] Local version: 1.3.3
+[21:06:17] [+] Version is up-to-date and files are present
+[21:06:17] [*] Attempting to connect to driver...
+[21:06:17] [*] Device symbolic link: airwave_radio (internal)
+[21:06:17] [+] Driver already loaded and connected
+[21:06:17] [+] Driver connection established
+[21:06:19] [*] Waiting for CS2 process...
+[21:06:19] [+] CS2 process found - PID: 21892
+[21:06:19] [*] CS2 process monitor started
+[21:06:19] [+] Attached to CS2 process
+[21:06:19] [*] Waiting for client.dll...
+[21:06:19] [+] client.dll found at address: 0x140721254039552
+[21:06:19] [+] Settings loaded from saburo_settings.cfg
+[21:06:19] [*] Entering lobby mode - waiting for game start
+[21:06:19] [+] Already in-game - ready to scan entities
+[21:06:20] [+] In-game mode activated
+[21:06:20] [+] Entity scan successful - 9 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 21:10:12
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[21:10:12] [*] Checking for updates from server...
+[21:10:12] [*] Remote version: 1.3.3
+[21:10:12] [*] Device name: irapedva1
+[21:10:12] [*] Local version: 1.3.3
+[21:10:12] [+] Version is up-to-date and files are present
+[21:10:12] [*] Attempting to connect to driver...
+[21:10:12] [*] Device symbolic link: airwave_radio (internal)
+[21:10:12] [+] Driver already loaded and connected
+[21:10:12] [+] Driver connection established
+[21:10:14] [*] Waiting for CS2 process...
+[21:10:14] [+] CS2 process found - PID: 21892
+[21:10:14] [*] CS2 process monitor started
+[21:10:14] [+] Attached to CS2 process
+[21:10:14] [*] Waiting for client.dll...
+[21:10:14] [+] client.dll found at address: 0x140721254039552
+[21:10:15] [+] Settings loaded from saburo_settings.cfg
+[21:10:15] [*] Entering lobby mode - waiting for game start
+[21:10:15] [+] Already in-game - ready to scan entities
+[21:10:15] [+] In-game mode activated
+[21:10:16] [+] Entity scan successful - 9 players detected
+
+================================================================================
+<<<<<<< Updated upstream
   SESSION END: 2025-12-04 02:58:14
   Duration: Session started at 2025-12-04 02:41:58
 ================================================================================
 
+=======
+  SESSION START: 2025-12-10 22:17:00
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[22:17:00] [*] Checking for updates from server...
+[22:17:01] [*] Remote version: 1.3.3
+[22:17:01] [*] Device name: irapedva1
+[22:17:01] [*] Local version: 1.3.3
+[22:17:01] [+] Version is up-to-date and files are present
+[22:17:01] [*] Attempting to connect to driver...
+[22:17:01] [*] Device symbolic link: airwave_radio (internal)
+[22:17:01] [+] Driver already loaded and connected
+[22:17:01] [+] Driver connection established
+[22:17:03] [*] Waiting for CS2 process...
+[22:17:03] [+] CS2 process found - PID: 21892
+[22:17:03] [*] CS2 process monitor started
+[22:17:03] [+] Attached to CS2 process
+[22:17:03] [*] Waiting for client.dll...
+[22:17:03] [+] client.dll found at address: 0x140721254039552
+[22:17:03] [+] Settings loaded from saburo_settings.cfg
+[22:17:03] [*] Entering lobby mode - waiting for game start
+[22:17:03] [+] Already in-game - ready to scan entities
+[22:17:04] [+] In-game mode activated
+[22:17:05] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 22:23:15
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[22:23:15] [*] Checking for updates from server...
+[22:23:15] [*] Remote version: 1.3.3
+[22:23:15] [*] Device name: irapedva1
+[22:23:15] [*] Local version: 1.3.3
+[22:23:15] [+] Version is up-to-date and files are present
+[22:23:15] [*] Attempting to connect to driver...
+[22:23:15] [*] Device symbolic link: airwave_radio (internal)
+[22:23:15] [+] Driver already loaded and connected
+[22:23:15] [+] Driver connection established
+[22:23:17] [*] Waiting for CS2 process...
+[22:23:17] [+] CS2 process found - PID: 21892
+[22:23:17] [*] CS2 process monitor started
+[22:23:17] [+] Attached to CS2 process
+[22:23:17] [*] Waiting for client.dll...
+[22:23:17] [+] client.dll found at address: 0x140721254039552
+[22:23:18] [+] Settings loaded from saburo_settings.cfg
+[22:23:18] [*] Entering lobby mode - waiting for game start
+[22:23:18] [+] Already in-game - ready to scan entities
+[22:23:18] [+] In-game mode activated
+[22:23:19] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 22:28:15
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[22:28:15] [*] Checking for updates from server...
+[22:28:16] [*] Remote version: 1.3.3
+[22:28:16] [*] Device name: irapedva1
+[22:28:16] [*] Local version: 1.3.3
+[22:28:16] [+] Version is up-to-date and files are present
+[22:28:16] [*] Attempting to connect to driver...
+[22:28:16] [*] Device symbolic link: airwave_radio (internal)
+[22:28:16] [+] Driver already loaded and connected
+[22:28:16] [+] Driver connection established
+[22:28:17] [*] Waiting for CS2 process...
+[22:28:17] [+] CS2 process found - PID: 21892
+[22:28:17] [*] CS2 process monitor started
+[22:28:17] [+] Attached to CS2 process
+[22:28:17] [*] Waiting for client.dll...
+[22:28:17] [+] client.dll found at address: 0x140721254039552
+[22:28:18] [+] Settings loaded from saburo_settings.cfg
+[22:28:18] [*] Entering lobby mode - waiting for game start
+[22:28:18] [+] Already in-game - ready to scan entities
+[22:28:18] [+] In-game mode activated
+[22:28:19] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 22:32:28
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[22:32:28] [*] Checking for updates from server...
+[22:32:29] [*] Remote version: 1.3.3
+[22:32:29] [*] Device name: irapedva1
+[22:32:29] [*] Local version: 1.3.3
+[22:32:29] [+] Version is up-to-date and files are present
+[22:32:29] [*] Attempting to connect to driver...
+[22:32:29] [*] Device symbolic link: airwave_radio (internal)
+[22:32:29] [+] Driver already loaded and connected
+[22:32:29] [+] Driver connection established
+[22:32:31] [*] Waiting for CS2 process...
+[22:32:31] [+] CS2 process found - PID: 21892
+[22:32:31] [*] CS2 process monitor started
+[22:32:31] [+] Attached to CS2 process
+[22:32:31] [*] Waiting for client.dll...
+[22:32:31] [+] client.dll found at address: 0x140721254039552
+[22:32:31] [+] Settings loaded from saburo_settings.cfg
+[22:32:31] [*] Entering lobby mode - waiting for game start
+[22:32:31] [+] Already in-game - ready to scan entities
+[22:32:32] [+] In-game mode activated
+[22:32:32] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 22:36:31
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[22:36:31] [*] Checking for updates from server...
+[22:36:32] [*] Remote version: 1.3.3
+[22:36:32] [*] Device name: irapedva1
+[22:36:32] [*] Local version: 1.3.3
+[22:36:32] [+] Version is up-to-date and files are present
+[22:36:32] [*] Attempting to connect to driver...
+[22:36:32] [*] Device symbolic link: airwave_radio (internal)
+[22:36:32] [+] Driver already loaded and connected
+[22:36:32] [+] Driver connection established
+[22:36:34] [*] Waiting for CS2 process...
+[22:36:34] [+] CS2 process found - PID: 21892
+[22:36:34] [*] CS2 process monitor started
+[22:36:34] [+] Attached to CS2 process
+[22:36:34] [*] Waiting for client.dll...
+[22:36:34] [+] client.dll found at address: 0x140721254039552
+[22:36:34] [+] Settings loaded from saburo_settings.cfg
+[22:36:34] [*] Entering lobby mode - waiting for game start
+[22:36:34] [+] Already in-game - ready to scan entities
+[22:36:35] [+] In-game mode activated
+[22:36:35] [+] Entity scan successful - 9 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 22:57:24
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[22:57:24] [*] Checking for updates from server...
+[22:57:24] [*] Remote version: 1.3.3
+[22:57:24] [*] Device name: irapedva1
+[22:57:24] [*] Local version: 1.3.3
+[22:57:24] [+] Version is up-to-date and files are present
+[22:57:24] [*] Attempting to connect to driver...
+[22:57:24] [*] Device symbolic link: airwave_radio (internal)
+[22:57:24] [+] Driver already loaded and connected
+[22:57:24] [+] Driver connection established
+[22:57:27] [*] Waiting for CS2 process...
+[22:57:27] [+] CS2 process found - PID: 21892
+[22:57:27] [*] CS2 process monitor started
+[22:57:27] [+] Attached to CS2 process
+[22:57:27] [*] Waiting for client.dll...
+[22:57:27] [+] client.dll found at address: 0x140721254039552
+[22:57:27] [+] Settings loaded from saburo_settings.cfg
+[22:57:27] [*] Entering lobby mode - waiting for game start
+[22:57:27] [+] Already in-game - ready to scan entities
+[22:57:28] [+] In-game mode activated
+[22:57:28] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 23:09:20
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[23:09:20] [*] Checking for updates from server...
+[23:09:20] [*] Remote version: 1.3.3
+[23:09:20] [*] Device name: irapedva1
+[23:09:20] [*] Local version: 1.3.3
+[23:09:20] [+] Version is up-to-date and files are present
+[23:09:20] [*] Attempting to connect to driver...
+[23:09:20] [*] Device symbolic link: airwave_radio (internal)
+[23:09:20] [+] Driver already loaded and connected
+[23:09:20] [+] Driver connection established
+[23:09:22] [*] Waiting for CS2 process...
+[23:09:22] [+] CS2 process found - PID: 21892
+[23:09:22] [*] CS2 process monitor started
+[23:09:22] [+] Attached to CS2 process
+[23:09:22] [*] Waiting for client.dll...
+[23:09:22] [+] client.dll found at address: 0x140721254039552
+[23:09:23] [+] Settings loaded from saburo_settings.cfg
+[23:09:23] [*] Entering lobby mode - waiting for game start
+[23:09:23] [+] Already in-game - ready to scan entities
+[23:09:23] [+] In-game mode activated
+[23:09:24] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 23:24:12
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[23:24:12] [*] Checking for updates from server...
+[23:24:12] [*] Remote version: 1.3.3
+[23:24:12] [*] Device name: irapedva1
+[23:24:12] [*] Local version: 1.3.3
+[23:24:12] [+] Version is up-to-date and files are present
+[23:24:12] [*] Attempting to connect to driver...
+[23:24:12] [*] Device symbolic link: airwave_radio (internal)
+[23:24:12] [+] Driver already loaded and connected
+[23:24:12] [+] Driver connection established
+[23:24:14] [*] Waiting for CS2 process...
+[23:24:14] [+] CS2 process found - PID: 21892
+[23:24:14] [*] CS2 process monitor started
+[23:24:14] [+] Attached to CS2 process
+[23:24:14] [*] Waiting for client.dll...
+[23:24:14] [+] client.dll found at address: 0x140721254039552
+[23:24:14] [+] Settings loaded from saburo_settings.cfg
+[23:24:14] [*] Entering lobby mode - waiting for game start
+[23:24:14] [*] Waiting for in-game state...
+[23:24:17] [+] In-game state detected!
+[23:24:17] [+] In-game mode activated
+[23:24:18] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 23:34:02
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[23:34:02] [*] Checking for updates from server...
+[23:34:02] [*] Remote version: 1.3.3
+[23:34:02] [*] Device name: irapedva1
+[23:34:02] [*] Local version: 1.3.3
+[23:34:02] [+] Version is up-to-date and files are present
+[23:34:02] [*] Attempting to connect to driver...
+[23:34:02] [*] Device symbolic link: airwave_radio (internal)
+[23:34:02] [+] Driver already loaded and connected
+[23:34:02] [+] Driver connection established
+[23:34:04] [*] Waiting for CS2 process...
+[23:34:04] [+] CS2 process found - PID: 21892
+[23:34:04] [*] CS2 process monitor started
+[23:34:04] [+] Attached to CS2 process
+[23:34:04] [*] Waiting for client.dll...
+[23:34:04] [+] client.dll found at address: 0x140721254039552
+[23:34:05] [+] Settings loaded from saburo_settings.cfg
+[23:34:05] [*] Entering lobby mode - waiting for game start
+[23:34:05] [+] Already in-game - ready to scan entities
+[23:34:05] [+] In-game mode activated
+[23:34:06] [+] Entity scan successful - 9 players detected
+[23:34:43] [!] No entities detected - quick rescan
+[23:34:45] [!] Entity list empty - forcing full rescan
+
+================================================================================
+  SESSION START: 2025-12-10 23:35:34
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[23:35:34] [*] Checking for updates from server...
+[23:35:35] [*] Remote version: 1.3.3
+[23:35:35] [*] Device name: irapedva1
+[23:35:35] [*] Local version: 1.3.3
+[23:35:35] [+] Version is up-to-date and files are present
+[23:35:35] [*] Attempting to connect to driver...
+[23:35:35] [*] Device symbolic link: airwave_radio (internal)
+[23:35:35] [+] Driver already loaded and connected
+[23:35:35] [+] Driver connection established
+[23:35:37] [*] Waiting for CS2 process...
+[23:35:37] [+] CS2 process found - PID: 21892
+[23:35:37] [*] CS2 process monitor started
+[23:35:37] [+] Attached to CS2 process
+[23:35:37] [*] Waiting for client.dll...
+[23:35:37] [+] client.dll found at address: 0x140721254039552
+[23:35:37] [+] Settings loaded from saburo_settings.cfg
+[23:35:37] [*] Entering lobby mode - waiting for game start
+[23:35:37] [+] Already in-game - ready to scan entities
+[23:35:38] [+] In-game mode activated
+[23:35:38] [+] Entity scan successful - 9 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 23:37:37
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[23:37:37] [*] Checking for updates from server...
+[23:37:37] [*] Remote version: 1.3.3
+[23:37:37] [*] Device name: irapedva1
+[23:37:37] [*] Local version: 1.3.3
+[23:37:37] [+] Version is up-to-date and files are present
+[23:37:37] [*] Attempting to connect to driver...
+[23:37:37] [*] Device symbolic link: airwave_radio (internal)
+[23:37:37] [+] Driver already loaded and connected
+[23:37:37] [+] Driver connection established
+
+================================================================================
+  SESSION START: 2025-12-10 23:37:53
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[23:37:53] [*] Checking for updates from server...
+[23:37:53] [*] Remote version: 1.3.3
+[23:37:53] [*] Device name: irapedva1
+[23:37:53] [*] Local version: 1.3.3
+[23:37:53] [+] Version is up-to-date and files are present
+[23:37:53] [*] Attempting to connect to driver...
+[23:37:53] [*] Device symbolic link: airwave_radio (internal)
+[23:37:53] [+] Driver already loaded and connected
+[23:37:53] [+] Driver connection established
+[23:37:55] [*] Waiting for CS2 process...
+[23:37:55] [+] CS2 process found - PID: 21892
+[23:37:55] [*] CS2 process monitor started
+[23:37:55] [+] Attached to CS2 process
+[23:37:55] [*] Waiting for client.dll...
+[23:37:55] [+] client.dll found at address: 0x140721254039552
+[23:37:56] [+] Settings loaded from saburo_settings.cfg
+[23:37:56] [*] Entering lobby mode - waiting for game start
+[23:37:56] [+] Already in-game - ready to scan entities
+[23:37:56] [+] In-game mode activated
+[23:37:57] [+] Entity scan successful - 9 players detected
+
+================================================================================
+  SESSION START: 2025-12-10 23:42:42
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[23:42:43] [*] Checking for updates from server...
+[23:42:43] [*] Remote version: 1.3.3
+[23:42:43] [*] Device name: irapedva1
+[23:42:43] [*] Local version: 1.3.3
+[23:42:43] [+] Version is up-to-date and files are present
+[23:42:43] [*] Attempting to connect to driver...
+[23:42:43] [*] Device symbolic link: airwave_radio (internal)
+[23:42:43] [+] Driver already loaded and connected
+[23:42:43] [+] Driver connection established
+[23:42:45] [*] Waiting for CS2 process...
+[23:42:45] [+] CS2 process found - PID: 21892
+[23:42:45] [*] CS2 process monitor started
+[23:42:45] [+] Attached to CS2 process
+[23:42:45] [*] Waiting for client.dll...
+[23:42:45] [+] client.dll found at address: 0x140721254039552
+[23:42:45] [+] Settings loaded from saburo_settings.cfg
+[23:42:45] [*] Entering lobby mode - waiting for game start
+[23:42:45] [+] Already in-game - ready to scan entities
+[23:42:46] [+] In-game mode activated
+[23:42:46] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:05:35
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:05:35] [*] Checking for updates from server...
+[00:05:36] [*] Remote version: 1.3.3
+[00:05:36] [*] Device name: irapedva1
+[00:05:36] [*] Local version: 1.3.3
+[00:05:36] [+] Version is up-to-date and files are present
+[00:05:36] [*] Attempting to connect to driver...
+[00:05:36] [*] Device symbolic link: airwave_radio (internal)
+[00:05:36] [+] Driver already loaded and connected
+[00:05:36] [+] Driver connection established
+
+================================================================================
+  SESSION START: 2025-12-11 00:05:47
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:05:47] [*] Checking for updates from server...
+[00:05:47] [*] Remote version: 1.3.3
+[00:05:47] [*] Device name: irapedva1
+[00:05:47] [*] Local version: 1.3.3
+[00:05:47] [+] Version is up-to-date and files are present
+[00:05:47] [*] Attempting to connect to driver...
+[00:05:47] [*] Device symbolic link: airwave_radio (internal)
+[00:05:47] [+] Driver already loaded and connected
+[00:05:47] [+] Driver connection established
+[00:05:49] [*] Waiting for CS2 process...
+[00:05:49] [+] CS2 process found - PID: 21892
+[00:05:49] [*] CS2 process monitor started
+[00:05:49] [+] Attached to CS2 process
+[00:05:49] [*] Waiting for client.dll...
+[00:05:49] [+] client.dll found at address: 0x140721254039552
+[00:05:50] [+] Settings loaded from saburo_settings.cfg
+[00:05:50] [*] Entering lobby mode - waiting for game start
+[00:05:50] [+] Already in-game - ready to scan entities
+[00:05:50] [+] In-game mode activated
+[00:05:51] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:06:27
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:06:27] [*] Checking for updates from server...
+[00:06:27] [*] Remote version: 1.3.3
+[00:06:27] [*] Device name: irapedva1
+[00:06:27] [*] Local version: 1.3.3
+[00:06:27] [+] Version is up-to-date and files are present
+[00:06:27] [*] Attempting to connect to driver...
+[00:06:27] [*] Device symbolic link: airwave_radio (internal)
+[00:06:27] [+] Driver already loaded and connected
+[00:06:27] [+] Driver connection established
+[00:06:29] [*] Waiting for CS2 process...
+[00:06:29] [+] CS2 process found - PID: 21892
+[00:06:29] [*] CS2 process monitor started
+[00:06:29] [+] Attached to CS2 process
+[00:06:29] [*] Waiting for client.dll...
+[00:06:29] [+] client.dll found at address: 0x140721254039552
+[00:06:30] [+] Settings loaded from saburo_settings.cfg
+[00:06:30] [*] Entering lobby mode - waiting for game start
+[00:06:30] [+] Already in-game - ready to scan entities
+[00:06:30] [+] In-game mode activated
+[00:06:31] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:08:55
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:08:55] [*] Checking for updates from server...
+[00:08:56] [*] Remote version: 1.3.3
+[00:08:56] [*] Device name: irapedva1
+[00:08:56] [*] Local version: 1.3.3
+[00:08:56] [+] Version is up-to-date and files are present
+[00:08:56] [*] Attempting to connect to driver...
+[00:08:56] [*] Device symbolic link: airwave_radio (internal)
+[00:08:56] [+] Driver already loaded and connected
+[00:08:56] [+] Driver connection established
+[00:08:58] [*] Waiting for CS2 process...
+[00:08:58] [+] CS2 process found - PID: 21892
+[00:08:58] [*] CS2 process monitor started
+[00:08:58] [+] Attached to CS2 process
+[00:08:58] [*] Waiting for client.dll...
+[00:08:58] [+] client.dll found at address: 0x140721254039552
+[00:08:58] [+] Settings loaded from saburo_settings.cfg
+[00:08:58] [*] Entering lobby mode - waiting for game start
+[00:08:58] [+] Already in-game - ready to scan entities
+[00:08:59] [+] In-game mode activated
+[00:08:59] [+] Entity scan successful - 8 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:12:01
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:12:01] [*] Checking for updates from server...
+[00:12:01] [*] Remote version: 1.3.3
+[00:12:01] [*] Device name: irapedva1
+[00:12:01] [*] Local version: 1.3.3
+[00:12:01] [+] Version is up-to-date and files are present
+[00:12:01] [*] Attempting to connect to driver...
+[00:12:01] [*] Device symbolic link: airwave_radio (internal)
+[00:12:01] [+] Driver already loaded and connected
+[00:12:01] [+] Driver connection established
+[00:12:03] [*] Waiting for CS2 process...
+[00:12:03] [+] CS2 process found - PID: 21892
+[00:12:03] [*] CS2 process monitor started
+[00:12:03] [+] Attached to CS2 process
+[00:12:03] [*] Waiting for client.dll...
+[00:12:03] [+] client.dll found at address: 0x140721254039552
+[00:12:03] [+] Settings loaded from saburo_settings.cfg
+[00:12:03] [*] Entering lobby mode - waiting for game start
+[00:12:03] [+] Already in-game - ready to scan entities
+[00:12:04] [+] In-game mode activated
+[00:12:04] [+] Entity scan successful - 9 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:13:21
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:13:21] [*] Checking for updates from server...
+[00:13:22] [*] Remote version: 1.3.3
+[00:13:22] [*] Device name: irapedva1
+[00:13:22] [*] Local version: 1.3.3
+[00:13:22] [+] Version is up-to-date and files are present
+[00:13:22] [*] Attempting to connect to driver...
+[00:13:22] [*] Device symbolic link: airwave_radio (internal)
+[00:13:22] [+] Driver already loaded and connected
+[00:13:22] [+] Driver connection established
+[00:13:24] [*] Waiting for CS2 process...
+[00:13:24] [+] CS2 process found - PID: 21892
+[00:13:24] [*] CS2 process monitor started
+[00:13:24] [+] Attached to CS2 process
+[00:13:24] [*] Waiting for client.dll...
+[00:13:24] [+] client.dll found at address: 0x140721254039552
+[00:13:24] [+] Settings loaded from saburo_settings.cfg
+[00:13:24] [*] Entering lobby mode - waiting for game start
+[00:13:24] [+] Already in-game - ready to scan entities
+[00:13:25] [+] In-game mode activated
+[00:13:25] [+] Entity scan successful - 9 players detected
+[00:16:15] [!] No entities detected - quick rescan
+[00:16:18] [!] Entity list empty - forcing full rescan
+[00:16:23] [*] Re-attach triggered - no players for 5 seconds
+[00:16:24] [*] Returning to game state detection...
+[00:16:24] [*] Entering lobby mode - waiting for game start
+[00:16:24] [*] Waiting for in-game state...
+
+================================================================================
+  SESSION START: 2025-12-11 00:29:18
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:29:18] [*] Checking for updates from server...
+[00:29:18] [*] Remote version: 1.3.3
+[00:29:18] [*] Device name: irapedva1
+[00:29:18] [*] Local version: 1.3.3
+[00:29:18] [+] Version is up-to-date and files are present
+[00:29:18] [*] Attempting to connect to driver...
+[00:29:18] [*] Device symbolic link: airwave_radio (internal)
+[00:29:18] [+] Driver already loaded and connected
+[00:29:18] [+] Driver connection established
+[00:29:20] [*] Waiting for CS2 process...
+[00:29:20] [+] CS2 process found - PID: 21892
+[00:29:20] [*] CS2 process monitor started
+[00:29:20] [+] Attached to CS2 process
+[00:29:20] [*] Waiting for client.dll...
+[00:29:20] [+] client.dll found at address: 0x140721254039552
+[00:29:21] [+] Settings loaded from saburo_settings.cfg
+[00:29:21] [*] Entering lobby mode - waiting for game start
+[00:29:21] [+] Already in-game - ready to scan entities
+[00:29:21] [+] In-game mode activated
+[00:29:22] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:31:07
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:31:07] [*] Checking for updates from server...
+[00:31:07] [*] Remote version: 1.3.3
+[00:31:07] [*] Device name: irapedva1
+[00:31:07] [*] Local version: 1.3.3
+[00:31:07] [+] Version is up-to-date and files are present
+[00:31:07] [*] Attempting to connect to driver...
+[00:31:07] [*] Device symbolic link: airwave_radio (internal)
+[00:31:07] [+] Driver already loaded and connected
+[00:31:07] [+] Driver connection established
+[00:31:09] [*] Waiting for CS2 process...
+[00:31:09] [+] CS2 process found - PID: 21892
+[00:31:09] [*] CS2 process monitor started
+[00:31:09] [+] Attached to CS2 process
+[00:31:09] [*] Waiting for client.dll...
+[00:31:09] [+] client.dll found at address: 0x140721254039552
+[00:31:09] [+] Settings loaded from saburo_settings.cfg
+[00:31:09] [*] Entering lobby mode - waiting for game start
+[00:31:09] [+] Already in-game - ready to scan entities
+[00:31:10] [+] In-game mode activated
+[00:31:10] [+] Entity scan successful - 8 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:33:53
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:33:53] [*] Checking for updates from server...
+[00:33:53] [*] Remote version: 1.3.3
+[00:33:53] [*] Device name: irapedva1
+[00:33:53] [*] Local version: 1.3.3
+[00:33:53] [+] Version is up-to-date and files are present
+[00:33:53] [*] Attempting to connect to driver...
+[00:33:53] [*] Device symbolic link: airwave_radio (internal)
+[00:33:53] [+] Driver already loaded and connected
+[00:33:53] [+] Driver connection established
+[00:33:55] [*] Waiting for CS2 process...
+[00:33:55] [+] CS2 process found - PID: 21892
+[00:33:55] [*] CS2 process monitor started
+[00:33:55] [+] Attached to CS2 process
+[00:33:55] [*] Waiting for client.dll...
+[00:33:55] [+] client.dll found at address: 0x140721254039552
+[00:33:55] [+] Settings loaded from saburo_settings.cfg
+[00:33:55] [*] Entering lobby mode - waiting for game start
+[00:33:55] [+] Already in-game - ready to scan entities
+[00:33:56] [+] In-game mode activated
+[00:33:57] [+] Entity scan successful - 10 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:35:08
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:35:08] [*] Checking for updates from server...
+[00:35:08] [*] Remote version: 1.3.3
+[00:35:08] [*] Device name: irapedva1
+[00:35:08] [*] Local version: 1.3.3
+[00:35:08] [+] Version is up-to-date and files are present
+[00:35:08] [*] Attempting to connect to driver...
+[00:35:08] [*] Device symbolic link: airwave_radio (internal)
+[00:35:08] [+] Driver already loaded and connected
+[00:35:08] [+] Driver connection established
+[00:35:10] [*] Waiting for CS2 process...
+[00:35:10] [+] CS2 process found - PID: 21892
+[00:35:10] [*] CS2 process monitor started
+[00:35:10] [+] Attached to CS2 process
+[00:35:10] [*] Waiting for client.dll...
+[00:35:10] [+] client.dll found at address: 0x140721254039552
+[00:35:11] [+] Settings loaded from saburo_settings.cfg
+[00:35:11] [*] Entering lobby mode - waiting for game start
+[00:35:11] [+] Already in-game - ready to scan entities
+[00:35:11] [+] In-game mode activated
+[00:35:12] [+] Entity scan successful - 9 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:36:47
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:36:47] [*] Checking for updates from server...
+[00:36:48] [*] Remote version: 1.3.3
+[00:36:48] [*] Device name: irapedva1
+[00:36:48] [*] Local version: 1.3.3
+[00:36:48] [+] Version is up-to-date and files are present
+[00:36:48] [*] Attempting to connect to driver...
+[00:36:48] [*] Device symbolic link: airwave_radio (internal)
+[00:36:48] [+] Driver already loaded and connected
+[00:36:48] [+] Driver connection established
+[00:36:50] [*] Waiting for CS2 process...
+[00:36:50] [+] CS2 process found - PID: 21892
+[00:36:50] [*] CS2 process monitor started
+[00:36:50] [+] Attached to CS2 process
+[00:36:50] [*] Waiting for client.dll...
+[00:36:50] [+] client.dll found at address: 0x140721254039552
+[00:36:51] [+] Settings loaded from saburo_settings.cfg
+[00:36:51] [*] Entering lobby mode - waiting for game start
+[00:36:51] [+] Already in-game - ready to scan entities
+[00:36:51] [+] In-game mode activated
+[00:36:52] [+] Entity scan successful - 8 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:44:12
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:44:12] [*] Checking for updates from server...
+[00:44:12] [*] Remote version: 1.3.3
+[00:44:12] [*] Device name: irapedva1
+[00:44:12] [*] Local version: 1.3.3
+[00:44:12] [+] Version is up-to-date and files are present
+[00:44:12] [*] Attempting to connect to driver...
+[00:44:12] [*] Device symbolic link: airwave_radio (internal)
+[00:44:12] [+] Driver already loaded and connected
+[00:44:12] [+] Driver connection established
+[00:44:14] [*] Waiting for CS2 process...
+[00:44:14] [+] CS2 process found - PID: 21892
+[00:44:14] [*] CS2 process monitor started
+[00:44:14] [+] Attached to CS2 process
+[00:44:14] [*] Waiting for client.dll...
+[00:44:14] [+] client.dll found at address: 0x140721254039552
+[00:44:15] [+] Settings loaded from saburo_settings.cfg
+[00:44:15] [*] Entering lobby mode - waiting for game start
+[00:44:15] [+] Already in-game - ready to scan entities
+[00:44:15] [+] In-game mode activated
+[00:44:16] [+] Entity scan successful - 9 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:46:34
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:46:34] [*] Checking for updates from server...
+[00:46:34] [*] Remote version: 1.3.3
+[00:46:34] [*] Device name: irapedva1
+[00:46:34] [*] Local version: 1.3.3
+[00:46:34] [+] Version is up-to-date and files are present
+[00:46:34] [*] Attempting to connect to driver...
+[00:46:34] [*] Device symbolic link: airwave_radio (internal)
+[00:46:34] [+] Driver already loaded and connected
+[00:46:34] [+] Driver connection established
+[00:46:36] [*] Waiting for CS2 process...
+[00:46:36] [+] CS2 process found - PID: 21892
+[00:46:36] [*] CS2 process monitor started
+[00:46:36] [+] Attached to CS2 process
+[00:46:36] [*] Waiting for client.dll...
+[00:46:36] [+] client.dll found at address: 0x140721254039552
+[00:46:37] [+] Settings loaded from saburo_settings.cfg
+[00:46:37] [*] Entering lobby mode - waiting for game start
+[00:46:37] [+] Already in-game - ready to scan entities
+[00:46:37] [+] In-game mode activated
+[00:46:38] [+] Entity scan successful - 9 players detected
+[00:49:28] [!] No entities detected - quick rescan
+[00:49:31] [!] Entity list empty - forcing full rescan
+[00:49:36] [*] Re-attach triggered - no players for 5 seconds
+[00:49:37] [!] CS2 process terminated - PID 21892 no longer exists
+[00:49:37] [*] Returning to game state detection...
+[00:49:37] [*] Entering lobby mode - waiting for game start
+[00:49:37] [*] Waiting for in-game state...
+[00:49:37] [!] CS2 process closed during lobby wait
+[00:49:37] [!] CS2 process closed during lobby wait
+[00:49:40] [*] User chose to exit after CS2 closure
+[00:49:40] [*] Shutting down Subaro...
+
+================================================================================
+  SESSION END: 2025-12-11 00:49:40
+  Duration: Session started at 2025-12-11 00:46:34
+================================================================================
+
+
+================================================================================
+  SESSION START: 2025-12-11 00:52:44
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:52:44] [*] Checking for updates from server...
+[00:52:45] [*] Remote version: 1.3.3
+[00:52:45] [*] Device name: irapedva1
+[00:52:45] [*] Local version: 1.3.3
+[00:52:45] [+] Version is up-to-date and files are present
+[00:52:45] [*] Attempting to connect to driver...
+[00:52:45] [*] Device symbolic link: airwave_radio (internal)
+[00:52:45] [+] Driver already loaded and connected
+[00:52:45] [+] Driver connection established
+[00:52:46] [*] Waiting for CS2 process...
+[00:52:46] [+] CS2 process found - PID: 28316
+[00:52:46] [*] CS2 process monitor started
+[00:52:46] [+] Attached to CS2 process
+[00:52:46] [*] Waiting for client.dll...
+[00:52:52] [+] client.dll found at address: 0x140721261772800
+[00:52:53] [+] Settings loaded from saburo_settings.cfg
+[00:52:53] [*] Entering lobby mode - waiting for game start
+[00:52:53] [*] Waiting for in-game state...
+[00:54:15] [+] In-game state detected!
+[00:54:15] [+] In-game mode activated
+[00:54:16] [+] Entity scan successful - 11 players detected
+
+================================================================================
+  SESSION START: 2025-12-11 00:58:24
+================================================================================
+
+
+========================================
+  SUBARO INITIALIZING
+========================================
+
+========================================
+  VERSION CONTROL SYSTEM
+========================================
+[00:58:24] [*] Checking for updates from server...
+[00:58:25] [*] Remote version: 1.3.3
+[00:58:25] [*] Device name: irapedva1
+[00:58:25] [*] Local version: 1.3.3
+[00:58:25] [+] Version is up-to-date and files are present
+[00:58:25] [*] Attempting to connect to driver...
+[00:58:25] [*] Device symbolic link: airwave_radio (internal)
+[00:58:25] [+] Driver already loaded and connected
+[00:58:25] [+] Driver connection established
+[00:58:26] [*] Waiting for CS2 process...
+[00:58:26] [+] CS2 process found - PID: 28316
+[00:58:26] [*] CS2 process monitor started
+[00:58:26] [+] Attached to CS2 process
+[00:58:26] [*] Waiting for client.dll...
+[00:58:26] [+] client.dll found at address: 0x140721261772800
+[00:58:27] [+] Settings loaded from saburo_settings.cfg
+[00:58:27] [*] Entering lobby mode - waiting for game start
+[00:58:27] [+] Already in-game - ready to scan entities
+[00:58:27] [+] In-game mode activated
+[00:58:28] [+] Entity scan successful - 13 players detected
+>>>>>>> Stashed changes

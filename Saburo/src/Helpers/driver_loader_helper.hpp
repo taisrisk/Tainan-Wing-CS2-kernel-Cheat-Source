@@ -8,26 +8,36 @@
 #include <chrono>
 #include "download_helper.hpp"
 #include "console_colors.hpp"
-#include "driver_patcher.hpp"
+#include "driver_patcher.hpp" // deprecated here (no patching is performed)
 #include "logger.hpp"
 
 namespace DriverLoaderHelper {
 
-    // Get random provider ID from the three supported options - CALLED EACH TIME
+    // Fixed provider selection: lock to 52 (stable for this system)
     inline int GetRandomProviderID() {
-        static const int providers[] = { 50, 44, 52 };  // Replaced 30 (AMD Ryzen - gets stuck) with 50
-        
-        // Use current time as seed for true randomness each call
-        auto now = std::chrono::high_resolution_clock::now();
-        auto seed = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
-        std::mt19937 gen(static_cast<unsigned int>(seed));
-        std::uniform_int_distribution<> dis(0, 2);
-        
-        int selectedProvider = providers[dis(gen)];
-        ConsoleColor::PrintInfo("Selected KDU provider: " + std::to_string(selectedProvider));
-        Logger::LogInfo("Selected KDU provider: " + std::to_string(selectedProvider));
-        
-        return selectedProvider;
+        constexpr int provider = 52;
+        ConsoleColor::PrintInfo("Selected KDU provider: 52");
+        Logger::LogInfo("Selected KDU provider: 52");
+        return provider;
+    }
+
+    inline bool WaitForDeviceReady(const std::string& deviceName, int timeoutMs = 5000) {
+        std::string path = R"(\\.\)" + deviceName;
+        const int stepMs = 100;
+        for (int t = 0; t <= timeoutMs; t += stepMs) {
+            HANDLE h = CreateFileA(path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, nullptr,
+                                   OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+            if (h != INVALID_HANDLE_VALUE) {
+                CloseHandle(h);
+                ConsoleColor::PrintSuccess("Device ready: " + path);
+                Logger::LogSuccess("Device ready: " + path);
+                return true;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(stepMs));
+        }
+        ConsoleColor::PrintWarning("Device not ready within timeout: " + path);
+        Logger::LogWarning("Device not ready within timeout: " + path);
+        return false;
     }
 
     // Load driver using KDU (Kernel Driver Utility) - executes as external admin command
@@ -37,7 +47,7 @@ namespace DriverLoaderHelper {
         std::string kduPath = exeDir + "\\kdu.exe";
         std::string sysPath = exeDir + "\\Hiroyoshi.sys";
 
-        Logger::LogInfo("Loading driver with KDU...");
+        Logger::LogInfo("Loading driver with KDU (no on-disk patching)...");
         Logger::Log("[*] Device name: " + deviceName);
         Logger::Log("[*] KDU path: " + kduPath);
         Logger::Log("[*] Driver path: " + sysPath);
@@ -55,37 +65,9 @@ namespace DriverLoaderHelper {
             return false;
         }
 
-        // PATCH THE DRIVER BEFORE LOADING (only if needed)
-        if (deviceName != "airway_radio") {
-            // Check if already patched
-            if (DriverPatcher::IsDriverAlreadyPatched(sysPath, deviceName)) {
-                ConsoleColor::PrintSuccess("Driver already patched with device name: " + deviceName);
-                Logger::LogSuccess("Driver already patched with device name: " + deviceName);
-            } else {
-                // CREATE BACKUP BEFORE PATCHING
-                if (!DriverPatcher::CreateDriverBackup(sysPath)) {
-                    ConsoleColor::PrintWarning("Failed to create backup");
-                    Logger::LogWarning("Failed to create backup");
-                }
-
-                // RESTORE FROM BACKUP FIRST (ensure we start with clean driver)
-                std::string backupPath = sysPath + ".original";
-                if (DownloadHelper::FileExists(backupPath)) {
-                    DriverPatcher::RestoreOriginalDriver(sysPath);
-                }
-
-                // PATCH THE DRIVER
-                if (!DriverPatcher::PatchDriverDeviceName(sysPath, deviceName)) {
-                    ConsoleColor::PrintError("Failed to patch driver");
-                    Logger::LogError("Failed to patch driver");
-                    DriverPatcher::RestoreOriginalDriver(sysPath);
-                    return false;
-                }
-                
-                ConsoleColor::PrintSuccess("Driver patched: " + deviceName);
-                Logger::LogSuccess("Driver patched: " + deviceName);
-            }
-        }
+                // NO PATCHING: Do not modify the .sys on disk — using original .sys
+                ConsoleColor::PrintInfo("Skipping driver patching step (using original .sys)");
+        Logger::LogInfo("Skipping driver patching step (using original .sys)");
 
         // Try up to 3 times if KDU gets stuck
         const int maxAttempts = 3;
@@ -158,9 +140,20 @@ namespace DriverLoaderHelper {
             // 1 = Success with message "Bye-bye!" (also means driver loaded successfully)
             // Other = Actual failure
             if (exitCode == 0 || exitCode == 1) {
-                ConsoleColor::PrintSuccess("Driver loaded successfully with KDU");
-                Logger::LogSuccess("Driver loaded successfully with KDU (exit code: " + std::to_string(exitCode) + ")");
-                return true;
+                // Wait until the device is actually ready
+                if (WaitForDeviceReady(deviceName, 5000)) {
+                    ConsoleColor::PrintSuccess("Driver loaded successfully with KDU");
+                    Logger::LogSuccess("Driver loaded successfully with KDU (exit code: " + std::to_string(exitCode) + ")");
+                    return true;
+                } else {
+                    ConsoleColor::PrintWarning("Device not ready after KDU success; retrying...");
+                    Logger::LogWarning("Device not ready after KDU success; retrying...");
+                    if (attempt < maxAttempts) {
+                        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                        continue;
+                    }
+                    return false;
+                }
             } else {
                 ConsoleColor::PrintWarning("KDU returned exit code: " + std::to_string(exitCode));
                 Logger::LogWarning("KDU returned exit code: " + std::to_string(exitCode));
@@ -180,7 +173,7 @@ namespace DriverLoaderHelper {
     }
 
     // Unload driver using KDU
-    inline bool UnloadDriverWithKDU(int providerID = 44) {
+    inline bool UnloadDriverWithKDU(int providerID = 50) {
         std::string exeDir = DownloadHelper::GetExecutableDirectory();
         std::string kduPath = exeDir + "\\kdu.exe";
 

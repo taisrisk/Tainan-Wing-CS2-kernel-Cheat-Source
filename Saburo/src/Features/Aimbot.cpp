@@ -1,4 +1,5 @@
 #include "Aimbot.hpp"
+#include "EntityPredictor.hpp"
 #include "../Helpers/console_logger.hpp"
 #include "../Core/driver.hpp"
 #include "../Offsets/offset_manager.hpp"
@@ -52,6 +53,14 @@ void Aimbot::update(const EntityManager& entities) {
     // Update view matrix every frame
     updateViewMatrix();
 
+    // Update predictor history for alive entities (only if enabled)
+    if (predictionEnabled) {
+        for (const auto& e : entities.alive_entities) {
+            if (!e.is_valid || e.health <= 0) continue;
+            predictor.updateEntity(e.address, e.position);
+        }
+    }
+
     // Find best target
     const Entity* bestTarget = findClosestTarget(entities);
 
@@ -68,15 +77,14 @@ void Aimbot::update(const EntityManager& entities) {
     lockedTargetAddress = bestTarget->address;
     targetLocked = true;
 
-    // ===== AIM AT TARGET EVERY FRAME - NO CACHING, NO DELAYS =====
-    // Use fresh position from entity list (updated @ 60 FPS)
+    // ===== AIM AT TARGET WITH PREDICTION =====
     Vector3 targetPos = bestTarget->position;
     targetPos.z += getHeadOffset(bestTarget->address);
 
     // Get local eye position
     Vector3 localPos = getLocalPlayerPosition();
-    
-    // Calculate direction
+
+    // Calculate initial direction to estimate travel time
     Vector3 direction;
     direction.x = targetPos.x - localPos.x;
     direction.y = targetPos.y - localPos.y;
@@ -88,22 +96,71 @@ void Aimbot::update(const EntityManager& entities) {
 
     if (distance < 0.001f) return;
 
-    // Calculate angles
-    float targetPitch = -std::asin(direction.z / distance) * (180.0f / M_PI);
+    // Predict target position based on velocity, net/input delay and bullet travel
+    if (predictionEnabled) {
+        float travelMs = (distance / std::max(1.0f, bulletSpeedUPS)) * 1000.0f;
+        float leadMs = std::clamp(baseLeadMs + travelMs, 0.0f, 30.0f);
+        Vector3 predicted = predictor.predictPosition(bestTarget->address, leadMs);
+        if (!(predicted.x == 0.0f && predicted.y == 0.0f && predicted.z == 0.0f)) {
+            targetPos = predicted;
+            targetPos.z += getHeadOffset(bestTarget->address);
+
+            // Recompute direction and distance
+            direction.x = targetPos.x - localPos.x;
+            direction.y = targetPos.y - localPos.y;
+            direction.z = targetPos.z - localPos.z;
+            distance = std::sqrt(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
+            if (distance < 0.001f) return;
+        }
+    }
+
+    // Calculate angles (clamp asin input to avoid NaN)
+    float zRatio = direction.z / distance;
+    if (zRatio > 1.0f) zRatio = 1.0f; else if (zRatio < -1.0f) zRatio = -1.0f;
+    float targetPitch = -std::asin(zRatio) * (180.0f / M_PI);
     float targetYaw = std::atan2(direction.y, direction.x) * (180.0f / M_PI);
-    
+
+    // No recoil compensation applied here
+
     // Normalize
     while (targetYaw > 180.0f) targetYaw -= 360.0f;
     while (targetYaw < -180.0f) targetYaw += 360.0f;
     targetPitch = std::clamp(targetPitch, -89.0f, 89.0f);
 
-    // ===== WRITE ANGLES EVERY FRAME - 60 TIMES PER SECOND =====
+    // ===== WRITE ANGLES =====
     std::uintptr_t viewAnglesAddr = clientBase + cs2_dumper::offsets::client_dll::dwViewAngles;
-    
-    drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr), &targetPitch, sizeof(float));
-    drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr + sizeof(float)), &targetYaw, sizeof(float));
-    float roll = 0.0f;
-    drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr + 2 * sizeof(float)), &roll, sizeof(float));
+    if (softClampEnabled) {
+        float currentAngles[3] = {0};
+        drv.read_memory(reinterpret_cast<void*>(viewAnglesAddr), currentAngles, sizeof(currentAngles));
+        float currPitch = currentAngles[0];
+        float currYaw = currentAngles[1];
+
+        float maxDeltaPitch = 4.0f; // deg per frame
+        float maxDeltaYaw   = 6.0f;
+        auto clampAbs = [](float v, float m){ return (v > m) ? m : (v < -m ? -m : v); };
+
+        float dyaw = targetYaw - currYaw;
+        while (dyaw > 180.0f) dyaw -= 360.0f;
+        while (dyaw < -180.0f) dyaw += 360.0f;
+        float dpitch = targetPitch - currPitch;
+
+        dyaw = clampAbs(dyaw, maxDeltaYaw);
+        dpitch = clampAbs(dpitch, maxDeltaPitch);
+
+        float outPitch = currPitch + dpitch;
+        float outYaw   = currYaw + dyaw;
+        if (outPitch > 89.0f) outPitch = 89.0f; else if (outPitch < -89.0f) outPitch = -89.0f;
+
+        drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr), &outPitch, sizeof(float));
+        drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr + sizeof(float)), &outYaw, sizeof(float));
+        float roll = 0.0f;
+        drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr + 2 * sizeof(float)), &roll, sizeof(float));
+    } else {
+        drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr), &targetPitch, sizeof(float));
+        drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr + sizeof(float)), &targetYaw, sizeof(float));
+        float roll = 0.0f;
+        drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr + 2 * sizeof(float)), &roll, sizeof(float));
+    }
 }
 
 bool Aimbot::validateLocalPlayer() {

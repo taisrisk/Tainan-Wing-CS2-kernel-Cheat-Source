@@ -3,6 +3,7 @@
 #include "../Core/driver.hpp"
 #include "../Offsets/offsets.hpp"
 #include "entity.hpp"
+#include "EntityPredictor.hpp"
 #include <cmath>
 #include <limits>
 #include <windows.h>
@@ -16,6 +17,9 @@ private:
     driver::DriverHandle& drv;
     std::uintptr_t clientBase;
     std::uintptr_t localPlayerPawn = 0;
+    EntityPredictor predictor;
+    bool predictionEnabled = false;
+    bool softClampEnabled = false;
 
     // FIXED: Separate offsets for standing and crouching
     static constexpr float HEAD_OFFSET_STANDING = 60.0f;
@@ -28,6 +32,10 @@ private:
     float viewMatrix[16] = { 0 };
     float screenWidth;
     float screenHeight;
+
+    // Prediction params
+    float baseLeadMs = 5.0f;           // small anticipatory lead
+    float bulletSpeedUPS = 6000.0f;    // higher speed -> smaller lead
 
     // Persistent target locking
     std::uintptr_t lockedTargetAddress = 0;
@@ -66,10 +74,13 @@ private:
 
 public:
     Aimbot(driver::DriverHandle& driver, std::uintptr_t client)
-        : drv(driver), clientBase(client) {
+        : drv(driver), clientBase(client), predictor(driver) {
         screenWidth = static_cast<float>(GetSystemMetrics(SM_CXSCREEN));
         screenHeight = static_cast<float>(GetSystemMetrics(SM_CYSCREEN));
     }
+
+    void setPredictionEnabled(bool enable) { predictionEnabled = enable; }
+    void setSoftClampEnabled(bool enable) { softClampEnabled = enable; }
 
     void setLocalPlayerPawn(std::uintptr_t pawn) {
         // Only reset state if the address actually changed

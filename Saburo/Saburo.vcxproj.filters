@@ -68,5 +68,10 @@
     <ClInclude Include="src\Features\SmoothAim.hpp" />
     <ClInclude Include="src\Features\HeadAngleLine.hpp" />
     <ClInclude Include="src\Helpers\settings_manager.hpp" />
+    <ClInclude Include="src\App\driver_manager.hpp" />
+    <ClInclude Include="src\Features\SilentAim.hpp" />
+    <ClInclude Include="src\Features\ThirdPerson.hpp" />
+    <ClInclude Include="src\Helpers\toggle_manager.hpp" />
+    <ClInclude Include="src\Helpers\ui_helper.hpp" />
   </ItemGroup>
 </Project>

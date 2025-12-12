@@ -22,7 +22,17 @@ private:
     // Cache of valid enemy addresses for instant validation
     std::unordered_set<std::uintptr_t> validEnemyCache;
     
+<<<<<<< Updated upstream
     static constexpr int SHOT_COOLDOWN_MS = 175; // Fixed 175ms between shots
+=======
+    // Cached local team for faster checks
+    uint8_t cachedLocalTeam;
+    
+    static constexpr int SHOT_COOLDOWN_MS = 200; // Reliable per-shot delay
+    static constexpr int CACHE_REFRESH_MS = 100; // Refresh validation cache every 100ms
+>>>>>>> Stashed changes
+
+    // No recoil gating (simplified)
 
 public:
     Triggerbot(driver::DriverHandle& driver, std::uintptr_t client)
@@ -97,8 +107,14 @@ public:
             return; // Still on cooldown, don't even check crosshair
         }
 
+<<<<<<< Updated upstream
         // Get dynamic offsets
         const auto& offsets = OffsetsManager::Get();
+=======
+        // No recoil gating; rely on cooldown only
+
+        // Simplified gating: rely on cooldown only for reliability
+>>>>>>> Stashed changes
 
         // Read crosshair entity handle - INSTANT
         uint32_t crosshairHandle = drv.read<uint32_t>(localPlayerPawn + offsets.m_iIDEntIndex);
@@ -121,6 +137,11 @@ public:
         // Resolve entity address
         std::uintptr_t chunk_ptr_address = entityList + (0x8 * chunk_index) + 0x10;
         std::uintptr_t chunk_ptr = drv.read<std::uintptr_t>(chunk_ptr_address);
+        if (chunk_ptr == 0 && chunk_index > 0) {
+            // Fallback: try previous chunk index (some lists are 1-based)
+            std::uintptr_t alt_addr = entityList + (0x8 * (chunk_index - 1)) + 0x10;
+            chunk_ptr = drv.read<std::uintptr_t>(alt_addr);
+        }
         if (chunk_ptr == 0) {
             return;
         }
@@ -130,6 +151,7 @@ public:
             return;
         }
 
+<<<<<<< Updated upstream
         // INSTANT VALIDATION - Check if target is in our ESP enemy cache
         // This means it's already validated as:
         // - Valid entity
@@ -138,6 +160,17 @@ public:
         // - Enemy team (or teammate if team check disabled)
         if (validEnemyCache.find(targetAddress) == validEnemyCache.end()) {
             // Not a valid target from ESP, do quick inline validation
+=======
+        // Validation: when team-check is ON, use cache to prefer enemies; when OFF, bypass cache
+        if (teamCheckEnabled) {
+            if (validEnemyCache.find(targetAddress) == validEnemyCache.end()) {
+                if (!quickValidateTarget(targetAddress, offsets)) {
+                    return;
+                }
+            }
+        } else {
+            // Bypass cache; allow teammates if alive
+>>>>>>> Stashed changes
             if (!quickValidateTarget(targetAddress, offsets)) {
                 return;
             }
@@ -182,13 +215,13 @@ private:
 
         // TRY METHOD 1: Write to CS2 attack button (primary method)
         uint32_t pressValue = 65537; // 0x10001
-        bool writeSuccess = drv.write_memory(reinterpret_cast<uint32_t*>(attackAddress), &pressValue, sizeof(pressValue));
+        bool writeSuccess = drv.write_memory(reinterpret_cast<void*>(attackAddress), &pressValue, sizeof(pressValue));
         
         // CRITICAL: Tiny delay for game to register the press
         Sleep(1); // 1ms delay
         
         uint32_t releaseValue = 256; // 0x100
-        drv.write_memory(reinterpret_cast<uint32_t*>(attackAddress), &releaseValue, sizeof(releaseValue));
+        drv.write_memory(reinterpret_cast<void*>(attackAddress), &releaseValue, sizeof(releaseValue));
 
         // METHOD 2: Mouse event fallback (always execute for reliability)
         mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
@@ -197,6 +230,7 @@ private:
 
         // Update shot time for cooldown tracking
         lastShotTime = std::chrono::steady_clock::now();
+        // No extra lockout
         
         if (ConsoleLogger::isEnabled()) {
             ConsoleLogger::logInfo("TB", writeSuccess ? "SHOT FIRED (BUTTON)" : "SHOT FIRED (MOUSE)");

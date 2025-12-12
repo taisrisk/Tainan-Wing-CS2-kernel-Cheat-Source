@@ -271,6 +271,7 @@ namespace ConsoleColor {
     
     // Print unified control panel with status (single clean display)
     inline void PrintUnifiedPanel(int frame, int players, int enemies, int teammates,
+<<<<<<< Updated upstream
                                    bool aimbot, bool triggerbot, bool bhop, bool boneESP,
                                    bool snaplines, bool distance, bool wallCheck, bool teamCheck, bool chams, bool inGame = false) {
         SetCursorPosition(0, 0);
@@ -288,6 +289,17 @@ namespace ConsoleColor {
         Reset();
         
         // Header - Blue in lobby, Red in-game
+=======
+                                   bool aimbot, bool triggerbot, bool bhop, bool headLine,
+                                   bool snaplines, bool distance, bool wallCheck, bool teamCheck, bool chams,
+                                   bool boneESP, bool silentAim, bool thirdPerson, bool recoilComp,
+                                   bool smoothAim, bool entityPredictor, bool visibilityCheck,
+                                   bool consoleDebugEnabled,
+                                   bool inGame = false) {
+        // Move cursor to a fixed region (e.g., row 10)
+        SetCursorPosition(0, 10);
+        // Print only the status panel, not the logo/header
+>>>>>>> Stashed changes
         SetColor(inGame ? RED : CYAN);
         std::cout << "========================================\n";
         std::cout << "           SUBARO - CS2 TOOL            \n";
@@ -319,8 +331,8 @@ namespace ConsoleColor {
         
         // Features with keybinds
         std::cout << "[0] Debug Console    ";
-        SetColor(DARK_GRAY);
-        std::cout << "OFF\n";
+        SetColor(consoleDebugEnabled ? GREEN : DARK_GRAY);
+        std::cout << (consoleDebugEnabled ? "ON " : "OFF") << "\n";
         Reset();
         
         std::cout << "[1] Aimbot           ";
@@ -368,6 +380,50 @@ namespace ConsoleColor {
         std::cout << (chams ? "ON " : "OFF") << "\n";
         Reset();
         
+<<<<<<< Updated upstream
+=======
+        SetColor(MAGENTA);
+        std::cout << "========================================\n";
+        std::cout << "        ADVANCED FEATURES (Q-U)         \n";
+        std::cout << "========================================\n";
+        Reset();
+        
+        std::cout << "[Q] Bone ESP         ";
+        SetColor(boneESP ? GREEN : DARK_GRAY);
+        std::cout << (boneESP ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[W] Silent Aim       ";
+        SetColor(silentAim ? GREEN : DARK_GRAY);
+        std::cout << (silentAim ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[E] Third Person     ";
+        SetColor(thirdPerson ? GREEN : DARK_GRAY);
+        std::cout << (thirdPerson ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[R] Recoil Comp      ";
+        SetColor(recoilComp ? GREEN : DARK_GRAY);
+        std::cout << (recoilComp ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[T] Smooth Aim       ";
+        SetColor(smoothAim ? GREEN : DARK_GRAY);
+        std::cout << (smoothAim ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[Y] Prediction       ";
+        SetColor(entityPredictor ? GREEN : DARK_GRAY);
+        std::cout << (entityPredictor ? "ON " : "OFF") << "\n";
+        Reset();
+        
+        std::cout << "[U] Visibility       ";
+        SetColor(visibilityCheck ? GREEN : DARK_GRAY);
+        std::cout << (visibilityCheck ? "ON " : "OFF") << "\n";
+        Reset();
+        
+>>>>>>> Stashed changes
         SetColor(CYAN);
         std::cout << "========================================\n";
         Reset();

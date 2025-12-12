@@ -368,8 +368,17 @@ RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     bool filesPresent = VersionManager::AreDriverFilesPresent();
 
     if (needsUpdate || !filesPresent) {
+        // Check Windows Security BEFORE any download to avoid AV deleting files
+        ConsoleColor::PrintInfo("Checking Windows Security (Real-Time Protection)...");
+        if (!WindowsSecurityHelper::GuideUserToDisableRealtimeProtection()) {
+            ConsoleColor::PrintError("Cannot proceed while Real-Time Protection is enabled");
+            std::cout << "\nPress Enter to exit...";
+            std::cin.get();
+            return 1;
+        }
+
         ConsoleColor::PrintInfo("Downloading driver package...");
-        
+
         if (!DownloadHelper::DownloadAndExtractDriverPackage(versionConfig.downloadUrl)) {
             ConsoleColor::PrintError("Failed to download driver package");
             std::cout << "\nPress Enter to exit...";
@@ -390,10 +399,11 @@ RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     }
 
     // ===== AUTO-LOADER SYSTEM =====
-    driver::DriverHandle driver_handle(versionConfig.deviceSymbolicLink);
+    // Always use built-in device name (airway_radio) regardless of version config
+    driver::DriverHandle driver_handle;
     
     Logger::LogInfo("Attempting to connect to driver...");
-    Logger::Log("[*] Device symbolic link: " + versionConfig.deviceSymbolicLink);
+    Logger::Log("[*] Device symbolic link: airwave_radio (internal)");
     
     if (!ConnectOrLoadDriver(driver_handle, versionConfig)) {
         ConsoleColor::PrintError("Failed to connect or load driver");
@@ -511,6 +521,8 @@ RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     // ===== INITIALIZE FEATURES (ONE TIME) =====
     Triggerbot triggerbot(driver_handle, client);
     BunnyHop bhop(driver_handle, client);
+    bhop.setTargetProcessId(pid);
+    bhop.setJumpDelayMs(10);
     Aimbot aimbot(driver_handle, client);
     Chams chams(driver_handle, client);
     
@@ -595,6 +607,41 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
     bool isInGame = true;
 
     // ===== RE-ENABLE FEATURES AFTER RE-ATTACK =====
+<<<<<<< Updated upstream
+=======
+    // Use ToggleManager to apply all toggles consistently
+    ToggleManager toggleManager(
+        triggerbot,
+        bhop,
+        aimbot,
+        chams,
+        boneESP,
+        thirdPerson,
+        visibilityChecker,
+        smoothAim,
+        recoilComp,
+        espRenderer,
+        silentAim,
+        entityPredictor,
+        triggerbotEnabled,
+        bhopEnabled,
+        aimbotEnabled,
+        consoleDebugEnabled,
+        teamCheckEnabled,
+        headAngleLineEnabled,
+        snaplinesEnabled,
+        distanceESPEnabled,
+        snaplinesWallCheckEnabled,
+        chamsEnabled,
+        boneESPEnabled,
+        silentAimEnabled,
+        thirdPersonEnabled,
+        recoilCompEnabled,
+        smoothAimEnabled,
+        entityPredictorEnabled,
+        visibilityCheckEnabled
+    );
+>>>>>>> Stashed changes
     
     triggerbot.setEnabled(triggerbotEnabled);
     bhop.setEnabled(bhopEnabled);
@@ -1092,6 +1139,21 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
                 aimbot.update(entities);
             }
 
+
+            // Third Person reapply per frame when enabled
+            if (thirdPersonEnabled) {
+                thirdPerson.update(local_player_pawn);
+            }
+
+            // Silent Aim: only active in third-person; reapply per frame if enabled
+            if (silentAimEnabled && thirdPersonEnabled) {
+                silentAim.update();
+            } else if (silentAimEnabled && !thirdPersonEnabled) {
+                // Ensure silent aim is disabled when third-person is off
+                silentAim.setEnabled(false);
+                silentAimEnabled = false;
+            }
+
             // Status line - now vertical display every 60 frames
             if (frame % 60 == 0) {
                 ConsoleColor::PrintUnifiedPanel(
@@ -1108,6 +1170,17 @@ RESTART_GAME_DETECTION:  // Re-attack label - jump here when player leaves game
                     snaplinesWallCheckEnabled,
                     teamCheckEnabled,
                     chamsEnabled,
+<<<<<<< Updated upstream
+=======
+                    boneESPEnabled,
+                    silentAimEnabled,
+                    thirdPersonEnabled,
+                    recoilCompEnabled,
+                    smoothAimEnabled,
+                    entityPredictorEnabled,
+                    visibilityCheckEnabled,
+                    consoleDebugEnabled,
+>>>>>>> Stashed changes
                     isInGame
                 );
             }

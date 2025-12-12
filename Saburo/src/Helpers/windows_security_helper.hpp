@@ -14,7 +14,7 @@
 
 namespace WindowsSecurityHelper {
 
-    // Check if Windows Defender Real-Time Protection is enabled
+    // Check if Windows Defender (or any AV via WSC) Real-Time Protection is enabled
     inline bool IsRealtimeProtectionEnabled() {
         HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
         bool wasInitialized = SUCCEEDED(hr);
@@ -44,7 +44,8 @@ namespace WindowsSecurityHelper {
                 RegCloseKey(hKey);
 
                 if (result == ERROR_SUCCESS) {
-                    return (disableRealtimeMonitoring == 0); // 0 = enabled, 1 = disabled
+                    // 0 = RTP enabled, 1 = RTP disabled
+                    return (disableRealtimeMonitoring == 0);
                 }
             }
 
@@ -75,23 +76,14 @@ namespace WindowsSecurityHelper {
                 BSTR productName = nullptr;
                 pProduct->get_ProductName(&productName);
 
-                if (productName) {
-                    std::wstring name(productName);
-                    SysFreeString(productName);
-
-                    // Check if this is Windows Defender
-                    if (name.find(L"Windows Defender") != std::wstring::npos ||
-                        name.find(L"Microsoft Defender") != std::wstring::npos) {
-                        
-                        WSC_SECURITY_PRODUCT_STATE productState;
-                        hr = pProduct->get_ProductState(&productState);
-                        if (SUCCEEDED(hr)) {
-                            // Check if real-time protection is on
-                            // WSC_SECURITY_PRODUCT_STATE_ON = 0x1000
-                            realtimeEnabled = (productState == WSC_SECURITY_PRODUCT_STATE_ON);
-                        }
+                // Treat any AV product in ON state as RTP enabled
+                WSC_SECURITY_PRODUCT_STATE productState;
+                if (SUCCEEDED(pProduct->get_ProductState(&productState))) {
+                    if (productState == WSC_SECURITY_PRODUCT_STATE_ON) {
+                        realtimeEnabled = true;
                     }
                 }
+                if (productName) SysFreeString(productName);
                 pProduct->Release();
             }
         }
@@ -134,7 +126,7 @@ namespace WindowsSecurityHelper {
         ConsoleColor::PrintSuccess("Windows Security settings closed");
     }
 
-    // Guide user through disabling real-time protection
+    // Guide user through disabling real-time protection (with post-close polling)
     inline bool GuideUserToDisableRealtimeProtection() {
         if (!IsRealtimeProtectionEnabled()) {
             ConsoleColor::PrintSuccess("Real-time protection is already disabled");
@@ -177,14 +169,20 @@ namespace WindowsSecurityHelper {
         OpenWindowsSecuritySettings();
         std::this_thread::sleep_for(std::chrono::seconds(2));
         WaitForSecurityWindowClose();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-
+        // Poll for status for up to ~10 seconds to allow Defender to apply the change
         ConsoleColor::PrintInfo("Verifying Real-Time Protection status...");
-        if (!IsRealtimeProtectionEnabled()) {
-            ConsoleColor::PrintSuccess("Real-Time Protection successfully disabled!");
-            return true;
+        {
+            const int retries = 20; // 20 * 500ms = 10s
+            for (int i = 0; i < retries; ++i) {
+                if (!IsRealtimeProtectionEnabled()) {
+                    ConsoleColor::PrintSuccess("Real-Time Protection successfully disabled!");
+                    return true;
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            }
         }
-        else {
+
+        {
             ConsoleColor::PrintError("Real-Time Protection is still enabled");
             ConsoleColor::PrintWarning("Please make sure you followed all the steps");
             
