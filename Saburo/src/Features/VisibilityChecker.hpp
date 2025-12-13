@@ -2,6 +2,7 @@
 
 #include "../Core/driver.hpp"
 #include "../Offsets/offsets.hpp"
+#include "../Offsets/offset_manager.hpp"
 #include "entity.hpp"
 #include <cmath>
 
@@ -10,10 +11,14 @@ class VisibilityChecker {
 private:
     driver::DriverHandle& drv;
     std::uintptr_t clientBase;
+    bool enabled = false;
 
 public:
     VisibilityChecker(driver::DriverHandle& driver, std::uintptr_t client)
-        : drv(driver), clientBase(client) {}
+        : drv(driver), clientBase(client), enabled(false) {}
+
+    void setEnabled(bool enable) { enabled = enable; }
+    bool isEnabled() const { return enabled; }
 
     // Check if target is visible from local player's position
     // Returns true if NO walls between local and target
@@ -75,7 +80,7 @@ public:
         direction.z /= distance;
 
         // Get local player view angles
-        std::uintptr_t viewAnglesAddr = clientBase + cs2_dumper::offsets::client_dll::dwViewAngles;
+        std::uintptr_t viewAnglesAddr = clientBase + OffsetsManager::Get().dwViewAngles;
         float viewAngles[3];
         if (!drv.read_memory(reinterpret_cast<void*>(viewAnglesAddr), viewAngles, sizeof(viewAngles))) {
             return false;

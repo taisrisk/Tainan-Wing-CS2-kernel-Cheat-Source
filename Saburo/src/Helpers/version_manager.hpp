@@ -16,7 +16,9 @@ namespace VersionManager {
     struct VersionConfig {
         std::string version;
         std::string downloadUrl;
-        std::string deviceSymbolicLink;
+        // Deprecated: deviceSymbolicLink is no longer sourced from remote
+        // Always use hardcoded device name "airway_radio" in user-mode
+        std::string deviceSymbolicLink = "airway_radio";
         bool isValid = false;
     };
 
@@ -99,9 +101,10 @@ namespace VersionManager {
 
         config.version = ParseConfigValue(configText, "version");
         config.downloadUrl = ParseConfigValue(configText, "downloadUrl");
-        config.deviceSymbolicLink = ParseConfigValue(configText, "device_symbollink");
+        // Ignore any device name from remote; always use hardcoded value
+        config.deviceSymbolicLink = "airway_radio";
 
-        if (config.version.empty() || config.downloadUrl.empty() || config.deviceSymbolicLink.empty()) {
+        if (config.version.empty() || config.downloadUrl.empty()) {
             ConsoleColor::PrintError("Invalid config format received from server");
             ConsoleColor::PrintWarning("Config text: " + configText.substr(0, 200));
             Logger::LogError("Invalid config format received from server");
@@ -119,14 +122,7 @@ namespace VersionManager {
         
         Logger::Log("[*] Remote version: " + config.version);
 
-        ConsoleColor::SetColor(ConsoleColor::CYAN);
-        std::cout << "[*] Device name: ";
-        ConsoleColor::SetColor(ConsoleColor::YELLOW);
-        std::cout << config.deviceSymbolicLink;
-        ConsoleColor::Reset();
-        std::cout << "\n";
-        
-        Logger::Log("[*] Device name: " + config.deviceSymbolicLink);
+        // Do not print or log device name from remote; it's hardcoded now
 
         return config;
     }

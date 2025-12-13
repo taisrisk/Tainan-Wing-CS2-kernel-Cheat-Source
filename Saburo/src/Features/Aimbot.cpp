@@ -117,8 +117,8 @@ void Aimbot::update(const EntityManager& entities) {
     // Calculate angles (clamp asin input to avoid NaN)
     float zRatio = direction.z / distance;
     if (zRatio > 1.0f) zRatio = 1.0f; else if (zRatio < -1.0f) zRatio = -1.0f;
-    float targetPitch = -std::asin(zRatio) * (180.0f / M_PI);
-    float targetYaw = std::atan2(direction.y, direction.x) * (180.0f / M_PI);
+    float targetPitch = -asinf(zRatio) * (180.0f / static_cast<float>(M_PI));
+    float targetYaw = static_cast<float>(std::atan2(direction.y, direction.x) * (180.0 / M_PI));
 
     // No recoil compensation applied here
 
@@ -128,7 +128,7 @@ void Aimbot::update(const EntityManager& entities) {
     targetPitch = std::clamp(targetPitch, -89.0f, 89.0f);
 
     // ===== WRITE ANGLES =====
-    std::uintptr_t viewAnglesAddr = clientBase + cs2_dumper::offsets::client_dll::dwViewAngles;
+    std::uintptr_t viewAnglesAddr = clientBase + OffsetsManager::Get().dwViewAngles;
     if (softClampEnabled) {
         float currentAngles[3] = {0};
         drv.read_memory(reinterpret_cast<void*>(viewAnglesAddr), currentAngles, sizeof(currentAngles));
@@ -233,7 +233,7 @@ float Aimbot::getHeadOffset(std::uintptr_t targetAddress) {
 }
 
 void Aimbot::updateViewMatrix() {
-    std::uintptr_t matrixAddress = clientBase + cs2_dumper::offsets::client_dll::dwViewMatrix;
+    std::uintptr_t matrixAddress = clientBase + OffsetsManager::Get().dwViewMatrix;
     drv.read_memory(reinterpret_cast<void*>(matrixAddress), viewMatrix, sizeof(viewMatrix));
 }
 

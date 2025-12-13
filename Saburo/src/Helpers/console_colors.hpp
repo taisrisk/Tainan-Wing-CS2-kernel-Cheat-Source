@@ -6,8 +6,14 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#include <atomic>
+#include <vector>
 
 namespace ConsoleColor {
+    inline std::atomic<bool> g_quiet{false};
+
+    inline void SetQuiet(bool q) { g_quiet.store(q, std::memory_order_relaxed); }
+    inline bool IsQuiet() { return g_quiet.load(std::memory_order_relaxed); }
     // Color codes for Windows console
     enum Color {
         BLACK = 0,
@@ -57,6 +63,7 @@ namespace ConsoleColor {
 
     // Print with timestamp and color
     inline void Print(const std::string& message, Color color = GRAY) {
+        if (IsQuiet()) return;
         SetColor(DARK_GRAY);
         std::cout << "[" << GetTimestamp() << "] ";
         SetColor(color);
@@ -67,6 +74,7 @@ namespace ConsoleColor {
 
     // Specialized print functions
     inline void PrintSuccess(const std::string& message) {
+        if (IsQuiet()) return;
         SetColor(DARK_GRAY);
         std::cout << "[" << GetTimestamp() << "] ";
         SetColor(GREEN);
@@ -76,6 +84,7 @@ namespace ConsoleColor {
     }
 
     inline void PrintError(const std::string& message) {
+        if (IsQuiet()) return;
         SetColor(DARK_GRAY);
         std::cout << "[" << GetTimestamp() << "] ";
         SetColor(RED);
@@ -85,6 +94,7 @@ namespace ConsoleColor {
     }
 
     inline void PrintWarning(const std::string& message) {
+        if (IsQuiet()) return;
         SetColor(DARK_GRAY);
         std::cout << "[" << GetTimestamp() << "] ";
         SetColor(YELLOW);
@@ -94,6 +104,7 @@ namespace ConsoleColor {
     }
 
     inline void PrintInfo(const std::string& message) {
+        if (IsQuiet()) return;
         SetColor(DARK_GRAY);
         std::cout << "[" << GetTimestamp() << "] ";
         SetColor(CYAN);
@@ -103,6 +114,7 @@ namespace ConsoleColor {
     }
 
     inline void PrintHeader(const std::string& title) {
+        if (IsQuiet()) return;
         SetColor(MAGENTA);
         std::cout << "\n";
         std::cout << "========================================\n";
@@ -216,6 +228,7 @@ namespace ConsoleColor {
 
     // Print ASCII logo for Saburo
     inline void PrintLogo(bool inGame = false) {
+        if (IsQuiet()) return;
         // Blue in lobby, Red in-game
         SetColor(inGame ? RED : CYAN);
         std::cout << R"(
@@ -271,25 +284,6 @@ namespace ConsoleColor {
     
     // Print unified control panel with status (single clean display)
     inline void PrintUnifiedPanel(int frame, int players, int enemies, int teammates,
-<<<<<<< Updated upstream
-                                   bool aimbot, bool triggerbot, bool bhop, bool boneESP,
-                                   bool snaplines, bool distance, bool wallCheck, bool teamCheck, bool chams, bool inGame = false) {
-        SetCursorPosition(0, 0);
-        
-        // Subaro ASCII Logo - Blue in lobby, Red in-game
-        SetColor(inGame ? RED : CYAN);
-        std::cout << "   _____       __                     \n";
-        std::cout << "  / ___/__  __/ /_  ____ __________  \n";
-        std::cout << "  \\__ \\/ / / / __ \\/ __ `/ ___/ __ \\ \n";
-        std::cout << " ___/ / /_/ / /_/ / /_/ / /  / /_/ / \n";
-        std::cout << "/____/\\__,_/_.___/\\__,_/_/   \\____/  \n";
-        Reset();
-        SetColor(DARK_GRAY);
-        std::cout << "                          By: zrorisc\n";
-        Reset();
-        
-        // Header - Blue in lobby, Red in-game
-=======
                                    bool aimbot, bool triggerbot, bool bhop, bool headLine,
                                    bool snaplines, bool distance, bool wallCheck, bool teamCheck, bool chams,
                                    bool boneESP, bool silentAim, bool thirdPerson, bool recoilComp,
@@ -299,7 +293,6 @@ namespace ConsoleColor {
         // Move cursor to a fixed region (e.g., row 10)
         SetCursorPosition(0, 10);
         // Print only the status panel, not the logo/header
->>>>>>> Stashed changes
         SetColor(inGame ? RED : CYAN);
         std::cout << "========================================\n";
         std::cout << "           SUBARO - CS2 TOOL            \n";
@@ -380,8 +373,6 @@ namespace ConsoleColor {
         std::cout << (chams ? "ON " : "OFF") << "\n";
         Reset();
         
-<<<<<<< Updated upstream
-=======
         SetColor(MAGENTA);
         std::cout << "========================================\n";
         std::cout << "        ADVANCED FEATURES (Q-U)         \n";
@@ -422,8 +413,6 @@ namespace ConsoleColor {
         SetColor(visibilityCheck ? GREEN : DARK_GRAY);
         std::cout << (visibilityCheck ? "ON " : "OFF") << "\n";
         Reset();
-        
->>>>>>> Stashed changes
         SetColor(CYAN);
         std::cout << "========================================\n";
         Reset();

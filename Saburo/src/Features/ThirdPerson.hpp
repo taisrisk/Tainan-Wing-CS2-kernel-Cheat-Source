@@ -2,6 +2,7 @@
 
 #include "../Core/driver.hpp"
 #include "../Offsets/offsets.hpp"
+#include "../Offsets/offset_manager.hpp"
 #include <array>
 #include <cstdint>
 
@@ -106,7 +107,7 @@ private:
     }
 
     void setState(bool state) {
-        std::uintptr_t inputAddress = clientBase + cs2_dumper::offsets::client_dll::dwCSGOInput + THIRDPERSON_STATE_OFFSET;
+        std::uintptr_t inputAddress = clientBase + OffsetsManager::Get().dwCSGOInput + THIRDPERSON_STATE_OFFSET;
         std::uint8_t value = state ? 1 : 0;
         bool ok = drv.write_memory(reinterpret_cast<void*>(inputAddress), &value, sizeof(value));
         if (!ok) {
@@ -121,7 +122,7 @@ private:
         }
 
         // Check if game has reset the third-person state
-        std::uintptr_t inputAddress = clientBase + cs2_dumper::offsets::client_dll::dwCSGOInput + THIRDPERSON_STATE_OFFSET;
+        std::uintptr_t inputAddress = clientBase + OffsetsManager::Get().dwCSGOInput + THIRDPERSON_STATE_OFFSET;
         std::uint8_t currentValue = drv.read<std::uint8_t>(inputAddress);
 
         return currentValue == 0;

@@ -22,22 +22,18 @@ private:
     // Cache of valid enemy addresses for instant validation
     std::unordered_set<std::uintptr_t> validEnemyCache;
     
-<<<<<<< Updated upstream
-    static constexpr int SHOT_COOLDOWN_MS = 175; // Fixed 175ms between shots
-=======
     // Cached local team for faster checks
-    uint8_t cachedLocalTeam;
+    uint8_t cachedLocalTeam = 0;
     
     static constexpr int SHOT_COOLDOWN_MS = 200; // Reliable per-shot delay
     static constexpr int CACHE_REFRESH_MS = 100; // Refresh validation cache every 100ms
->>>>>>> Stashed changes
 
     // No recoil gating (simplified)
 
 public:
     Triggerbot(driver::DriverHandle& driver, std::uintptr_t client)
         : drv(driver), clientBase(client), localPlayerPawn(0),
-        isEnabled(true), teamCheckEnabled(true) {
+        isEnabled(true), teamCheckEnabled(true), cachedLocalTeam(0) {
         // Initialize with time in the past so first shot can fire immediately
         lastShotTime = std::chrono::steady_clock::now() - std::chrono::milliseconds(SHOT_COOLDOWN_MS);
     }
@@ -107,14 +103,12 @@ public:
             return; // Still on cooldown, don't even check crosshair
         }
 
-<<<<<<< Updated upstream
-        // Get dynamic offsets
-        const auto& offsets = OffsetsManager::Get();
-=======
         // No recoil gating; rely on cooldown only
 
         // Simplified gating: rely on cooldown only for reliability
->>>>>>> Stashed changes
+
+        // Get dynamic offsets
+        const auto& offsets = OffsetsManager::Get();
 
         // Read crosshair entity handle - INSTANT
         uint32_t crosshairHandle = drv.read<uint32_t>(localPlayerPawn + offsets.m_iIDEntIndex);
@@ -129,7 +123,7 @@ public:
         uint32_t entityIndex = crosshairHandle & 0x1FF;
 
         // Get entity list
-        std::uintptr_t entityList = drv.read<std::uintptr_t>(clientBase + cs2_dumper::offsets::client_dll::dwEntityList);
+        std::uintptr_t entityList = drv.read<std::uintptr_t>(clientBase + OffsetsManager::Get().dwEntityList);
         if (entityList == 0) {
             return;
         }
@@ -151,16 +145,6 @@ public:
             return;
         }
 
-<<<<<<< Updated upstream
-        // INSTANT VALIDATION - Check if target is in our ESP enemy cache
-        // This means it's already validated as:
-        // - Valid entity
-        // - Alive (life_state == 0)
-        // - Health > 0
-        // - Enemy team (or teammate if team check disabled)
-        if (validEnemyCache.find(targetAddress) == validEnemyCache.end()) {
-            // Not a valid target from ESP, do quick inline validation
-=======
         // Validation: when team-check is ON, use cache to prefer enemies; when OFF, bypass cache
         if (teamCheckEnabled) {
             if (validEnemyCache.find(targetAddress) == validEnemyCache.end()) {
@@ -170,7 +154,6 @@ public:
             }
         } else {
             // Bypass cache; allow teammates if alive
->>>>>>> Stashed changes
             if (!quickValidateTarget(targetAddress, offsets)) {
                 return;
             }

@@ -13,6 +13,13 @@ C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\OS-ImGui\imgui\imgui_
 C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\OS-ImGui\OS-ImGui.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\OS-ImGui.obj
 C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\OS-ImGui\OS-ImGui_Base.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\OS-ImGui_Base.obj
 C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\OS-ImGui\OS-ImGui_External.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\OS-ImGui_External.obj
+C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\bootstrap.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\bootstrap.obj
+C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\offsets_init.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\offsets_init.obj
+C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\esp_setup.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\esp_setup.obj
+C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\game_state.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\game_state.obj
+C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\features_init.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\features_init.obj
+C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\loop_runner.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\loop_runner.obj
 C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Helpers\kernel_mouse.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\kernel_mouse.obj
 C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Features\Aimbot.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\Aimbot.obj
 C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Offsets\offset_manager.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\offset_manager.obj
+C:\Users\tai2l\source\repos\Tainan Wing\Saburo\src\Offsets\offset_decryptor.cpp;C:\Users\tai2l\source\repos\Tainan Wing\build\Saburo_Intermediates\offset_decryptor.obj

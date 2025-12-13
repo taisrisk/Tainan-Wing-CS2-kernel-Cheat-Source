@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <vector>
 #include "offset_updater.hpp"
+#include "offset_decryptor.hpp"
 
 // Simple JSON value extractor (no library needed)
 namespace SimpleJSON {
@@ -50,6 +51,10 @@ struct CS2Offsets {
     uint32_t dwLocalPlayerController;
     uint32_t dwGlobalVars;
     uint32_t dwPlantedC4;
+    uint32_t dwCSGOInput;
+    uint32_t dwInputSystem;
+    uint32_t dwSensitivity;
+    uint32_t dwSensitivity_sensitivity;
 
     // Buttons from buttons.json
     struct {
@@ -122,6 +127,10 @@ struct CS2Offsets {
         dwLocalPlayerController = 0;
         dwGlobalVars = 0;
         dwPlantedC4 = 0;
+        dwCSGOInput = 0;
+        dwInputSystem = 0;
+        dwSensitivity = 0;
+        dwSensitivity_sensitivity = 0;
         buttons.attack = 0;
         buttons.jump = 0;
         buttons.right = 0;
@@ -156,6 +165,14 @@ struct CS2Offsets {
         m_bGlowEnabled = 0;
         m_glowColorOverride = 0;
         m_bBombTicking = 0;
+        m_flC4Blow = 0;
+        m_nBombSite = 0;
+        m_bBombPlanted = 0;
+        m_bBombDefused = 0;
+        m_flTimerLength = 0;
+        m_bBeingDefused = 0;
+        m_flDefuseCountDown = 0;
+        m_bBombDropped = 0;
     }
 };
 
@@ -165,6 +182,7 @@ private:
     static bool initialized;
     static const std::string cache_file;
     static const std::string client_dll_hpp_cache;
+    static const std::string header_cache_file;
 
     // Save offsets to cache file
     static void SaveToCache(const std::string& client_dll, const std::string& offsets_data, const std::string& buttons_data) {
@@ -232,6 +250,10 @@ private:
             offsets.dwLocalPlayerController = extractHex(offsets_json, "dwLocalPlayerController");
             offsets.dwGlobalVars = extractHex(offsets_json, "dwGlobalVars");
             offsets.dwPlantedC4 = extractHex(offsets_json, "dwPlantedC4");
+            offsets.dwCSGOInput = extractHex(offsets_json, "dwCSGOInput");
+            offsets.dwInputSystem = extractHex(offsets_json, "dwInputSystem");
+            offsets.dwSensitivity = extractHex(offsets_json, "dwSensitivity");
+            offsets.dwSensitivity_sensitivity = extractHex(offsets_json, "dwSensitivity_sensitivity");
 
             // Extract buttons from buttons.json
             offsets.buttons.attack = extractHex(buttons_json, "attack");
@@ -319,6 +341,57 @@ private:
         }
     }
 
+    // Try loading JSON directly from local repo folder: src/Offsets/*.json (Nova-style)
+    static bool InitializeFromLocalJsonImpl() {
+        if (initialized) return true;
+        auto try_read = [](const std::vector<std::string>& roots, const std::string& rel, std::string& out) -> bool {
+            for (const auto& r : roots) {
+                std::ifstream f(r + rel, std::ios::in | std::ios::binary);
+                if (f.good()) {
+                    std::ostringstream ss; ss << f.rdbuf(); out = ss.str(); return true;
+                }
+            }
+            return false;
+        };
+
+        // Build search roots relative to current working dir
+        std::vector<std::string> roots = {
+            "",
+            ".\\",
+            "..\\",
+            "..\\..\\",
+            "..\\..\\..\\"
+        };
+
+        std::string client_dll_json, offsets_json, buttons_json;
+        bool okOff = try_read(roots, std::string("src\\Offsets\\offsets.json"), offsets_json) ||
+                     try_read(roots, std::string("Offsets\\offsets.json"), offsets_json);
+        bool okBtn = try_read(roots, std::string("src\\Offsets\\buttons.json"), buttons_json) ||
+                     try_read(roots, std::string("Offsets\\buttons.json"), buttons_json);
+        bool okCdll = try_read(roots, std::string("src\\Offsets\\client_dll.json"), client_dll_json) ||
+                      try_read(roots, std::string("Offsets\\client_dll.json"), client_dll_json);
+
+        if (!(okOff && okBtn && okCdll)) {
+            std::cerr << "[-] Local JSON offsets not found in src/Offsets" << "\n";
+            return false;
+        }
+
+        if (!ParseOffsets(client_dll_json, offsets_json, buttons_json)) {
+            std::cerr << "[-] Failed to parse local JSON offsets" << "\n";
+            return false;
+        }
+
+        initialized = true;
+        std::cout << "[+] Offsets initialized from local JSON (src/Offsets)" << "\n";
+        return true;
+    }
+
+public:
+    // Public wrapper to initialize from local JSON
+    static bool InitializeFromLocalJson() {
+        return InitializeFromLocalJsonImpl();
+    }
+
     // Download client_dll.hpp if it doesn't exist
     static void DownloadClientDllHppIfNeeded() {
         std::ifstream check(client_dll_hpp_cache);
@@ -397,6 +470,54 @@ public:
         return true;
     }
 
+    // Initialize by parsing local generated headers instead of JSON
+    static bool InitializeFromHeaders() {
+        if (initialized) return true;
+        std::string log;
+        CS2Offsets parsed; // zero-initialized by ctor
+        if (!OffsetDecryptor::DecryptHeadersTo(parsed, &log)) {
+            std::cerr << log;
+            std::cerr << "[-] Header decryptor failed.\n";
+            return false;
+        }
+        std::cout << log;
+        offsets = parsed;
+        initialized = true;
+        std::cout << "[+] Offsets initialized from headers (offset_decryptor)\n";
+        return true;
+    }
+
+    // Version-aware cached initialize from headers
+    static bool InitializeFromHeadersCached(const std::string& appVersion) {
+        if (initialized) return true;
+        // Try load cached header parse first if version matches
+        CS2Offsets cached{};
+        std::string cachedVersion;
+        if (LoadHeaderCache(cached, cachedVersion)) {
+            if (!appVersion.empty() && cachedVersion == appVersion) {
+                offsets = cached;
+                initialized = true;
+                std::cout << "[+] Loaded offsets from header cache (version match)\n";
+                return true;
+            }
+        }
+
+        // Parse from headers now
+        std::string log;
+        CS2Offsets parsed{};
+        if (!OffsetDecryptor::DecryptHeadersTo(parsed, &log)) {
+            std::cerr << log;
+            std::cerr << "[-] Header decryptor failed.\n";
+            return false;
+        }
+        std::cout << log;
+        offsets = parsed;
+        initialized = true;
+        SaveHeaderCache(appVersion, offsets);
+        std::cout << "[+] Offsets initialized from headers and cached\n";
+        return true;
+    }
+
     // Get the current offsets
     static const CS2Offsets& Get() {
         if (!initialized) {
@@ -463,5 +584,139 @@ public:
         std::cout << "m_flDefuseCountDown: 0x" << std::hex << offsets.m_flDefuseCountDown << std::dec << "\n";
         std::cout << "m_bBombDropped: 0x" << std::hex << offsets.m_bBombDropped << std::dec << "\n";
         std::cout << "=========================\n\n";
+    }
+private:
+    static bool LoadHeaderCache(CS2Offsets& out, std::string& outVersion) {
+        try {
+            std::ifstream f(header_cache_file);
+            if (!f.is_open()) return false;
+            std::stringstream ss; ss << f.rdbuf();
+            std::string content = ss.str();
+            outVersion = SimpleJSON::extractString(content, "version");
+            if (outVersion.empty()) return false;
+
+            auto HX = [&](const char* k){ return SimpleJSON::extractHex(content, k); };
+
+            out.dwEntityList = HX("dwEntityList");
+            out.dwViewMatrix = HX("dwViewMatrix");
+            out.dwViewAngles = HX("dwViewAngles");
+            out.dwLocalPlayerPawn = HX("dwLocalPlayerPawn");
+            out.dwLocalPlayerController = HX("dwLocalPlayerController");
+            out.dwGlobalVars = HX("dwGlobalVars");
+            out.dwPlantedC4 = HX("dwPlantedC4");
+            out.dwCSGOInput = HX("dwCSGOInput");
+            out.dwInputSystem = HX("dwInputSystem");
+            out.dwSensitivity = HX("dwSensitivity");
+            out.dwSensitivity_sensitivity = HX("dwSensitivity_sensitivity");
+
+            out.buttons.attack = HX("buttons.attack");
+            out.buttons.jump = HX("buttons.jump");
+            out.buttons.right = HX("buttons.right");
+            out.buttons.left = HX("buttons.left");
+
+            out.m_iHealth = HX("m_iHealth");
+            out.m_iMaxHealth = HX("m_iMaxHealth");
+            out.m_iTeamNum = HX("m_iTeamNum");
+            out.m_fFlags = HX("m_fFlags");
+            out.m_vecAbsVelocity = HX("m_vecAbsVelocity");
+            out.m_pGameSceneNode = HX("m_pGameSceneNode");
+            out.m_lifeState = HX("m_lifeState");
+            out.m_hPlayerPawn = HX("m_hPlayerPawn");
+            out.m_angEyeAngles = HX("m_angEyeAngles");
+            out.m_vecLastClipCameraPos = HX("m_vecLastClipCameraPos");
+            out.m_aimPunchAngle = HX("m_aimPunchAngle");
+            out.m_iShotsFired = HX("m_iShotsFired");
+            out.m_pCameraServices = HX("m_pCameraServices");
+            out.m_pBulletServices = HX("m_pBulletServices");
+            out.m_pClippingWeapon = HX("m_pClippingWeapon");
+            out.m_iIDEntIndex = HX("m_iIDEntIndex");
+            out.m_bIsScoped = HX("m_bIsScoped");
+            out.m_bIsDefusing = HX("m_bIsDefusing");
+            out.m_flFlashDuration = HX("m_flFlashDuration");
+            out.m_vecAbsOrigin = HX("m_vecAbsOrigin");
+            out.m_modelState = HX("m_modelState");
+            out.m_iFOVStart = HX("m_iFOVStart");
+            out.m_iszPlayerName = HX("m_iszPlayerName");
+            out.m_pMovementServices = HX("m_pMovementServices");
+            out.m_bInCrouch = HX("m_bInCrouch");
+            out.m_bDucked = HX("m_bDucked");
+            out.m_clrRender = HX("m_clrRender");
+            out.m_bGlowEnabled = HX("m_bGlowEnabled");
+            out.m_glowColorOverride = HX("m_glowColorOverride");
+            out.m_bBombTicking = HX("m_bBombTicking");
+            out.m_flC4Blow = HX("m_flC4Blow");
+            out.m_nBombSite = HX("m_nBombSite");
+            out.m_flTimerLength = HX("m_flTimerLength");
+            out.m_bBeingDefused = HX("m_bBeingDefused");
+            out.m_flDefuseCountDown = HX("m_flDefuseCountDown");
+            out.m_bBombDefused = HX("m_bBombDefused");
+            out.m_bBombPlanted = HX("m_bBombPlanted");
+            out.m_bBombDropped = HX("m_bBombDropped");
+            return true;
+        } catch (...) { return false; }
+    }
+
+    static void SaveHeaderCache(const std::string& version, const CS2Offsets& in) {
+        try {
+            std::ofstream f(header_cache_file, std::ios::trunc);
+            if (!f.is_open()) return;
+            auto H = [](uint32_t v){ std::ostringstream o; o << "0x" << std::uppercase << std::hex << v; return o.str(); };
+            f << "{\n";
+            f << "  \"version\": \"" << version << "\",\n";
+            f << "  \"dwEntityList\": \"" << H(in.dwEntityList) << "\",\n";
+            f << "  \"dwViewMatrix\": \"" << H(in.dwViewMatrix) << "\",\n";
+            f << "  \"dwViewAngles\": \"" << H(in.dwViewAngles) << "\",\n";
+            f << "  \"dwLocalPlayerPawn\": \"" << H(in.dwLocalPlayerPawn) << "\",\n";
+            f << "  \"dwLocalPlayerController\": \"" << H(in.dwLocalPlayerController) << "\",\n";
+            f << "  \"dwGlobalVars\": \"" << H(in.dwGlobalVars) << "\",\n";
+            f << "  \"dwPlantedC4\": \"" << H(in.dwPlantedC4) << "\",\n";
+            f << "  \"dwCSGOInput\": \"" << H(in.dwCSGOInput) << "\",\n";
+            f << "  \"dwInputSystem\": \"" << H(in.dwInputSystem) << "\",\n";
+            f << "  \"dwSensitivity\": \"" << H(in.dwSensitivity) << "\",\n";
+            f << "  \"dwSensitivity_sensitivity\": \"" << H(in.dwSensitivity_sensitivity) << "\",\n";
+            f << "  \"buttons.attack\": \"" << H(in.buttons.attack) << "\",\n";
+            f << "  \"buttons.jump\": \"" << H(in.buttons.jump) << "\",\n";
+            f << "  \"buttons.right\": \"" << H(in.buttons.right) << "\",\n";
+            f << "  \"buttons.left\": \"" << H(in.buttons.left) << "\",\n";
+            f << "  \"m_iHealth\": \"" << H(in.m_iHealth) << "\",\n";
+            f << "  \"m_iMaxHealth\": \"" << H(in.m_iMaxHealth) << "\",\n";
+            f << "  \"m_iTeamNum\": \"" << H(in.m_iTeamNum) << "\",\n";
+            f << "  \"m_fFlags\": \"" << H(in.m_fFlags) << "\",\n";
+            f << "  \"m_vecAbsVelocity\": \"" << H(in.m_vecAbsVelocity) << "\",\n";
+            f << "  \"m_pGameSceneNode\": \"" << H(in.m_pGameSceneNode) << "\",\n";
+            f << "  \"m_lifeState\": \"" << H(in.m_lifeState) << "\",\n";
+            f << "  \"m_hPlayerPawn\": \"" << H(in.m_hPlayerPawn) << "\",\n";
+            f << "  \"m_angEyeAngles\": \"" << H(in.m_angEyeAngles) << "\",\n";
+            f << "  \"m_vecLastClipCameraPos\": \"" << H(in.m_vecLastClipCameraPos) << "\",\n";
+            f << "  \"m_aimPunchAngle\": \"" << H(in.m_aimPunchAngle) << "\",\n";
+            f << "  \"m_iShotsFired\": \"" << H(in.m_iShotsFired) << "\",\n";
+            f << "  \"m_pCameraServices\": \"" << H(in.m_pCameraServices) << "\",\n";
+            f << "  \"m_pBulletServices\": \"" << H(in.m_pBulletServices) << "\",\n";
+            f << "  \"m_pClippingWeapon\": \"" << H(in.m_pClippingWeapon) << "\",\n";
+            f << "  \"m_iIDEntIndex\": \"" << H(in.m_iIDEntIndex) << "\",\n";
+            f << "  \"m_bIsScoped\": \"" << H(in.m_bIsScoped) << "\",\n";
+            f << "  \"m_bIsDefusing\": \"" << H(in.m_bIsDefusing) << "\",\n";
+            f << "  \"m_flFlashDuration\": \"" << H(in.m_flFlashDuration) << "\",\n";
+            f << "  \"m_vecAbsOrigin\": \"" << H(in.m_vecAbsOrigin) << "\",\n";
+            f << "  \"m_modelState\": \"" << H(in.m_modelState) << "\",\n";
+            f << "  \"m_iFOVStart\": \"" << H(in.m_iFOVStart) << "\",\n";
+            f << "  \"m_iszPlayerName\": \"" << H(in.m_iszPlayerName) << "\",\n";
+            f << "  \"m_pMovementServices\": \"" << H(in.m_pMovementServices) << "\",\n";
+            f << "  \"m_bInCrouch\": \"" << H(in.m_bInCrouch) << "\",\n";
+            f << "  \"m_bDucked\": \"" << H(in.m_bDucked) << "\",\n";
+            f << "  \"m_clrRender\": \"" << H(in.m_clrRender) << "\",\n";
+            f << "  \"m_bGlowEnabled\": \"" << H(in.m_bGlowEnabled) << "\",\n";
+            f << "  \"m_glowColorOverride\": \"" << H(in.m_glowColorOverride) << "\",\n";
+            f << "  \"m_bBombTicking\": \"" << H(in.m_bBombTicking) << "\",\n";
+            f << "  \"m_flC4Blow\": \"" << H(in.m_flC4Blow) << "\",\n";
+            f << "  \"m_nBombSite\": \"" << H(in.m_nBombSite) << "\",\n";
+            f << "  \"m_bBombPlanted\": \"" << H(in.m_bBombPlanted) << "\",\n";
+            f << "  \"m_bBombDefused\": \"" << H(in.m_bBombDefused) << "\",\n";
+            f << "  \"m_flTimerLength\": \"" << H(in.m_flTimerLength) << "\",\n";
+            f << "  \"m_bBeingDefused\": \"" << H(in.m_bBeingDefused) << "\",\n";
+            f << "  \"m_flDefuseCountDown\": \"" << H(in.m_flDefuseCountDown) << "\",\n";
+            f << "  \"m_bBombDropped\": \"" << H(in.m_bBombDropped) << "\"\n";
+            f << "}\n";
+        } catch (...) {}
     }
 };

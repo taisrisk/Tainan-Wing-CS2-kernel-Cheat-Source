@@ -3,6 +3,7 @@
 #include "entity.hpp"
 #include "../Core/driver.hpp"
 #include "../Offsets/offsets.hpp"
+#include "../Offsets/offset_manager.hpp"
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -84,7 +85,7 @@ public:
         manager.local_player_team = local_player.team;
 
         // Perform fresh enumeration
-        std::uintptr_t entity_list = drv.read<std::uintptr_t>(client_base + cs2_dumper::offsets::client_dll::dwEntityList);
+        std::uintptr_t entity_list = drv.read<std::uintptr_t>(client_base + OffsetsManager::Get().dwEntityList);
 
         if (entity_list == 0) {
             return;
@@ -227,7 +228,7 @@ public:
         manager.local_player_team = local_player.team;
 
         // Read entity list
-        std::uintptr_t entity_list = drv.read<std::uintptr_t>(client_base + cs2_dumper::offsets::client_dll::dwEntityList);
+        std::uintptr_t entity_list = drv.read<std::uintptr_t>(client_base + OffsetsManager::Get().dwEntityList);
 
         if (entity_list == 0) {
             return manager;
@@ -278,7 +279,7 @@ public:
         // Clear only the all_entities vector, keep local player info
         manager.all_entities.clear();
 
-        std::uintptr_t entity_list = drv.read<std::uintptr_t>(client_base + cs2_dumper::offsets::client_dll::dwEntityList);
+        std::uintptr_t entity_list = drv.read<std::uintptr_t>(client_base + OffsetsManager::Get().dwEntityList);
         if (entity_list == 0) return;
 
         // If we have cached indices, use them for ultra-fast updates

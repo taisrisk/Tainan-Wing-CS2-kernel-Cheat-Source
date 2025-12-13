@@ -19,6 +19,13 @@
     <ClCompile Include="src\Helpers\console_logger.cpp" />
     <ClCompile Include="src\Offsets\offset_manager.cpp" />
     <ClCompile Include="src\Features\BoneESP.cpp" />
+    <ClCompile Include="src\Offsets\offset_decryptor.cpp" />
+    <ClCompile Include="src\Helpers\bootstrap.cpp" />
+    <ClCompile Include="src\Helpers\offsets_init.cpp" />
+    <ClCompile Include="src\Helpers\esp_setup.cpp" />
+    <ClCompile Include="src\Helpers\game_state.cpp" />
+    <ClCompile Include="src\Helpers\features_init.cpp" />
+    <ClCompile Include="src\Helpers\loop_runner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\driver.hpp" />
@@ -73,5 +80,18 @@
     <ClInclude Include="src\Features\ThirdPerson.hpp" />
     <ClInclude Include="src\Helpers\toggle_manager.hpp" />
     <ClInclude Include="src\Helpers\ui_helper.hpp" />
+    <ClInclude Include="src\Offsets\offset_decryptor.hpp" />
+    <ClInclude Include="src\Helpers\settings_helper.hpp" />
+    <ClInclude Include="src\Helpers\bootstrap.hpp" />
+    <ClInclude Include="src\Helpers\offsets_init.hpp" />
+    <ClInclude Include="src\Helpers\esp_setup.hpp" />
+    <ClInclude Include="src\Helpers\game_state.hpp" />
+    <ClInclude Include="src\Helpers\features_init.hpp" />
+    <ClInclude Include="src\Helpers\loop_runner.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Offsets\client_dll.json" />
+    <None Include="src\Offsets\buttons.json" />
+    <None Include="src\Offsets\offsets.json" />
   </ItemGroup>
 </Project>

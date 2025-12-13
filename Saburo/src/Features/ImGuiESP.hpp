@@ -6,6 +6,7 @@
 #include "VisibilityChecker.hpp"
 #include "../Core/driver.hpp"
 #include "../Offsets/offsets.hpp"
+#include "../Offsets/offset_manager.hpp"
 #include <memory>
 #include <atomic>
 #include <chrono>
@@ -37,12 +38,9 @@ private:
     bool distanceESPEnabled = false;
     bool chamsEnabled = false;
     bool lobbyMode = false;
-<<<<<<< Updated upstream
-=======
     bool boneESPEnabled = false;
     bool teamCheckEnabled = true;
     BoneESP boneEsp;
->>>>>>> Stashed changes
     
     // Visibility cache for snaplines
     std::vector<bool> enemyVisibility;
@@ -86,15 +84,13 @@ public:
     bool isChamsEnabled() const { return chamsEnabled; }
     void setLobbyMode(bool enable) { lobbyMode = enable; }
     bool isLobbyMode() const { return lobbyMode; }
-<<<<<<< Updated upstream
-=======
     void setBoneESPEnabled(bool enable) { boneESPEnabled = enable; boneEsp.setEnabled(enable); }
     bool isBoneESPEnabled() const { return boneESPEnabled; }
     void setTeamCheckEnabled(bool enable) { teamCheckEnabled = enable; }
->>>>>>> Stashed changes
     
     void updateViewMatrix() {
-        std::uintptr_t matrixAddress = clientBase + cs2_dumper::offsets::client_dll::dwViewMatrix;
+        const auto& offsets = OffsetsManager::Get();
+        std::uintptr_t matrixAddress = clientBase + offsets.dwViewMatrix;
         drv.read_memory(reinterpret_cast<PVOID>(matrixAddress), viewMatrix, sizeof(viewMatrix));
     }
     

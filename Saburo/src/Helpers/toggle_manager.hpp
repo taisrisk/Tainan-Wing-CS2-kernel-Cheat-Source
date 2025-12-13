@@ -1,17 +1,18 @@
 #pragma once
 
-#include "src/Features/triggerbot.hpp"
-#include "src/Features/bhop.hpp"
-#include "src/Features/Aimbot.hpp"
-#include "src/Features/Chams.hpp"
-#include "src/Features/BoneESP.hpp"
-#include "src/Features/ThirdPerson.hpp"
-#include "src/Features/VisibilityChecker.hpp"
-#include "src/Features/SmoothAim.hpp"
-#include "src/Features/RecoilCompensation.hpp"
-#include "src/Features/ImGuiESP.hpp"
-#include "src/Helpers/console_logger.hpp"
-#include "src/Helpers/settings_helper.hpp"
+#include "../Features/triggerbot.hpp"
+#include "../Features/bhop.hpp"
+#include "../Features/Aimbot.hpp"
+#include "../Features/Chams.hpp"
+#include "../Features/BoneESP.hpp"
+#include "../Features/ThirdPerson.hpp"
+#include "../Features/VisibilityChecker.hpp"
+#include "../Features/SmoothAim.hpp"
+#include "../Features/RecoilCompensation.hpp"
+#include "../Features/ImGuiESP.hpp"
+#include "../Features/SilentAim.hpp"
+#include "console_logger.hpp"
+#include "settings_helper.hpp"
 #include <cctype>
 
 class ToggleManager {
