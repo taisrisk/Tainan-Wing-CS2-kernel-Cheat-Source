@@ -211,14 +211,14 @@ bool Aimbot::isTargetCrouched(std::uintptr_t targetAddress) {
     const auto& offsets = OffsetsManager::Get();
     
     try {
-        // Get movement services pointer from player pawn
-        std::uintptr_t movementServices = drv.read<std::uintptr_t>(targetAddress + offsets.m_pMovementServices);
-        if (movementServices == 0) {
-            return false;
+        // Prefer m_bDucked directly on pawn when available
+        if (offsets.m_bDucked != 0) {
+            bool ducked = drv.read<bool>(targetAddress + offsets.m_bDucked);
+            return ducked;
         }
-        
-        // Read m_bInCrouch from movement services (more reliable than m_bDucked)
-        // This is a bool at offset 0x240 from the movement services pointer
+        // Fallback: read m_bInCrouch from movement services
+        std::uintptr_t movementServices = drv.read<std::uintptr_t>(targetAddress + offsets.m_pMovementServices);
+        if (movementServices == 0) return false;
         bool inCrouch = drv.read<bool>(movementServices + offsets.m_bInCrouch);
         return inCrouch;
     }

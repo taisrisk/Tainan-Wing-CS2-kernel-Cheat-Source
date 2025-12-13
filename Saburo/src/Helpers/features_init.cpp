@@ -16,13 +16,13 @@ Toggles LoadToggles() {
     t.distanceESPEnabled = s.distanceESPEnabled;
     t.snaplinesWallCheckEnabled = s.snaplinesWallCheckEnabled;
     t.chamsEnabled = s.chamsEnabled;
-    t.boneESPEnabled = false;
-    t.silentAimEnabled = false;
-    t.thirdPersonEnabled = false;
-    t.recoilCompEnabled = false;
-    t.smoothAimEnabled = false;
-    t.entityPredictorEnabled = false;
-    t.visibilityCheckEnabled = false;
+    t.boneESPEnabled = s.boneESPEnabled;
+    t.silentAimEnabled = s.silentAimEnabled;
+    t.thirdPersonEnabled = s.thirdPersonEnabled;
+    t.recoilCompEnabled = s.recoilCompEnabled;
+    t.smoothAimEnabled = s.smoothAimEnabled;
+    t.entityPredictorEnabled = s.entityPredictorEnabled;
+    t.visibilityCheckEnabled = s.visibilityCheckEnabled;
     if (SettingsManager::SettingsFileExists()) {
         ConsoleColor::PrintSuccess("Settings loaded from file");
     } else {

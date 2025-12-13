@@ -13,13 +13,13 @@ namespace SettingsHelper {
         bool distanceESPEnabled,
         bool snaplinesWallCheckEnabled,
         bool chamsEnabled,
-        bool /*boneESPEnabled*/,        // ignored by current SettingsManager
-        bool /*silentAimEnabled*/,      // ignored
-        bool /*thirdPersonEnabled*/,    // ignored
-        bool /*recoilCompEnabled*/,     // ignored
-        bool /*smoothAimEnabled*/,      // ignored
-        bool /*entityPredictorEnabled*/,// ignored
-        bool /*visibilityCheckEnabled*/ // ignored
+        bool boneESPEnabled,
+        bool silentAimEnabled,
+        bool thirdPersonEnabled,
+        bool recoilCompEnabled,
+        bool smoothAimEnabled,
+        bool entityPredictorEnabled,
+        bool visibilityCheckEnabled
     ) {
         SettingsManager::Settings s;
         s.triggerbotEnabled = triggerbotEnabled;
@@ -32,6 +32,13 @@ namespace SettingsHelper {
         s.distanceESPEnabled = distanceESPEnabled;
         s.snaplinesWallCheckEnabled = snaplinesWallCheckEnabled;
         s.chamsEnabled = chamsEnabled;
+        s.boneESPEnabled = boneESPEnabled;
+        s.silentAimEnabled = silentAimEnabled;
+        s.thirdPersonEnabled = thirdPersonEnabled;
+        s.recoilCompEnabled = recoilCompEnabled;
+        s.smoothAimEnabled = smoothAimEnabled;
+        s.entityPredictorEnabled = entityPredictorEnabled;
+        s.visibilityCheckEnabled = visibilityCheckEnabled;
         return s;
     }
 }

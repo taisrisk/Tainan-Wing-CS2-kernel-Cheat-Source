@@ -18,6 +18,14 @@ namespace SettingsManager {
         bool distanceESPEnabled = false;
         bool snaplinesWallCheckEnabled = false;
         bool chamsEnabled = false;
+        // Advanced toggles
+        bool boneESPEnabled = false;
+        bool silentAimEnabled = false;
+        bool thirdPersonEnabled = false;
+        bool recoilCompEnabled = false;
+        bool smoothAimEnabled = false;
+        bool entityPredictorEnabled = false;
+        bool visibilityCheckEnabled = false;
     };
 
     // Get settings file path
@@ -43,6 +51,13 @@ namespace SettingsManager {
             file << "distanceESPEnabled=" << settings.distanceESPEnabled << "\n";
             file << "snaplinesWallCheckEnabled=" << settings.snaplinesWallCheckEnabled << "\n";
             file << "chamsEnabled=" << settings.chamsEnabled << "\n";
+            file << "boneESPEnabled=" << settings.boneESPEnabled << "\n";
+            file << "silentAimEnabled=" << settings.silentAimEnabled << "\n";
+            file << "thirdPersonEnabled=" << settings.thirdPersonEnabled << "\n";
+            file << "recoilCompEnabled=" << settings.recoilCompEnabled << "\n";
+            file << "smoothAimEnabled=" << settings.smoothAimEnabled << "\n";
+            file << "entityPredictorEnabled=" << settings.entityPredictorEnabled << "\n";
+            file << "visibilityCheckEnabled=" << settings.visibilityCheckEnabled << "\n";
 
             file.close();
             return true;
@@ -82,6 +97,13 @@ namespace SettingsManager {
                 else if (key == "distanceESPEnabled") settings.distanceESPEnabled = boolValue;
                 else if (key == "snaplinesWallCheckEnabled") settings.snaplinesWallCheckEnabled = boolValue;
                 else if (key == "chamsEnabled") settings.chamsEnabled = boolValue;
+                else if (key == "boneESPEnabled") settings.boneESPEnabled = boolValue;
+                else if (key == "silentAimEnabled") settings.silentAimEnabled = boolValue;
+                else if (key == "thirdPersonEnabled") settings.thirdPersonEnabled = boolValue;
+                else if (key == "recoilCompEnabled") settings.recoilCompEnabled = boolValue;
+                else if (key == "smoothAimEnabled") settings.smoothAimEnabled = boolValue;
+                else if (key == "entityPredictorEnabled") settings.entityPredictorEnabled = boolValue;
+                else if (key == "visibilityCheckEnabled") settings.visibilityCheckEnabled = boolValue;
             }
 
             file.close();

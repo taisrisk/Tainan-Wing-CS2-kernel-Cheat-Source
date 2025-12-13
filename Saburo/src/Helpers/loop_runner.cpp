@@ -87,6 +87,7 @@ void Run(driver::DriverHandle& drv, std::uintptr_t client, ImGuiESP& esp,
 
     int frame=0;
     static std::array<bool,256> prev{};
+    static HWND hConsoleWnd = GetConsoleWindow();
     auto on_press = [&](int vk, int keyToHandle){
         SHORT s = GetAsyncKeyState(vk);
         bool down = (s & 0x8000) != 0;
@@ -96,6 +97,9 @@ void Run(driver::DriverHandle& drv, std::uintptr_t client, ImGuiESP& esp,
     };
 
     while (cs2Running.load()) {
+        // Only process toggle hotkeys when our console window is focused
+        bool appFocused = (GetForegroundWindow() == hConsoleWnd);
+
         enumerator.update_entities(entities);
         esp.updateEntities(entities, localPawn);
 
@@ -111,24 +115,29 @@ void Run(driver::DriverHandle& drv, std::uintptr_t client, ImGuiESP& esp,
         if (t.thirdPersonEnabled) f.thirdPerson.update(localPawn);
         if (t.silentAimEnabled && t.thirdPersonEnabled) f.silentAim.update();
 
-        // Hotkeys (edge-triggered)
-        on_press('0','0');
-        on_press('1','1');
-        on_press('2','2');
-        on_press('3','3');
-        on_press('4','4');
-        on_press('5','5');
-        on_press('6','6');
-        on_press('7','7');
-        on_press('8','8');
-        on_press('9','9');
-        on_press('Q','q');
-        on_press('W','w');
-        on_press('E','e');
-        on_press('R','r');
-        on_press('T','t');
-        on_press('Y','y');
-        on_press('U','u');
+        // Hotkeys (edge-triggered) only when app focused; otherwise clear edge history
+        if (appFocused) {
+            on_press('0','0');
+            on_press('1','1');
+            on_press('2','2');
+            on_press('3','3');
+            on_press('4','4');
+            on_press('5','5');
+            on_press('6','6');
+            on_press('7','7');
+            on_press('8','8');
+            on_press('9','9');
+            on_press('Q','q');
+            on_press('W','w');
+            on_press('E','e');
+            on_press('R','r');
+            on_press('T','t');
+            on_press('Y','y');
+            on_press('U','u');
+        } else {
+            // Reset so no stale edges toggle when refocusing
+            prev.fill(false);
+        }
 
         if ((frame++ % 60) == 0) {
             ConsoleColor::PrintUnifiedPanel(
