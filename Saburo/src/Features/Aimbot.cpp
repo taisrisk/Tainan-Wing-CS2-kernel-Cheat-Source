@@ -96,22 +96,38 @@ void Aimbot::update(const EntityManager& entities) {
 
     if (distance < 0.001f) return;
 
-    // Predict target position based on velocity, net/input delay and bullet travel
+    // Predict target position using entity velocity with a very small extra lead (2-5ms)
     if (predictionEnabled) {
-        float travelMs = (distance / std::max(1.0f, bulletSpeedUPS)) * 1000.0f;
-        float leadMs = std::clamp(baseLeadMs + travelMs, 0.0f, 30.0f);
-        Vector3 predicted = predictor.predictPosition(bestTarget->address, leadMs);
-        if (!(predicted.x == 0.0f && predicted.y == 0.0f && predicted.z == 0.0f)) {
-            targetPos = predicted;
-            targetPos.z += getHeadOffset(bestTarget->address);
+        // Read entity world velocity (UPS)
+        const auto& offsets = OffsetsManager::Get();
+        Vector3 entVel = drv.read<Vector3>(bestTarget->address + offsets.m_vecAbsVelocity);
+        float entSpeed = std::sqrt(entVel.x*entVel.x + entVel.y*entVel.y + entVel.z*entVel.z);
 
-            // Recompute direction and distance
-            direction.x = targetPos.x - localPos.x;
-            direction.y = targetPos.y - localPos.y;
-            direction.z = targetPos.z - localPos.z;
-            distance = std::sqrt(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
-            if (distance < 0.001f) return;
-        }
+        // Very small fixed-time lead based on entity speed only (no travel time)
+        // Clamp to approx 2-5ms to avoid large overshoots
+        float extraMs = 4.0f + (entSpeed * 0.003f); // baseline +2ms more
+        if (extraMs > 5.0f) extraMs = 5.0f;
+        if (extraMs < 2.0f) extraMs = 2.0f;
+        float leadSec = extraMs / 1000.0f;
+
+        // Project target along its velocity only (do not add local velocity)
+        // Use base (feet) position to avoid double-adding head offset
+        Vector3 basePos = bestTarget->position;
+        Vector3 predicted = {
+            basePos.x + entVel.x * leadSec,
+            basePos.y + entVel.y * leadSec,
+            basePos.z + entVel.z * leadSec
+        };
+
+        targetPos = predicted;
+        targetPos.z += getHeadOffset(bestTarget->address);
+
+        // Recompute direction and distance
+        direction.x = targetPos.x - localPos.x;
+        direction.y = targetPos.y - localPos.y;
+        direction.z = targetPos.z - localPos.z;
+        distance = std::sqrt(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
+        if (distance < 0.001f) return;
     }
 
     // Calculate angles (clamp asin input to avoid NaN)
@@ -130,25 +146,26 @@ void Aimbot::update(const EntityManager& entities) {
     // ===== WRITE ANGLES =====
     std::uintptr_t viewAnglesAddr = clientBase + OffsetsManager::Get().dwViewAngles;
     if (softClampEnabled) {
+        // Smooth aim: simple lerp towards target to reduce jitter
         float currentAngles[3] = {0};
         drv.read_memory(reinterpret_cast<void*>(viewAnglesAddr), currentAngles, sizeof(currentAngles));
         float currPitch = currentAngles[0];
         float currYaw = currentAngles[1];
 
-        float maxDeltaPitch = 4.0f; // deg per frame
-        float maxDeltaYaw   = 6.0f;
-        auto clampAbs = [](float v, float m){ return (v > m) ? m : (v < -m ? -m : v); };
+        auto angDiff = [](float a, float b){
+            float d = a - b;
+            while (d > 180.0f) d -= 360.0f;
+            while (d < -180.0f) d += 360.0f;
+            return d;
+        };
 
-        float dyaw = targetYaw - currYaw;
-        while (dyaw > 180.0f) dyaw -= 360.0f;
-        while (dyaw < -180.0f) dyaw += 360.0f;
-        float dpitch = targetPitch - currPitch;
+        float dpitch = angDiff(targetPitch, currPitch);
+        float dyaw   = angDiff(targetYaw, currYaw);
 
-        dyaw = clampAbs(dyaw, maxDeltaYaw);
-        dpitch = clampAbs(dpitch, maxDeltaPitch);
-
-        float outPitch = currPitch + dpitch;
-        float outYaw   = currYaw + dyaw;
+        // Lerp factor (0..1). 0.2 gives smooth yet responsive motion
+        const float alpha = 0.2f;
+        float outPitch = currPitch + dpitch * alpha;
+        float outYaw   = currYaw + dyaw   * alpha;
         if (outPitch > 89.0f) outPitch = 89.0f; else if (outPitch < -89.0f) outPitch = -89.0f;
 
         drv.write_memory(reinterpret_cast<void*>(viewAnglesAddr), &outPitch, sizeof(float));

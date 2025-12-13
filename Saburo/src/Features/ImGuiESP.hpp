@@ -12,6 +12,7 @@
 #include <chrono>
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 class ImGuiESP {
 private:
@@ -41,10 +42,14 @@ private:
     bool boneESPEnabled = false;
     bool teamCheckEnabled = true;
     BoneESP boneEsp;
+    // Master visibility for overlay (boxes/text/etc). HeadAngleLine can draw regardless.
+    bool masterVisible = true;
     
     // Visibility cache for snaplines
     std::vector<bool> enemyVisibility;
     std::vector<bool> teammateVisibility;
+    // Prediction toggle for UI display
+    bool predictionEnabled = false;
     
 public:
     ImGuiESP(driver::DriverHandle& driver, std::uintptr_t client)
@@ -87,6 +92,10 @@ public:
     void setBoneESPEnabled(bool enable) { boneESPEnabled = enable; boneEsp.setEnabled(enable); }
     bool isBoneESPEnabled() const { return boneESPEnabled; }
     void setTeamCheckEnabled(bool enable) { teamCheckEnabled = enable; }
+    void setMasterVisible(bool enable) { masterVisible = enable; }
+    bool isMasterVisible() const { return masterVisible; }
+    void setPredictionEnabled(bool enable) { predictionEnabled = enable; }
+    bool isPredictionEnabled() const { return predictionEnabled; }
     
     void updateViewMatrix() {
         const auto& offsets = OffsetsManager::Get();
@@ -172,6 +181,11 @@ public:
             return;  // Don't render anything else in lobby mode
         }
         
+        // If master visibility is off, draw nothing further (head angle line already drawn above)
+        if (!masterVisible) {
+            return;
+        }
+
         // NORMAL MODE: Render all entities
         char fpsText[64];
         snprintf(fpsText, sizeof(fpsText), "ESP FPS: %.0f", currentFPS);
@@ -183,6 +197,57 @@ public:
         char countText[64];
         snprintf(countText, sizeof(countText), "Entities: %zu", currentEntities.enemy_entities.size() + currentEntities.teammate_entities.size());
         drawList->AddText(ImVec2(10, 30), ImColor(255, 255, 255, 255), countText);
+
+        // Show simple prediction direction when enabled (left/right and pixels)
+        if (predictionEnabled) {
+            // Find nearest enemy to screen center horizontally
+            float centerX = screenWidth * 0.5f;
+            float bestDx = 1e9f;
+            const Entity* best = nullptr;
+            Vec2 bestScreen{};
+            for (const auto& e : currentEntities.enemy_entities) {
+                if (!e.is_valid) continue;
+                Vector3 head = e.position; head.z += 70.0f;
+                Vec2 s{}; if (!worldToScreen(head, s)) continue;
+                float dx = std::abs(s.x - centerX);
+                if (dx < bestDx) { bestDx = dx; best = &e; bestScreen = s; }
+            }
+            if (best) {
+                // Predict a tiny lead identical to aimbot style (2-5ms based on velocity)
+                const auto& offsets = OffsetsManager::Get();
+                Vector3 entVel = drv.read<Vector3>(best->address + offsets.m_vecAbsVelocity);
+                float entSpeed = std::sqrt(entVel.x*entVel.x + entVel.y*entVel.y + entVel.z*entVel.z);
+                float extraMs = 2.0f + (entSpeed * 0.003f);
+                if (extraMs > 7.0f) extraMs = 7.0f; // small cap
+                if (extraMs < 2.0f) extraMs = 2.0f;
+                float leadSec = extraMs / 1000.0f;
+                Vector3 base = best->position;
+                Vector3 predW = { base.x + entVel.x * leadSec, base.y + entVel.y * leadSec, base.z + entVel.z * leadSec };
+                predW.z += 70.0f;
+                Vec2 predS{}; if (worldToScreen(predW, predS)) {
+                    float dpx = predS.x - bestScreen.x;
+                    float absdx = std::abs(dpx);
+                    const char* arrow = "--";
+                    int px = static_cast<int>(std::round(absdx));
+                    if (absdx < 2.0f) {
+                        // Try a slightly larger preview lead for UI direction only
+                        float uiLead = leadSec * 3.0f + 0.01f;
+                        Vector3 predW2 = { base.x + entVel.x * uiLead, base.y + entVel.y * uiLead, base.z + entVel.z * uiLead };
+                        predW2.z += 70.0f;
+                        Vec2 predS2{}; if (worldToScreen(predW2, predS2)) {
+                            float dpx2 = predS2.x - bestScreen.x;
+                            if (std::abs(dpx2) >= 0.5f) dpx = dpx2; // use sign from larger preview
+                        }
+                        absdx = std::abs(dpx);
+                        px = static_cast<int>(std::round(absdx));
+                    }
+                    if (dpx > 0.0f) arrow = "-->"; else if (dpx < 0.0f) arrow = "<--"; else arrow = "--";
+                    char predText[64];
+                    snprintf(predText, sizeof(predText), "Pred: %s %dpx", arrow, px);
+                    drawList->AddText(ImVec2(10, 48), ImColor(0, 200, 255, 255), predText);
+                }
+            }
+        }
         
         // Render enemies with visibility index (always render enemies)
         for (size_t i = 0; i < currentEntities.enemy_entities.size(); i++) {

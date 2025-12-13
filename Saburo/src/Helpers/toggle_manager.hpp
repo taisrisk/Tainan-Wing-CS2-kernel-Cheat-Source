@@ -67,6 +67,7 @@ public:
         bhop.setEnabled(bhopEnabled);
         aimbot.setEnabled(aimbotEnabled);
         aimbot.setPredictionEnabled(entityPredictorEnabled);
+        espRenderer.setPredictionEnabled(entityPredictorEnabled);
         aimbot.setSoftClampEnabled(smoothAimEnabled);
         chams.setEnabled(chamsEnabled);
         ConsoleLogger::setEnabled(consoleDebugEnabled);
@@ -84,6 +85,8 @@ public:
         espRenderer.setSnaplinesWallCheckEnabled(snaplinesWallCheckEnabled);
         espRenderer.setChamsEnabled(chamsEnabled);
         espRenderer.setBoneESPEnabled(boneESPEnabled);
+        // Master overlay visibility (boxes/text/etc). HeadAngleLine remains separate.
+        espRenderer.setMasterVisible(visibilityCheckEnabled);
 
         // extended features
         boneESP.setEnabled(boneESPEnabled);
@@ -180,11 +183,13 @@ public:
             case 'y': // Prediction
                 entityPredictorEnabled = !entityPredictorEnabled;
                 aimbot.setPredictionEnabled(entityPredictorEnabled);
+                espRenderer.setPredictionEnabled(entityPredictorEnabled);
                 changed = true;
                 break;
             case 'u': // Visibility
                 visibilityCheckEnabled = !visibilityCheckEnabled;
                 visibilityChecker.setEnabled(visibilityCheckEnabled);
+                espRenderer.setMasterVisible(visibilityCheckEnabled);
                 changed = true;
                 break;
             default:

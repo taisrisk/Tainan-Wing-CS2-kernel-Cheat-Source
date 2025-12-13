@@ -39,12 +39,15 @@ void ApplyToggles(Features& f, ImGuiESP& esp, const Toggles& t) {
     ConsoleLogger::setEnabled(t.consoleDebugEnabled);
     f.triggerbot.setTeamCheckEnabled(t.teamCheckEnabled);
     f.aimbot.setTeamCheckEnabled(t.teamCheckEnabled);
+    esp.setPredictionEnabled(t.entityPredictorEnabled);
     esp.setHeadAngleLineEnabled(t.headAngleLineEnabled);
     esp.setHeadAngleLineTeamCheckEnabled(t.teamCheckEnabled);
     esp.setSnaplinesEnabled(t.snaplinesEnabled);
     esp.setSnaplinesWallCheckEnabled(t.snaplinesWallCheckEnabled);
     esp.setDistanceESPEnabled(t.distanceESPEnabled);
     esp.setChamsEnabled(t.chamsEnabled);
+    // Apply master overlay visibility
+    esp.setMasterVisible(t.visibilityCheckEnabled);
 }
 
 }

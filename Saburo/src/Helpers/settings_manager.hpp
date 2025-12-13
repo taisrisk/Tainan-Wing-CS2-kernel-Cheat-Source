@@ -25,7 +25,7 @@ namespace SettingsManager {
         bool recoilCompEnabled = false;
         bool smoothAimEnabled = false;
         bool entityPredictorEnabled = false;
-        bool visibilityCheckEnabled = false;
+        bool visibilityCheckEnabled = true;
     };
 
     // Get settings file path
