@@ -6,6 +6,7 @@
 
 class SmoothAim {
 private:
+    bool enabled = false;
     float currentSmoothness;  // Higher = smoother (1.0 = instant, 10.0 = very smooth)
     const float MIN_SMOOTHNESS = 1.0f;
     const float MAX_SMOOTHNESS = 20.0f;
@@ -19,6 +20,17 @@ private:
     AimTarget lastTarget;
     
 public:
+    void setEnabled(bool enable) {
+        enabled = enable;
+        if (!enable) {
+            reset();
+        }
+    }
+
+    bool isEnabled() const {
+        return enabled;
+    }
+
     SmoothAim(float smoothness = 5.0f) 
         : currentSmoothness(std::clamp(smoothness, MIN_SMOOTHNESS, MAX_SMOOTHNESS)) {}
     
@@ -34,6 +46,12 @@ public:
     // Calculate smooth camera movement towards target
     // Returns the delta to apply this frame
     void calculateSmoothDelta(float targetDeltaX, float targetDeltaY, float& outDeltaX, float& outDeltaY) {
+        if (!enabled) {
+            outDeltaX = targetDeltaX;
+            outDeltaY = targetDeltaY;
+            return;
+        }
+
         // Apply smoothing factor - divide by smoothness to slow down movement
         outDeltaX = targetDeltaX / currentSmoothness;
         outDeltaY = targetDeltaY / currentSmoothness;

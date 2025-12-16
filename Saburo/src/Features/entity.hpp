@@ -83,8 +83,9 @@ public:
         alive_entities.clear();
         dead_entities.clear();
         
-        for (const auto& entity : all_entities) {
+        for (auto entity : all_entities) {
             if (!entity.is_valid) continue;
+
             
             if (entity.life_state == 0) {
                 alive_entities.push_back(entity);

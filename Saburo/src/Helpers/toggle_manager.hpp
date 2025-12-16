@@ -67,7 +67,6 @@ public:
         bhop.setEnabled(bhopEnabled);
         aimbot.setEnabled(aimbotEnabled);
         aimbot.setPredictionEnabled(entityPredictorEnabled);
-        espRenderer.setPredictionEnabled(entityPredictorEnabled);
         aimbot.setSoftClampEnabled(smoothAimEnabled);
         chams.setEnabled(chamsEnabled);
         ConsoleLogger::setEnabled(consoleDebugEnabled);
@@ -92,6 +91,8 @@ public:
         boneESP.setEnabled(boneESPEnabled);
         thirdPerson.setEnabled(thirdPersonEnabled);
         visibilityChecker.setEnabled(visibilityCheckEnabled);
+        recoilComp.setEnabled(recoilCompEnabled);
+        smoothAim.setEnabled(smoothAimEnabled);
     }
 
     void handleKey(int key) {
@@ -174,16 +175,18 @@ public:
                 break;
             case 'r': // Recoil Comp
                 recoilCompEnabled = !recoilCompEnabled;
+                recoilComp.setEnabled(recoilCompEnabled);
                 changed = true;
                 break;
             case 't': // Smooth Aim
                 smoothAimEnabled = !smoothAimEnabled;
+                smoothAim.setEnabled(smoothAimEnabled);
+                aimbot.setSoftClampEnabled(smoothAimEnabled);
                 changed = true;
                 break;
             case 'y': // Prediction
                 entityPredictorEnabled = !entityPredictorEnabled;
                 aimbot.setPredictionEnabled(entityPredictorEnabled);
-                espRenderer.setPredictionEnabled(entityPredictorEnabled);
                 changed = true;
                 break;
             case 'u': // Visibility

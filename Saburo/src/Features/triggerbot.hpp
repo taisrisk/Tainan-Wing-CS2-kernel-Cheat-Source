@@ -28,7 +28,12 @@ private:
     static constexpr int SHOT_COOLDOWN_MS = 200; // Reliable per-shot delay
     static constexpr int CACHE_REFRESH_MS = 100; // Refresh validation cache every 100ms
 
-    // No recoil gating (simplified)
+    // Recoil gating
+    bool waitingForRecoil = false;
+    std::chrono::steady_clock::time_point recoilStartTime;
+    static constexpr float RECOIL_PITCH_THRESHOLD = 0.6f; // degrees
+    static constexpr float RECOIL_YAW_THRESHOLD = 0.8f;   // degrees
+    static constexpr int RECOIL_MAX_WAIT_MS = 700;        // maximum wait time for recovery
 
 public:
     Triggerbot(driver::DriverHandle& driver, std::uintptr_t client)
@@ -103,7 +108,19 @@ public:
             return; // Still on cooldown, don't even check crosshair
         }
 
-        // No recoil gating; rely on cooldown only
+        // Recoil gating: after a shot, wait until aim punch recovers
+        if (waitingForRecoil) {
+            const auto& offsets = OffsetsManager::Get();
+            Vector3 aimPunch{0,0,0};
+            drv.read_memory(reinterpret_cast<void*>(localPlayerPawn + offsets.m_aimPunchAngle), &aimPunch, sizeof(Vector3));
+            bool recovered = (std::abs(aimPunch.x) <= RECOIL_PITCH_THRESHOLD) && (std::abs(aimPunch.y) <= RECOIL_YAW_THRESHOLD);
+            long long waitMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - recoilStartTime).count();
+            if (recovered || waitMs >= RECOIL_MAX_WAIT_MS) {
+                waitingForRecoil = false;
+            } else {
+                return; // keep waiting
+            }
+        }
 
         // Simplified gating: rely on cooldown only for reliability
 
@@ -213,7 +230,9 @@ private:
 
         // Update shot time for cooldown tracking
         lastShotTime = std::chrono::steady_clock::now();
-        // No extra lockout
+        // Enable recoil gating until aim punch recovers
+        waitingForRecoil = true;
+        recoilStartTime = lastShotTime;
         
         if (ConsoleLogger::isEnabled()) {
             ConsoleLogger::logInfo("TB", writeSuccess ? "SHOT FIRED (BUTTON)" : "SHOT FIRED (MOUSE)");

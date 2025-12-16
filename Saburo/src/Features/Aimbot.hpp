@@ -150,6 +150,7 @@ private:
     bool setViewAngles(const ViewAngles& angles);
     ViewAngles getViewAngles();
     ViewAngles calculateAimAngles(const Vector3& targetWorldPos);
+    Vector3 getHeadBonePosition(std::uintptr_t targetAddress);
 
     ScreenPosition getScreenCenter() const {
         ScreenPosition center;
@@ -177,4 +178,8 @@ private:
     }
 
     bool teamCheckEnabled;  // NEW: Allow aiming at teammates when false
+
+    // Smoothed predicted position to reduce jitter
+    Vector3 lastPredictedPos {0.0f, 0.0f, 0.0f};
+    bool lastPredictedValid = false;
 };

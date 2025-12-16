@@ -1,4 +1,5 @@
 #pragma once
+
 #include <windows.h>
 #include <wininet.h>
 #include <shlobj.h>
@@ -40,6 +41,17 @@ namespace DownloadHelper {
         HRESULT hr = URLDownloadToFileA(nullptr, url.c_str(), outputPath.c_str(), 0, nullptr);
         
         if (SUCCEEDED(hr)) {
+            // ensure file exists and non-zero size
+            std::ifstream in(outputPath, std::ios::binary | std::ios::ate);
+            if (!in.is_open()) return false;
+            auto size = in.tellg();
+            in.close();
+            if (size <= 0) {
+                ConsoleColor::PrintError("Downloaded file is empty");
+                DeleteFileA(outputPath.c_str());
+                return false;
+            }
+
             ConsoleColor::PrintSuccess("Download completed successfully");
             return true;
         }

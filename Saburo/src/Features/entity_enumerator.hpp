@@ -7,6 +7,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <string>
 
 // ===== CRITICAL FIX =====
 // The position offset was WRONG. CS2 uses m_vOrigin NOT m_vecAbsOrigin
@@ -22,6 +23,20 @@ class EntityEnumerator {
 private:
     driver::DriverHandle& drv;
     std::uintptr_t client_base;
+
+    static std::uintptr_t get_entity_from_handle(driver::DriverHandle& drv, std::uintptr_t client, uint32_t handle) {
+        if (handle == 0) return 0;
+        const uint32_t index = handle & 0x7FFF;
+        std::uintptr_t entity_list = drv.read<std::uintptr_t>(client + OffsetsManager::Get().dwEntityList);
+        if (entity_list == 0) return 0;
+        const uint32_t chunk_index = index >> 9;
+        std::uintptr_t chunk_pointer_address = entity_list + (0x8 * chunk_index) + 0x10;
+        std::uintptr_t list_entry = drv.read<std::uintptr_t>(chunk_pointer_address);
+        if (list_entry == 0) return 0;
+        const uint32_t entity_index = index & 0x1FF;
+        std::uintptr_t entity_address = list_entry + (0x70 * entity_index);
+        return drv.read<std::uintptr_t>(entity_address);
+    }
 
     // Cache valid entity indices across frames for performance
     std::vector<uint32_t> knownEntityIndices;
@@ -120,8 +135,7 @@ public:
         manager.categorize_entities();
     }
 
-    // Read entity data from memory
-    Entity read_entity_data(std::uintptr_t entity_address) {
+    Entity read_entity_data(std::uintptr_t entity_address, bool lightweight = false) {
         Entity entity;
         entity.address = entity_address;
 
@@ -132,9 +146,11 @@ public:
         try {
             // Read health and validate first
             entity.health = drv.read<int32_t>(entity_address + cs2_offsets::m_iHealth());
-            entity.max_health = drv.read<int32_t>(entity_address + cs2_offsets::m_iMaxHealth());
             entity.life_state = drv.read<uint8_t>(entity_address + cs2_offsets::m_lifeState());
             entity.team = drv.read<uint8_t>(entity_address + cs2_offsets::m_iTeamNum());
+            if (!lightweight) {
+                entity.max_health = drv.read<int32_t>(entity_address + cs2_offsets::m_iMaxHealth());
+            }
 
             // ===== SCENE NODE METHOD =====
             // Read position through the scene node (more reliable)
@@ -152,63 +168,91 @@ public:
                 entity.position = Vector3(pos_array[0], pos_array[1], pos_array[2]);
             }
 
-            // Read location name
-            char location_buffer[256] = { 0 };
-            drv.read_memory(reinterpret_cast<PVOID>(entity_address + cs2_offsets::m_szLastPlaceName()), location_buffer, sizeof(location_buffer));
-            entity.location = std::string(location_buffer);
+            if (!lightweight) {
+                char location_buffer[256] = { 0 };
+                drv.read_memory(reinterpret_cast<PVOID>(entity_address + cs2_offsets::m_szLastPlaceName()), location_buffer, sizeof(location_buffer));
+                entity.location = std::string(location_buffer);
+            }
 
-            // NEW: Read player name from entity
-            // CS2 stores names in the entity itself at m_iszPlayerName offset
             const auto& offsets = OffsetsManager::Get();
 
-            char name_buffer[128] = { 0 };
+            {
+                auto read_ascii_string = [&](std::uintptr_t base, size_t maxLen) -> std::string {
+                    if (base == 0) return {};
+                    std::string out;
+                    out.reserve(maxLen);
+                    for (size_t i = 0; i < maxLen; i++) {
+                        char c = drv.read<char>(base + i);
+                        if (c == '\0') break;
+                        if (c < 32 || c > 126) return {};
+                        out.push_back(c);
+                    }
+                    if (out.size() < 2 || out.size() > 64) return {};
+                    if (out.find_first_not_of(" ") == std::string::npos) return {};
+                    return out;
+                };
 
-            // Try to read name from entity memory
-            try {
-                drv.read_memory(reinterpret_cast<PVOID>(entity_address + offsets.m_iszPlayerName),
-                    name_buffer, sizeof(name_buffer));
+                entity.name.clear();
 
-                // Validate name string
-                std::string name_str(name_buffer);
+                std::uintptr_t controller = 0;
+                try {
+                    uint32_t pawnHandle = drv.read<uint32_t>(entity_address + offsets.m_hPlayerPawn);
+                    if (pawnHandle != 0) {
+                        controller = entity_address;
+                    }
+                }
+                catch (...) {
+                    controller = 0;
+                }
 
-                // Only use name if it's reasonable (2-64 chars, printable)
-                if (name_str.length() >= 2 && name_str.length() <= 64) {
-                    // Check if it's mostly printable ASCII
-                    bool valid = true;
-                    for (char c : name_str) {
-                        if (c < 32 || c > 126) {
-                            if (c != '\0') {
-                                valid = false;
-                                break;
+                if (controller == 0) {
+                    try {
+                        std::uintptr_t localController = drv.read<std::uintptr_t>(client_base + offsets.dwLocalPlayerController);
+                        if (localController != 0) {
+                            uint32_t localPawnHandle = drv.read<uint32_t>(localController + offsets.m_hPlayerPawn);
+                            if (localPawnHandle != 0) {
+                                std::uintptr_t localPawn = get_entity_from_handle(drv, client_base, localPawnHandle);
+                                if (localPawn == entity_address) {
+                                    controller = localController;
+                                }
                             }
                         }
                     }
-
-                    if (valid && name_str.find_first_not_of(" ") != std::string::npos) {
-                        entity.name = name_str;
-                    }
-                    else {
-                        entity.name = ""; // Invalid characters or empty name
+                    catch (...) {
+                        controller = 0;
                     }
                 }
-                else {
-                    entity.name = ""; // Name too short or too long
+
+                if (controller != 0) {
+                    std::uintptr_t nameBase = controller + offsets.m_iszPlayerName;
+                    if (offsets.m_iszPlayerName == 0) {
+                        nameBase = controller + 0x6E8;
+                    }
+                    entity.name = read_ascii_string(nameBase, 127);
+
+                    if (entity.name.empty()) {
+                        std::uintptr_t sanitizedBase = controller + 0x850;
+                        entity.name = read_ascii_string(sanitizedBase, 127);
+                    }
                 }
             }
-            catch (...) {
-                entity.name = ""; // Read failed
-            }
 
-            // ===== HARD VALIDATION =====
-            // Check all conditions before marking as valid
-            // This prevents garbage data from being treated as real entities
-            entity.is_valid = (
-                entity_address != 0 &&
-                is_health_valid(entity.health) &&
-                is_health_valid(entity.max_health) &&
-                is_team_valid(entity.team) &&
-                is_position_valid(entity.position)
-                );
+            if (lightweight) {
+                entity.is_valid = (
+                    entity_address != 0 &&
+                    is_health_valid(entity.health) &&
+                    is_team_valid(entity.team) &&
+                    is_position_valid(entity.position)
+                    );
+            } else {
+                entity.is_valid = (
+                    entity_address != 0 &&
+                    is_health_valid(entity.health) &&
+                    is_health_valid(entity.max_health) &&
+                    is_team_valid(entity.team) &&
+                    is_position_valid(entity.position)
+                    );
+            }
 
         }
         catch (...) {
@@ -297,7 +341,7 @@ public:
                 std::uintptr_t entity_address = drv.read<std::uintptr_t>(chunk_ptr + (0x70 * entity_index));
                 if (entity_address == 0) continue;
 
-                Entity entity = read_entity_data(entity_address);
+                Entity entity = read_entity_data(entity_address, true);
 
                 if (entity.is_valid) {
                     manager.all_entities.push_back(entity);

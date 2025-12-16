@@ -496,6 +496,12 @@ RESTART_FROM_BEGINNING:  // Jump here when CS2 closes and user wants to restart
     
     ImGuiESP espRenderer(driver_handle, client);
     
+    // Resolve engine2.dll base for in-game FPS sampling
+    std::uintptr_t engine2 = driver_handle.get_module_base(pid, L"engine2.dll");
+    if (engine2 != 0) {
+        espRenderer.setEngineBase(engine2);
+    }
+    
     std::atomic<bool> espRunning(false);
     std::thread espThread([&]() {
         try {

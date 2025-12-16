@@ -8,6 +8,7 @@
 
 class RecoilCompensation {
 private:
+    bool enabled = false;
     driver::DriverHandle& drv;
     std::uintptr_t clientBase;
     
@@ -23,6 +24,17 @@ private:
     const float RECOIL_RECOVERY_TIME_MS = 150.0f;  // Time for recoil to reset
 
 public:
+    void setEnabled(bool enable) {
+        enabled = enable;
+        if (!enable) {
+            resetRecoil();
+        }
+    }
+
+    bool isEnabled() const {
+        return enabled;
+    }
+
     RecoilCompensation(driver::DriverHandle& driver, std::uintptr_t client)
         : drv(driver), clientBase(client) {
         currentRecoil.lastShotTime = std::chrono::steady_clock::now();
@@ -30,6 +42,11 @@ public:
     
     // Read current recoil punch from local player
     void updateRecoil(std::uintptr_t localPlayerPawn) {
+        if (!enabled) {
+            resetRecoil();
+            return;
+        }
+
         if (localPlayerPawn == 0) {
             resetRecoil();
             return;

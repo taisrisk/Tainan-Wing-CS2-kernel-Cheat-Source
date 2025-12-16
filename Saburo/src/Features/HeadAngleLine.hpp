@@ -26,7 +26,7 @@ private:
     float viewMatrix[16] = {0};
     
     // FOV for target filtering (same as aimbot)
-    static constexpr float FOV_RADIUS = 250.0f;
+    static constexpr float FOV_RADIUS = 600.0f;
     
     // HEAD OFFSETS - MUST MATCH AIMBOT VALUES
     static constexpr float HEAD_OFFSET_STANDING = 60.0f;

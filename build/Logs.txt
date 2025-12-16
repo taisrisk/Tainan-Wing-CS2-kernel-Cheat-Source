@@ -1,35 +1,7 @@
+ 
 
 ================================================================================
-  SESSION START: 2025-12-13 10:48:21
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[10:48:21] [*] Checking for updates from server...
-[10:48:22] [*] Remote version: 1.3.3
-[10:48:22] [!] No local Version.txt found - first time setup
-[10:48:22] [!] Version mismatch detected!
-[10:48:22] [!] Local: None | Remote: 1.3.3
-[10:48:22] [*] Update required - download will be initiated
-[10:48:22] [*] Starting driver package download...
-[10:48:22] [*] URL: https://firebasestorage.googleapis.com/v0/b/lucent-xijvr.firebasestorage.app/o/Hiroyoshi.zip?alt=media&token=aa65a9d2-350b-4a11-958b-a4d5cc101801
-[10:48:22] [*] Destination: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.zip
-[10:48:22] [+] File downloaded successfully
-[10:48:23] [*] Verifying installation...
-[10:48:23] [+] Driver files verified
-[10:48:23] [+] Version.txt updated: 1.3.3
-[10:48:23] [+] Installation verified successfully
-[10:48:23] [+] Current version: 1.3.3
-[10:48:23] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 10:52:47
+  SESSION START: 2025-12-16 16:36:05
 ================================================================================
 
 
@@ -40,170 +12,20 @@
 ========================================
   VERSION CONTROL SYSTEM
 ========================================
-[10:52:47] [*] Checking for updates from server...
-[10:52:47] [*] Remote version: 1.3.3
-[10:52:47] [*] Local version: 1.3.3
-[10:52:47] [+] Version is up-to-date and files are present
-[10:52:47] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 10:54:48
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[10:54:48] [*] Checking for updates from server...
-[10:54:49] [*] Remote version: 1.3.3
-[10:54:49] [*] Local version: 1.3.3
-[10:54:49] [+] Version is up-to-date and files are present
-[10:54:49] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 11:02:26
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[11:02:26] [*] Checking for updates from server...
-[11:02:26] [*] Remote version: 1.3.3
-[11:02:26] [*] Local version: 1.3.3
-[11:02:26] [+] Version is up-to-date and files are present
-[11:02:26] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 11:13:00
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[11:13:00] [*] Checking for updates from server...
-[11:13:00] [*] Remote version: 1.3.3
-[11:13:00] [*] Local version: 1.3.3
-[11:13:00] [+] Version is up-to-date and files are present
-[11:13:00] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 11:31:03
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[11:31:03] [*] Checking for updates from server...
-[11:31:04] [*] Remote version: 1.3.3
-[11:31:04] [*] Local version: 1.3.3
-[11:31:04] [+] Version is up-to-date and files are present
-[11:31:04] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 11:41:02
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[11:41:02] [*] Checking for updates from server...
-[11:41:03] [*] Remote version: 1.3.3
-[11:41:03] [*] Local version: 1.3.3
-[11:41:03] [+] Version is up-to-date and files are present
-[11:41:03] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 11:51:23
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[11:51:23] [*] Checking for updates from server...
-[11:51:23] [*] Remote version: 1.3.3
-[11:51:23] [*] Local version: 1.3.3
-[11:51:23] [+] Version is up-to-date and files are present
-[11:51:23] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 11:55:54
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[11:55:54] [*] Checking for updates from server...
-[11:55:54] [*] Remote version: 1.3.3
-[11:55:54] [*] Local version: 1.3.3
-[11:55:54] [+] Version is up-to-date and files are present
-[11:55:54] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 12:00:58
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[12:00:58] [*] Checking for updates from server...
-[12:00:58] [*] Remote version: 1.3.3
-[12:00:58] [*] Local version: 1.3.3
-[12:00:58] [+] Version is up-to-date and files are present
-[12:00:58] [+] Driver already loaded and connected
-
-================================================================================
-  SESSION START: 2025-12-13 12:09:54
-================================================================================
-
-
-========================================
-  SUBARO INITIALIZING
-========================================
-
-========================================
-  VERSION CONTROL SYSTEM
-========================================
-[12:09:54] [*] Checking for updates from server...
-[12:09:54] [*] Remote version: 1.3.3
-[12:09:54] [*] Local version: 1.3.3
-[12:09:54] [+] Version is up-to-date and files are present
-[12:09:54] [+] Driver already loaded and connected
+[16:36:05] [*] Detected leftover update.bat at startup - cleaning up (post-update)
+[16:36:05] [*] Checking for updates from server...
+[16:36:05] [*] Remote version: 1.3.3
+[16:36:05] [*] Local version: 1.3.3
+[16:36:05] [!] Driver files are missing or incomplete
+[16:36:05] [*] Update required - download will be initiated
+[16:36:05] [*] Starting driver package download...
+[16:36:05] [*] URL: https://firebasestorage.googleapis.com/v0/b/lucent-xijvr.firebasestorage.app/o/Hiroyoshi.zip?alt=media&token=aa65a9d2-350b-4a11-958b-a4d5cc101801
+[16:36:05] [*] Destination: C:\Users\tai2l\source\repos\Tainan Wing\build\Hiroyoshi.zip
+[16:36:06] [+] File downloaded successfully
+[16:36:06] [*] Verifying installation...
+[16:36:06] [+] Driver files verified
+[16:36:06] [+] Version.txt updated: 1.3.3
+[16:36:06] [+] Installation verified successfully
+[16:36:06] [+] Current version: 1.3.3
+[16:36:06] [+] Driver already loaded and connected
+[16:40:02] [!] CS2 process terminated - PID 30180 no longer exists

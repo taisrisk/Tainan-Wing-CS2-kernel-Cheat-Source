@@ -12,7 +12,6 @@
 #include <chrono>
 #include <algorithm>
 #include <vector>
-#include <cmath>
 
 class ImGuiESP {
 private:
@@ -48,8 +47,6 @@ private:
     // Visibility cache for snaplines
     std::vector<bool> enemyVisibility;
     std::vector<bool> teammateVisibility;
-    // Prediction toggle for UI display
-    bool predictionEnabled = false;
     
 public:
     ImGuiESP(driver::DriverHandle& driver, std::uintptr_t client)
@@ -94,8 +91,6 @@ public:
     void setTeamCheckEnabled(bool enable) { teamCheckEnabled = enable; }
     void setMasterVisible(bool enable) { masterVisible = enable; }
     bool isMasterVisible() const { return masterVisible; }
-    void setPredictionEnabled(bool enable) { predictionEnabled = enable; }
-    bool isPredictionEnabled() const { return predictionEnabled; }
     
     void updateViewMatrix() {
         const auto& offsets = OffsetsManager::Get();
@@ -186,68 +181,33 @@ public:
             return;
         }
 
-        // NORMAL MODE: Render all entities
-        char fpsText[64];
-        snprintf(fpsText, sizeof(fpsText), "ESP FPS: %.0f", currentFPS);
-        drawList->AddText(ImVec2(10, 10), ImColor(0, 255, 0, 255), fpsText);
-        
         int readIdx = readIndex.load(std::memory_order_acquire);
         const EntityManager& currentEntities = entityBuffer[readIdx];
-        
+
+        float panelX = 10.0f;
+        float panelY = 10.0f;
+        float panelW = 180.0f;
+        float rowH = 15.0f;
+        float panelH = rowH * 3.0f;
+
+        ImVec2 panelMin(panelX, panelY);
+        ImVec2 panelMax(panelX + panelW, panelY + panelH);
+
+        drawList->AddRectFilled(panelMin, panelMax, ImColor(0, 0, 0, 160), 3.0f);
+        drawList->AddRect(panelMin, panelMax, ImColor(255, 255, 255, 80), 3.0f, 0, 1.0f);
+
+        char espFpsText[64];
+        snprintf(espFpsText, sizeof(espFpsText), "ESP FPS: %.0f", currentFPS);
+
+        char gameFpsText[64];
+        snprintf(gameFpsText, sizeof(gameFpsText), "Game FPS: N/A");
+
         char countText[64];
         snprintf(countText, sizeof(countText), "Entities: %zu", currentEntities.enemy_entities.size() + currentEntities.teammate_entities.size());
-        drawList->AddText(ImVec2(10, 30), ImColor(255, 255, 255, 255), countText);
 
-        // Show simple prediction direction when enabled (left/right and pixels)
-        if (predictionEnabled) {
-            // Find nearest enemy to screen center horizontally
-            float centerX = screenWidth * 0.5f;
-            float bestDx = 1e9f;
-            const Entity* best = nullptr;
-            Vec2 bestScreen{};
-            for (const auto& e : currentEntities.enemy_entities) {
-                if (!e.is_valid) continue;
-                Vector3 head = e.position; head.z += 70.0f;
-                Vec2 s{}; if (!worldToScreen(head, s)) continue;
-                float dx = std::abs(s.x - centerX);
-                if (dx < bestDx) { bestDx = dx; best = &e; bestScreen = s; }
-            }
-            if (best) {
-                // Predict a tiny lead identical to aimbot style (2-5ms based on velocity)
-                const auto& offsets = OffsetsManager::Get();
-                Vector3 entVel = drv.read<Vector3>(best->address + offsets.m_vecAbsVelocity);
-                float entSpeed = std::sqrt(entVel.x*entVel.x + entVel.y*entVel.y + entVel.z*entVel.z);
-                float extraMs = 2.0f + (entSpeed * 0.003f);
-                if (extraMs > 7.0f) extraMs = 7.0f; // small cap
-                if (extraMs < 2.0f) extraMs = 2.0f;
-                float leadSec = extraMs / 1000.0f;
-                Vector3 base = best->position;
-                Vector3 predW = { base.x + entVel.x * leadSec, base.y + entVel.y * leadSec, base.z + entVel.z * leadSec };
-                predW.z += 70.0f;
-                Vec2 predS{}; if (worldToScreen(predW, predS)) {
-                    float dpx = predS.x - bestScreen.x;
-                    float absdx = std::abs(dpx);
-                    const char* arrow = "--";
-                    int px = static_cast<int>(std::round(absdx));
-                    if (absdx < 2.0f) {
-                        // Try a slightly larger preview lead for UI direction only
-                        float uiLead = leadSec * 3.0f + 0.01f;
-                        Vector3 predW2 = { base.x + entVel.x * uiLead, base.y + entVel.y * uiLead, base.z + entVel.z * uiLead };
-                        predW2.z += 70.0f;
-                        Vec2 predS2{}; if (worldToScreen(predW2, predS2)) {
-                            float dpx2 = predS2.x - bestScreen.x;
-                            if (std::abs(dpx2) >= 0.5f) dpx = dpx2; // use sign from larger preview
-                        }
-                        absdx = std::abs(dpx);
-                        px = static_cast<int>(std::round(absdx));
-                    }
-                    if (dpx > 0.0f) arrow = "-->"; else if (dpx < 0.0f) arrow = "<--"; else arrow = "--";
-                    char predText[64];
-                    snprintf(predText, sizeof(predText), "Pred: %s %dpx", arrow, px);
-                    drawList->AddText(ImVec2(10, 48), ImColor(0, 200, 255, 255), predText);
-                }
-            }
-        }
+        drawList->AddText(ImVec2(panelX + 6.0f, panelY + 0.0f * rowH), ImColor(255, 255, 255, 255), espFpsText);
+        drawList->AddText(ImVec2(panelX + 6.0f, panelY + 1.0f * rowH), ImColor(255, 255, 255, 255), gameFpsText);
+        drawList->AddText(ImVec2(panelX + 6.0f, panelY + 2.0f * rowH), ImColor(255, 255, 255, 255), countText);
         
         // Render enemies with visibility index (always render enemies)
         for (size_t i = 0; i < currentEntities.enemy_entities.size(); i++) {
@@ -332,7 +292,7 @@ private:
                 // Draw from TOP of screen to TOP of entity box
                 ImVec2 startPos(screenWidth / 2.0f, 0.0f);  // TOP CENTER
                 ImVec2 endPos(snapEndpoint.x, snapEndpoint.y);
-                ImColor lineColor(color.Value.x, color.Value.y, color.Value.z, 0.6f);
+                ImColor lineColor(255, 255, 255, 160);
                 drawList->AddLine(startPos, endPos, lineColor, 1.5f);
             }
         }
@@ -373,8 +333,38 @@ private:
             );
         }
         
-        // Draw entity box AFTER chams so box is visible
-        drawList->AddRect(boxPos.ToImVec2(), ImVec2(boxPos.x + boxSize.x, boxPos.y + boxSize.y), color, 4.0f, 0, 2.0f);
+        ImColor espWhite(255, 255, 255, 255);
+
+        auto drawCornerBox = [&](const ImVec2& min, const ImVec2& max) {
+            float w = max.x - min.x;
+            float h = max.y - min.y;
+            float seg = (std::min)(w, h) * 0.25f;
+            if (seg < 2.0f) seg = 2.0f;
+            if (seg > 15.0f) seg = 15.0f;
+
+            ImColor glow1(255, 255, 255, 28);
+            ImColor glow2(255, 255, 255, 12);
+
+            auto corner = [&](float x, float y, float sx, float sy) {
+                ImVec2 p(x, y);
+                ImVec2 ph(x + sx * seg, y);
+                ImVec2 pv(x, y + sy * seg);
+
+                drawList->AddLine(p, ph, glow2, 3.0f);
+                drawList->AddLine(p, pv, glow2, 3.0f);
+                drawList->AddLine(p, ph, glow1, 2.0f);
+                drawList->AddLine(p, pv, glow1, 2.0f);
+                drawList->AddLine(p, ph, espWhite, 1.0f);
+                drawList->AddLine(p, pv, espWhite, 1.0f);
+            };
+
+            corner(min.x, min.y, +1.0f, +1.0f);
+            corner(max.x, min.y, -1.0f, +1.0f);
+            corner(min.x, max.y, +1.0f, -1.0f);
+            corner(max.x, max.y, -1.0f, -1.0f);
+        };
+
+        drawCornerBox(boxPos.ToImVec2(), ImVec2(boxPos.x + boxSize.x, boxPos.y + boxSize.y));
 
         // Bone ESP rendering (direct bone buffer, exact indices and connections)
         if (boneESPEnabled) {
@@ -409,67 +399,26 @@ private:
                         Vector3 v2 = drv.read<Vector3>(boneIndex + static_cast<std::uintptr_t>(b2) * 32);
                         Vec2 s1{}, s2{};
                         if (worldToScreen(v1, s1) && worldToScreen(v2, s2)) {
-                            drawList->AddLine(ImVec2(s1.x, s1.y), ImVec2(s2.x, s2.y), color, 1.0f);
+                            drawList->AddLine(ImVec2(s1.x, s1.y), ImVec2(s2.x, s2.y), ImColor(255, 255, 255, 255), 1.0f);
                         }
                     }
 
-                    // China hat on top of head (screen-proportional, distance-stable)
                     {
                         Vector3 vHead = drv.read<Vector3>(boneIndex + static_cast<std::uintptr_t>(HEAD) * 32);
                         Vec2 sHead{};
                         if (worldToScreen(vHead, sHead)) {
-                            // Scale relative to on-screen box height with lower mins for far targets
                             float h = std::clamp(height, 0.0f, 1000.0f);
                             if (h >= 8.0f) {
-                                float brimRadius = std::clamp(h * 0.16f, 4.0f, 18.0f);
-                                float apexOffset = std::clamp(h * 0.18f, 6.0f, 24.0f);
-                                // Keep brim near the top of the head (slightly above)
-                                float brimYOffsetTop = std::clamp(h * 0.01f, 1.0f, 6.0f);
+                                float radius = std::clamp(h * 0.06f, 3.0f, 10.0f);
+                                ImVec2 center(sHead.x, sHead.y - radius * 0.35f);
 
-                                // Flatter brim at distance (smaller h), less flatten near
-                                float hNorm = std::clamp(h / 200.0f, 0.0f, 1.0f);
-                                float brimFlatten = 0.22f + 0.28f * hNorm; // 0.22 (far) .. 0.50 (near)
+                                ImColor headColor(255, 255, 255, 255);
+                                ImColor glow1(1.0f, 1.0f, 1.0f, 0.25f);
+                                ImColor glow2(1.0f, 1.0f, 1.0f, 0.15f);
 
-                                const int segments = 26;
-                                const int spokeCount = 12;
-
-                                float baseLift = std::clamp(h * 0.05f, 3.0f, 14.0f);
-                                ImVec2 apex(sHead.x, sHead.y - (apexOffset + baseLift));
-                                ImVec2 brimCenter(sHead.x, sHead.y - brimYOffsetTop);
-
-                                float alphaFactor = std::clamp(h / 200.0f, 0.35f, 1.0f);
-                                ImColor spokeCol(color.Value.x, color.Value.y, color.Value.z, 0.70f * alphaFactor);
-                                ImColor rimCol  (color.Value.x, color.Value.y, color.Value.z, 0.90f * alphaFactor);
-                                ImColor shadeCol(0.0f, 0.0f, 0.0f, 0.25f);
-
-                                // Brim ellipse
-                                ImVec2 firstPt{}, prevPt{};
-                                for (int i = 0; i < segments; ++i) {
-                                    float t = (2.0f * 3.14159265f) * (static_cast<float>(i) / segments);
-                                    ImVec2 pt(
-                                        brimCenter.x + brimRadius * cosf(t),
-                                        brimCenter.y + (brimRadius * brimFlatten) * sinf(t)
-                                    );
-                                    if (i == 0) firstPt = pt; else {
-                                        drawList->AddLine(ImVec2(prevPt.x, prevPt.y + 1.0f), ImVec2(pt.x, pt.y + 1.0f), shadeCol, 1.0f);
-                                        drawList->AddLine(prevPt, pt, rimCol, 1.8f);
-                                    }
-                                    prevPt = pt;
-                                }
-                                // Close ring
-                                drawList->AddLine(ImVec2(prevPt.x, prevPt.y + 1.0f), ImVec2(firstPt.x, firstPt.y + 1.0f), shadeCol, 1.0f);
-                                drawList->AddLine(prevPt, firstPt, rimCol, 1.8f);
-
-                                // Spokes
-                                for (int i = 0; i < spokeCount; ++i) {
-                                    float t = (2.0f * 3.14159265f) * (static_cast<float>(i) / spokeCount);
-                                    ImVec2 brimPt(
-                                        brimCenter.x + brimRadius * cosf(t),
-                                        brimCenter.y + (brimRadius * brimFlatten) * sinf(t)
-                                    );
-                                    drawList->AddLine(ImVec2(apex.x, apex.y + 1.0f), ImVec2(brimPt.x, brimPt.y + 1.0f), shadeCol, 1.0f);
-                                    drawList->AddLine(apex, brimPt, spokeCol, 1.2f);
-                                }
+                                drawList->AddCircle(center, radius + 2.0f, glow2, 0, 3.0f);
+                                drawList->AddCircle(center, radius + 1.0f, glow1, 0, 2.0f);
+                                drawList->AddCircle(center, radius, headColor, 0, 1.2f);
                             }
                         }
                     }
@@ -494,7 +443,7 @@ private:
                 
                 drawList->AddText(ImVec2(textPos.x - 1, textPos.y + 1), ImColor(0, 0, 0, 255), distText);
                 drawList->AddText(ImVec2(textPos.x + 1, textPos.y - 1), ImColor(0, 0, 0, 255), distText);
-                drawList->AddText(textPos, color, distText);
+                drawList->AddText(textPos, ImColor(255, 255, 255, 255), distText);
             }
         }
         
@@ -511,7 +460,7 @@ private:
         drawList->AddText(ImVec2(textPos.x + 1, textPos.y), ImColor(0, 0, 0, 255), displayName.c_str());
         drawList->AddText(ImVec2(textPos.x, textPos.y - 1), ImColor(0, 0, 0, 255), displayName.c_str());
         drawList->AddText(ImVec2(textPos.x, textPos.y + 1), ImColor(0, 0, 0, 255), displayName.c_str());
-        drawList->AddText(textPos, color, displayName.c_str());
+        drawList->AddText(textPos, ImColor(255, 255, 255, 255), displayName.c_str());
         
         // Draw health bar
         float hpPercent = (float)ent.health / (float)ent.max_health;
@@ -524,24 +473,38 @@ private:
         
         drawList->AddRectFilled(barPos.ToImVec2(), ImVec2(barPos.x + barWidth, barPos.y + barHeight), ImColor(0, 0, 0, 220), 2.0f);
         
-        ImColor hpColor;
-        if (hpPercent > 0.66f) hpColor = ImColor(0, 255, 0, 255);
-        else if (hpPercent > 0.33f) hpColor = ImColor(255, 165, 0, 255);
-        else hpColor = ImColor(255, 0, 0, 255);
-        
+        auto lerp = [](float a, float b, float t) {
+            return a + (b - a) * t;
+        };
+
+        auto lerpColor = [&](ImColor a, ImColor b, float t) {
+            t = std::clamp(t, 0.0f, 1.0f);
+            return ImColor(
+                lerp(a.Value.x, b.Value.x, t),
+                lerp(a.Value.y, b.Value.y, t),
+                lerp(a.Value.z, b.Value.z, t),
+                lerp(a.Value.w, b.Value.w, t)
+            );
+        };
+
+        ImColor cGreen(0, 255, 0, 255);
+        ImColor cYellow(255, 255, 0, 255);
+        ImColor cOrange(255, 165, 0, 255);
+        ImColor cRed(255, 0, 0, 255);
+
+        ImColor hpColor = cRed;
+        if (hpPercent >= 0.75f) {
+            hpColor = lerpColor(cYellow, cGreen, (hpPercent - 0.75f) / 0.25f);
+        } else if (hpPercent >= 0.50f) {
+            hpColor = lerpColor(cOrange, cYellow, (hpPercent - 0.50f) / 0.25f);
+        } else if (hpPercent >= 0.25f) {
+            hpColor = lerpColor(cRed, cOrange, (hpPercent - 0.25f) / 0.25f);
+        }
+
         if (hpPercent > 0.01f) {
             drawList->AddRectFilled(barPos.ToImVec2(), ImVec2(barPos.x + barWidth * hpPercent, barPos.y + barHeight), hpColor, 2.0f);
         }
-        
+
         drawList->AddRect(barPos.ToImVec2(), ImVec2(barPos.x + barWidth, barPos.y + barHeight), ImColor(150, 150, 150, 255), 2.0f, 0, 1.5f);
-        
-        char hpText[64];
-        snprintf(hpText, sizeof(hpText), "HP: %d", ent.health);
-        float hpTextWidth = ImGui::CalcTextSize(hpText).x;
-        ImVec2 hpTextPos(headScreen.x - hpTextWidth / 2, feetScreen.y + 5);
-        
-        drawList->AddText(ImVec2(hpTextPos.x - 1, hpTextPos.y + 1), ImColor(0, 0, 0), hpText);
-        drawList->AddText(ImVec2(hpTextPos.x + 1, hpTextPos.y - 1), ImColor(0, 0, 0), hpText);
-        drawList->AddText(hpTextPos, ImColor(255, 255, 255, 255), hpText);
     }
 };

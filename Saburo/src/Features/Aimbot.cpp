@@ -53,8 +53,7 @@ void Aimbot::update(const EntityManager& entities) {
     // Update view matrix every frame
     updateViewMatrix();
 
-    // Update predictor history for alive entities (only if enabled)
-    if (predictionEnabled) {
+    if (predictionEnabled || isRightClickHeld()) {
         for (const auto& e : entities.alive_entities) {
             if (!e.is_valid || e.health <= 0) continue;
             predictor.updateEntity(e.address, e.position);
@@ -96,33 +95,32 @@ void Aimbot::update(const EntityManager& entities) {
 
     if (distance < 0.001f) return;
 
-    // Predict target position using entity velocity with a very small extra lead (2-5ms)
-    if (predictionEnabled) {
-        // Read entity world velocity (UPS)
-        const auto& offsets = OffsetsManager::Get();
-        Vector3 entVel = drv.read<Vector3>(bestTarget->address + offsets.m_vecAbsVelocity);
-        float entSpeed = std::sqrt(entVel.x*entVel.x + entVel.y*entVel.y + entVel.z*entVel.z);
-
-        // Very small fixed-time lead based on entity speed only (no travel time)
-        // Clamp to approx 2-5ms to avoid large overshoots
-        float extraMs = 4.0f + (entSpeed * 0.003f); // baseline +2ms more
-        if (extraMs > 5.0f) extraMs = 5.0f;
-        if (extraMs < 2.0f) extraMs = 2.0f;
-        float leadSec = extraMs / 1000.0f;
-
-        // Project target along its velocity only (do not add local velocity)
-        // Use base (feet) position to avoid double-adding head offset
-        Vector3 basePos = bestTarget->position;
-        Vector3 predicted = {
-            basePos.x + entVel.x * leadSec,
-            basePos.y + entVel.y * leadSec,
-            basePos.z + entVel.z * leadSec
-        };
-
-        targetPos = predicted;
-        targetPos.z += getHeadOffset(bestTarget->address);
-
-        // Recompute direction and distance
+    bool usePrediction = predictionEnabled || isRightClickHeld();
+    if (usePrediction) {
+        const auto& off = OffsetsManager::Get();
+        Vector3 entVel = drv.read<Vector3>(bestTarget->address + off.m_vecAbsVelocity);
+        Vector3 locVel = drv.read<Vector3>(localPlayerPawn + off.m_vecAbsVelocity);
+        Vector3 relVel{ entVel.x - locVel.x, entVel.y - locVel.y, entVel.z - locVel.z };
+        ScreenPosition s0;
+        if (worldToScreen(targetPos, s0)) {
+            float testDt = 0.01f;
+            Vector3 tp{ targetPos.x + relVel.x * testDt, targetPos.y + relVel.y * testDt, targetPos.z + relVel.z * testDt };
+            ScreenPosition s1;
+            if (worldToScreen(tp, s1)) {
+                float dxp = s1.x - s0.x;
+                float dyp = s1.y - s0.y;
+                float pps = std::sqrt(dxp*dxp + dyp*dyp) / testDt;
+                float desired = 3.0f;
+                if (pps > 0.0001f) {
+                    float dt = desired / pps;
+                    if (dt < 0.002f) dt = 0.002f;
+                    if (dt > 0.015f) dt = 0.015f;
+                    targetPos.x += relVel.x * dt;
+                    targetPos.y += relVel.y * dt;
+                    targetPos.z += relVel.z * dt;
+                }
+            }
+        }
         direction.x = targetPos.x - localPos.x;
         direction.y = targetPos.y - localPos.y;
         direction.z = targetPos.z - localPos.z;
