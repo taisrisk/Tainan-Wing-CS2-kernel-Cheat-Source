@@ -1,7 +1,6 @@
 #include "offset_manager.hpp"
 #include <fstream>
 #include <iostream>
-#include "client.dll.hpp"
 
 // Static member definitions
 CS2Offsets OffsetsManager::offsets = {};

@@ -51,14 +51,8 @@
     <ClInclude Include="src\Helpers\OS-ImGui\OS-ImGui_External.h" />
     <ClInclude Include="src\Helpers\OS-ImGui\OS-ImGui_Struct.h" />
     <ClInclude Include="src\Helpers\OS-ImGui\stb\stb_image.h" />
-    <ClInclude Include="src\Offsets\buttons.hpp" />
-    <ClInclude Include="src\Offsets\client_dll.hpp" />
-    <ClInclude Include="src\Offsets\offsets.hpp" />
     <ClInclude Include="src\Offsets\offset_updater.hpp" />
     <ClInclude Include="src\Offsets\offset_manager.hpp" />
-    <ClInclude Include="src\Offsets\client.dll.hpp" />
-    <ClInclude Include="src\Offsets\server_dll.hpp" />
-    <ClInclude Include="src\Offsets\offsets_pt2.hpp" />
     <ClInclude Include="src\Helpers\download_helper.hpp" />
     <ClInclude Include="src\Helpers\windows_security_helper.hpp" />
     <ClInclude Include="src\Helpers\driver_loader_helper.hpp" />
@@ -88,10 +82,7 @@
     <ClInclude Include="src\Helpers\game_state.hpp" />
     <ClInclude Include="src\Helpers\features_init.hpp" />
     <ClInclude Include="src\Helpers\loop_runner.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Offsets\client_dll.json" />
-    <None Include="src\Offsets\buttons.json" />
-    <None Include="src\Offsets\offsets.json" />
+    <ClInclude Include="src\Offsets\offsets.hpp" />
+    <ClInclude Include="src\Offsets\buttons.hpp" />
   </ItemGroup>
 </Project>

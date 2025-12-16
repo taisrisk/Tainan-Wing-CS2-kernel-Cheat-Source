@@ -220,19 +220,10 @@
     <ClInclude Include="src\Helpers\features_init.hpp" />
     <ClInclude Include="src\Helpers\loop_runner.hpp" />
     <ClInclude Include="src\Offsets\buttons.hpp" />
-    <ClInclude Include="src\Offsets\client.dll.hpp" />
-    <ClInclude Include="src\Offsets\client_dll.hpp" />
     <ClInclude Include="src\Offsets\offsets.hpp" />
-    <ClInclude Include="src\Offsets\offsets_pt2.hpp" />
     <ClInclude Include="src\Offsets\offset_manager.hpp" />
     <ClInclude Include="src\Offsets\offset_decryptor.hpp" />
     <ClInclude Include="src\Offsets\offset_updater.hpp" />
-    <ClInclude Include="src\Offsets\server_dll.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Offsets\buttons.json" />
-    <None Include="src\Offsets\client_dll.json" />
-    <None Include="src\Offsets\offsets.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

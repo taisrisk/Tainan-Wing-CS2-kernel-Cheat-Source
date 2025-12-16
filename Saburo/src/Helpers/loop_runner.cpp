@@ -96,6 +96,10 @@ void Run(driver::DriverHandle& drv, std::uintptr_t client, ImGuiESP& esp,
         if (down && !was) toggleManager.handleKey(keyToHandle);
     };
 
+    int noPlayersFrameCount = 0;
+    static constexpr int QUICK_RESCAN_THRESHOLD = 30;
+    static constexpr int FORCE_RESCAN_THRESHOLD = 120;
+
     while (cs2Running.load()) {
         // Only process toggle hotkeys when our console window is focused
         bool appFocused = (GetForegroundWindow() == hConsoleWnd);
@@ -103,8 +107,21 @@ void Run(driver::DriverHandle& drv, std::uintptr_t client, ImGuiESP& esp,
         enumerator.update_entities(entities);
         esp.updateEntities(entities, localPawn);
 
+        const bool noPlayers = entities.all_entities.empty();
+        if (noPlayers) {
+            noPlayersFrameCount++;
+            if (noPlayersFrameCount == QUICK_RESCAN_THRESHOLD) {
+                enumerator.update_entities(entities);
+            }
+            if (noPlayersFrameCount == FORCE_RESCAN_THRESHOLD) {
+                enumerator.force_rescan(entities, localPawn);
+            }
+        } else {
+            noPlayersFrameCount = 0;
+        }
+
         // Flip to in-game visuals once entities are populated
-        if (entities.all_entities.size() > 0) {
+        if (!noPlayers) {
             esp.setLobbyMode(false);
         }
 
